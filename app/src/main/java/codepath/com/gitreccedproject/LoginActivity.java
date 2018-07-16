@@ -7,12 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     EditText username, password;
     Button login, signUp;
 
@@ -21,9 +19,13 @@ public class LoginActivity extends AppCompatActivity {
     EditText enterPassword;
     Button btnSubmit;
 
+    DatabaseReference dbItems;
     EditText etGenre;
     EditText etTitle;
     Button btnSubmitItem;
+
+    String uid = "user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "item id not set yet"; //item id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +37,14 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.btnLogin);
         signUp = findViewById(R.id.btnSignUp);
 
-
+        //reference to users field of json array in database
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         enterUsername = findViewById(R.id.etSubmitUsername);
         enterPassword = findViewById(R.id.etSubmitPassword);
         btnSubmit = findViewById(R.id.btnSubmit);
-        
+
+        //reference to items field of json array in database
+        dbItems = FirebaseDatabase.getInstance().getReference("items").child(uid);
         etGenre = findViewById(R.id.etGenre);
         etTitle = findViewById(R.id.etTitle);
         btnSubmitItem = findViewById(R.id.btnSubmitItem);
@@ -49,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //add new user to users field
                 addUser();
             }
         });
@@ -57,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSubmitItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //add new item to items field
                 addItem();
             }
         });
@@ -69,16 +75,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //adds user to db
     private void addUser(){
         String username = enterUsername.getText().toString();
         String password = enterPassword.getText().toString();
 
         if(!TextUtils.isEmpty(username)){
-            String id = dbUsers.push().getKey();
+            uid = dbUsers.push().getKey();
 
-            User newUser = new User(id, username, password, "dummy item id");
+            //new user to add
+            User newUser = new User(uid, username, password, iid);
 
-            dbUsers.child("users").push().setValue(newUser);
+            dbUsers.push().setValue(newUser);
 
         }
     }
@@ -88,11 +96,12 @@ public class LoginActivity extends AppCompatActivity {
         String title = etTitle.getText().toString();
 
         if(!TextUtils.isEmpty(title)){
-            String id = dbUsers.push().getKey();
+            iid = dbItems.push().getKey();
 
-            Item newItem = new Item(id, genre, title, "dummy details string", "dummy users string");
+            //new item to add
+            Item newItem = new Item(iid, genre, title, "dummy details string", uid);
 
-            dbUsers.child("items").push().setValue(newItem);
+            dbItems.push().setValue(newItem);
 
         }
     }
