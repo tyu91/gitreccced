@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -44,19 +45,23 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title_tv;
+        public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title_tv = itemView.findViewById(R.id.title_tv);
+            rlayout = itemView.findViewById(R.id.rlayout);
+
+            rlayout.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             final int position = getAdapterPosition();
+            Log.i("select", String.format("Got item at %s", position));
             if (position != RecyclerView.NO_POSITION) {
                 // get the item at the position
                 final Item item = mItems.get(position);
-                Log.i("select", String.format("Got item at %s", position));
                 // TODO - insert into firebase
             }
         }
