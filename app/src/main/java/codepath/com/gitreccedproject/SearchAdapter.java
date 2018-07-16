@@ -58,10 +58,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             final int position = getAdapterPosition();
-            Log.i("select", String.format("Got item at %s", position));
             if (position != RecyclerView.NO_POSITION) {
                 // get the item at the position
                 final Item item = mItems.get(position);
+                Log.i("select", String.format("Got item at %s", position));
                 // TODO - insert into firebase
             }
         }
