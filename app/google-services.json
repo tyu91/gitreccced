@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "304581432688",
+    "firebase_url": "https://gitreccedproject.firebaseio.com",
+    "project_id": "gitreccedproject",
+    "storage_bucket": "gitreccedproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304581432688:android:b8be88bbdfdb453f",
+        "android_client_info": {
+          "package_name": "codepath.com.gitreccedproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304581432688-78gsqkjt0esm5mjtsbjjnv6s4678k36v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEhFNXhqtw6RYMeJj63AtQT49ZhGH0hXE"
+        }
+      ],
+
+      //TODO: make current key and client id secret
+      
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
