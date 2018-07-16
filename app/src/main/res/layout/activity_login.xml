@@ -16,4 +16,50 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="137dp"
+        android:layout_height="39dp"
+        android:text="App Name"
+        android:textAlignment="center"
+        android:textSize="26sp"
+        android:textStyle="bold|italic"
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="29dp" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="135dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Pasword"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="215dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="143dp"
+        android:layout_height="wrap_content"
+        android:text="Log In"
+        tools:layout_editor_absoluteX="121dp"
+        tools:layout_editor_absoluteY="323dp" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="143dp"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        tools:layout_editor_absoluteX="121dp"
+        tools:layout_editor_absoluteY="387dp" />
 </RelativeLayout>
