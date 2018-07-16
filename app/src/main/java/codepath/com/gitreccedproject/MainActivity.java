@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         signUp = findViewById(R.id.btnSignUp);
 
         //check if user is already logged in
-        if (mAuth.getCurrentUser() != null){
+        if (mAuth.getCurrentUser() == null){
 
             //User NOT logged in
             finish();
@@ -48,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String em = email.getText().toString().trim();
+                String pass = password.getText().toString().trim();
 
+                callLogIn(em, pass);
             }
         });
 
@@ -100,5 +103,31 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    //Start Sign In process
+    private  void callLogIn(String email, String password){
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("TESTING", "Sign in successful" + task.isSuccessful());
+
+                        /*
+                        If sign in fails, display a message to the user. If sign in succeeds
+                        the auth state will be modified and logic to handle the signed in user
+                        can be handled in the listener
+                         */
+                        if (!task.isSuccessful()){
+                            Log.v("TESTING", "signInWithEmail : failed", task.getException());
+                            Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent i = new Intent(MainActivity.this, LogIn.class);
+                            finish();
+                            startActivity(i);
+                        }
+                    }
+                });
     }
 }
