@@ -1,5 +1,6 @@
 package codepath.com.gitreccedproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,10 +24,13 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.btnLogin);
         signUp = findViewById(R.id.btnSignUp);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        // TODO - change this back to login
+        signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // TODO - delete this before pushing
+                Intent intent = new Intent(LoginActivity.this, InputRecsActivity.class);
+                startActivity(intent);
             }
         });
     }
