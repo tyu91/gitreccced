@@ -21,7 +21,7 @@
         <activity android:name=".InputRecsActivity" />
         <activity android:name=".DBTestActivity" />
         <activity android:name=".DBTest2Activity" />
-        <activity android:name=".SignUp"></activity>
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>
