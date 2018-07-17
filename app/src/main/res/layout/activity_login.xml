@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -83,5 +83,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:text="dbtest" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etName"
+        android:layout_below="@+id/etPassword"
+        android:text="Password must be at least 6 characters long" />
 
 </RelativeLayout>

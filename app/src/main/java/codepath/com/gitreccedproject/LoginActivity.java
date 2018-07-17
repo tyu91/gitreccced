@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Main";
 
     private FirebaseAuth mAuth;
@@ -29,14 +29,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        //Check if user is already logged in
-        if (mAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(getApplicationContext(), InputRecsActivity.class));
-        }
 
         name = findViewById(R.id.etName);
         email = findViewById(R.id.etEmail);
@@ -48,34 +43,43 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String iD = name.getText().toString().trim();
                 String em = email.getText().toString().trim();
                 String pass = password.getText().toString().trim();
 
-                callLogIn(em, pass);
+                if (em.isEmpty() || pass.isEmpty() || iD.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Please complete all fields before Logging In", Toast.LENGTH_SHORT).show();
+                } else {
+                    callLogIn(em, pass);
+                    finish();
+                }
             }
         });
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String iD = name.getText().toString().trim();
                 String em = email.getText().toString().trim();
                 String pass = password.getText().toString().trim();
 
-                callSignUp(em, pass);
+                if (em.isEmpty() || pass.isEmpty() || iD.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Please complete all fields before Signing up", Toast.LENGTH_SHORT).show();
+                } else {
+                    callSignUp(em, pass);
+                }
             }
         });
 
         btnDbTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DBTestActivity.class);
+                Intent intent = new Intent(LoginActivity.this, DBTestActivity.class);
                 startActivity(intent);
             }
 
         });
     }
-
-
 
     //Create Account
     private void callSignUp(String email, String password){
@@ -87,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Sign up Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Sign up Failed", Toast.LENGTH_SHORT).show();
                         } else {
                             userProfile();
-                            Toast.makeText(MainActivity.this, "Account created", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Account created", Toast.LENGTH_LONG).show();
                             Log.d("TESTING", "Created account");
                         }
                     }
@@ -132,11 +136,10 @@ public class MainActivity extends AppCompatActivity {
                          */
                         if (!task.isSuccessful()){
                             Log.v("TESTING", "signInWithEmail : failed", task.getException());
-                            Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent i = new Intent(MainActivity.this, InputRecsActivity.class);
-                            finish();
-                            //startActivity(i);
+                            Intent i = new Intent(LoginActivity.this, InputRecsActivity.class);
+                            startActivity(i);
                         }
                     }
                 });
