@@ -38,6 +38,7 @@ public class DBTest2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 //add new item to items field
                 addItem();
+                finish();
             }
         });
     }
