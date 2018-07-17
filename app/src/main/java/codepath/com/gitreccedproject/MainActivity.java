@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         btnDbTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DBTestActivity.class);
+                Intent intent = new Intent(MainActivity.this, InputRecsActivity.class);
                 startActivity(intent);
             }
 
