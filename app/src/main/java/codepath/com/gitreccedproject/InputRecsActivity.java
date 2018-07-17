@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
 import java.util.ArrayList;
 
 public class InputRecsActivity extends AppCompatActivity {
@@ -18,6 +22,9 @@ public class InputRecsActivity extends AppCompatActivity {
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
+
+    //firebase
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +56,13 @@ public class InputRecsActivity extends AppCompatActivity {
         });
     }
 
-    public void getSearchResults(String input_text) {
+    public void getSearchResults(String input) {
         // TODO  - firebase query
+        CollectionReference itemsRef = db.collection("items");
+        Query query;
+        query = itemsRef.orderBy("title").startAt(input).endAt(input + "\uf8ff");
+
+
         for (int i=0; i<5; i++) {
             Item item = null;
             items.add(item);
