@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText email, password, name;
     private Button login, signUp;
 
+    private Button btnDbTest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.etPassword);
         login = findViewById(R.id.btnLogin);
         signUp = findViewById(R.id.btnSignUp);
+        btnDbTest = findViewById(R.id.btnDbTest);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +65,18 @@ public class MainActivity extends AppCompatActivity {
                 callSignUp(em, pass);
             }
         });
+
+        btnDbTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, DBTestActivity.class);
+                startActivity(intent);
+            }
+
+        });
     }
+
+
 
     //Create Account
     private void callSignUp(String email, String password){
