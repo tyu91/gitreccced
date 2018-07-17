@@ -2,7 +2,6 @@ package codepath.com.gitreccedproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,8 +19,10 @@ public class DBTestActivity extends AppCompatActivity {
     EditText enterPassword;
     Button btnSubmit;
 
-    String uid = "user id not set yet"; //user id (initialized to dummy string for testing)
-    String iid = "item id not set yet"; //item id (initialized to dummy string for testing)
+    String uid = "1: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "1: item id not set yet"; //item id (initialized to dummy string for testing)
+
+    protected static final int DB_TEST_REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class DBTestActivity extends AppCompatActivity {
             //pass userid to test recommendations page
             Intent intent = new Intent(DBTestActivity.this, DBTest2Activity.class);
             intent.putExtra("uid", uid);
-            startActivityForResult(intent, 20);
+            startActivityForResult(intent, DB_TEST_REQUEST_CODE);
 
             //new user to add
             User newUser = new User(uid, username, password, iid);
@@ -66,8 +67,8 @@ public class DBTestActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 20) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DB_TEST_REQUEST_CODE) {
             Toast.makeText(this, "successfully entered item into database!", Toast.LENGTH_SHORT).show();
         }
     }
