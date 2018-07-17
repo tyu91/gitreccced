@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Intent i = new Intent(MainActivity.this, InputRecsActivity.class);
                             finish();
-                            startActivity(i);
+                            //startActivity(i);
                         }
                     }
                 });

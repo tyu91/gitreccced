@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".InputRecsActivity" />
-        <activity android:name=".DBTestActivity"></activity>
+        <activity android:name=".DBTestActivity" />
+        <activity android:name=".DBTest2Activity"></activity>
     </application>
 
 </manifest>
