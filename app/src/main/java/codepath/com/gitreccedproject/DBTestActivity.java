@@ -10,9 +10,7 @@ import android.widget.EditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class LoginActivity extends AppCompatActivity {
-    EditText username, password;
-    Button login, signUp;
+public class DBTestActivity extends AppCompatActivity {
 
     DatabaseReference dbUsers;
     EditText enterUsername;
@@ -29,13 +27,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        username = findViewById(R.id.etUsername);
-        password = findViewById(R.id.etPassword);
-        login = findViewById(R.id.btnLogin);
-        signUp = findViewById(R.id.btnSignUp);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dbtest);
 
         //reference to users field of json array in database
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
@@ -64,13 +57,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //add new item to items field
                 addItem();
-            }
-        });
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
     }
@@ -103,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
 
             dbItems.push().setValue(newItem);
 
-        }*/
+        }
     }
-
 }
