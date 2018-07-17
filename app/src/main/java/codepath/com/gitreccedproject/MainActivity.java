@@ -29,15 +29,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
         //Check if user is already logged in
         if (mAuth.getCurrentUser() != null){
             finish();
             startActivity(new Intent(getApplicationContext(), InputRecsActivity.class));
         }
-
-        setContentView(R.layout.activity_main);
-
-        mAuth = FirebaseAuth.getInstance();
 
         name = findViewById(R.id.etName);
         email = findViewById(R.id.etEmail);
