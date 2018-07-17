@@ -60,8 +60,8 @@ public class InputRecsActivity extends AppCompatActivity {
         // TODO  - firebase query
         CollectionReference itemsRef = db.collection("items");
         Query query;
-        query = itemsRef.orderBy("title").startAt(input).endAt(input + "\uf8ff");
-
+        query = itemsRef.orderBy("title");
+        //.startAt(input).endAt(input + "\uf8ff");
 
         for (int i=0; i<5; i++) {
             Item item = null;
