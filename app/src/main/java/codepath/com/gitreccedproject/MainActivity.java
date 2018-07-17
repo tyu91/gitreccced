@@ -29,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Check if user is already logged in
+        if (mAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(getApplicationContext(), InputRecsActivity.class));
+        }
+
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
@@ -38,16 +44,7 @@ public class MainActivity extends AppCompatActivity {
         password = findViewById(R.id.etPassword);
         login = findViewById(R.id.btnLogin);
         signUp = findViewById(R.id.btnSignUp);
-
         btnDbTest = findViewById(R.id.btnDbTest);
-
-        //check if user is already logged in
-        if (mAuth.getCurrentUser() == null){
-
-            //User NOT logged in
-            finish();
-            startActivity(new Intent(getApplicationContext(), LogIn.class));
-        }
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("TESTING", "Sig Up Successful" + task.isSuccessful());
+                        Log.d("TESTING", "Sign Up Successful" + task.isSuccessful());
                         FirebaseUser user = mAuth.getCurrentUser();
 
                         if (task.isSuccessful()) {
@@ -138,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.v("TESTING", "signInWithEmail : failed", task.getException());
                             Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent i = new Intent(MainActivity.this, LogIn.class);
+                            Intent i = new Intent(MainActivity.this, InputRecsActivity.class);
                             finish();
-                            startActivity(i);
+                            //startActivity(i);
                         }
                     }
                 });
