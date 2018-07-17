@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
             //User NOT logged in
             finish();
-            startActivity(new Intent(getApplicationContext(), LogIn.class));
+            //startActivity(new Intent(getApplicationContext(), LogIn.class));
         }
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +138,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.v("TESTING", "signInWithEmail : failed", task.getException());
                             Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent i = new Intent(MainActivity.this, LogIn.class);
+                            //Intent i = new Intent(MainActivity.this, LogIn.class);
                             finish();
-                            startActivity(i);
+                            //startActivity(i);
                         }
                     }
                 });
