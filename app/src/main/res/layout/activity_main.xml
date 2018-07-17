@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:ems="10"
-        android:hint="Pasword"
+        android:hint="Password"
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="215dp" />
@@ -75,4 +75,13 @@
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnDbTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="dbtest" />
+
 </RelativeLayout>
