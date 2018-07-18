@@ -91,11 +91,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         User user = item.getUser();
 
                         iid = item.getIid();
+                        uid = item.getUser().getUid();
 
                         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
 
                         //add user to usersbyitem
-                        dbUsersbyItem
+                        dbUsersbyItem.child(uid)
                                 .setValue(user);
                     }
 

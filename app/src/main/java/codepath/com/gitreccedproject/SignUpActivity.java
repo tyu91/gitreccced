@@ -118,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             User newUser = new User(uid, mUsername, mPassword, new Item ());
 
-            dbUsers.push().setValue(newUser);
+            dbUsers.child(uid).setValue(newUser);
 
             //pass userid to test recommendations page
             Intent intent = new Intent(SignUpActivity.this, InputRecsActivity.class);

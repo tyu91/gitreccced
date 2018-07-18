@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
@@ -63,9 +64,9 @@ public class InputRecsActivity extends AppCompatActivity {
     }
 
     public void getSearchResults(String input) {
-        com.google.firebase.database.Query query = null;
+        Query query = null;
         DatabaseReference itemsRef;
-        itemsRef = FirebaseDatabase.getInstance().getReference("movies");
+        itemsRef = FirebaseDatabase.getInstance().getReference("items");
 
         query = itemsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff");
 
