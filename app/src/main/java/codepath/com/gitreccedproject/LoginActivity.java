@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.v("TESTING", "signInWithEmail : failed", task.getException());
                             Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent i = new Intent(LoginActivity.this, InputRecsActivity.class);
+                            Intent i = new Intent(LoginActivity.this, MyLibraryActivity.class);
                             startActivity(i);
                             finish();
                         }

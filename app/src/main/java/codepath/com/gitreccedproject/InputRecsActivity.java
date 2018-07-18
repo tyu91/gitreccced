@@ -18,6 +18,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class InputRecsActivity extends AppCompatActivity {
 
@@ -64,7 +66,7 @@ public class InputRecsActivity extends AppCompatActivity {
     public void getSearchResults(String input) {
         // TODO  - firebase query
         //goOnline();
-        //DatabaseReference itemsRef;
+        /*//DatabaseReference itemsRef;
         //itemsRef = FirebaseDatabase.getInstance().getReference().getRoot();
         //DatabaseReference itemsRef = database.getReference("items");
         //Query query = itemsRef.child("movies").orderByChild("title").startAt(input);
@@ -96,7 +98,18 @@ public class InputRecsActivity extends AppCompatActivity {
         /*query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("snapshot", "loadPost:onDataChange");*/
+        com.google.firebase.database.Query query = null;
+        DatabaseReference itemsRef;
+        itemsRef = FirebaseDatabase.getInstance().getReference("movies");
+        //DatabaseReference itemsRef = database.getReference("items");
+        query = itemsRef.orderByChild("title").startAt(input);
+        //goOnline();
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i("snapshot", "loadPost:onDataChange");
+                Log.i("Snapshot", dataSnapshot.toString());
                 List<String> cities = new ArrayList<String>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     cities.add(postSnapshot.getValue().toString());
@@ -104,14 +117,11 @@ public class InputRecsActivity extends AppCompatActivity {
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("snapshot", "loadPost:onCancelled", databaseError.toException());
+                Log.i("snapshot", "loadPost:onCancelled");
             }
-
-
-        });*/
+        });
 
 
         for (int i=0; i<5; i++) {
