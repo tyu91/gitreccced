@@ -35,7 +35,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         // get the data according to position
         Item item = mItems.get(position);
         // populate the views according to position
-        holder.title_tv.setText(String.format("Item_title_%s",position)); //TODO - change this later
+        holder.title_tv.setText(item.title); //TODO - change this later
     }
 
     @Override
