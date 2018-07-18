@@ -17,8 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 
 
@@ -81,7 +79,6 @@ public class InputRecsActivity extends AppCompatActivity {
                     item.setGenre(postSnapshot.child("genre").getValue().toString());
                     item.setDetails(postSnapshot.child("overview").getValue().toString());
                     item.setTitle(postSnapshot.child("title").getValue().toString());
-                    item.setUser((User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
 
                     items.add(item);
                     searchAdapter.notifyItemInserted(items.size() - 1);
