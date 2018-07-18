@@ -2,18 +2,23 @@ package codepath.com.gitreccedproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class DBTest2Activity extends AppCompatActivity {
 
-    DatabaseReference dbItems;
+    DatabaseReference dbItemsByUser;
     EditText etGenre;
     EditText etTitle;
     Button btnSubmitItem;
@@ -30,7 +35,33 @@ public class DBTest2Activity extends AppCompatActivity {
         uid = intent.getStringExtra("uid");
 
         //reference to items field of json array in database
-        dbItems = FirebaseDatabase.getInstance().getReference("items").child(uid);
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+        dbItemsByUser.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         etGenre = findViewById(R.id.etGenre);
         etTitle = findViewById(R.id.etTitle);
         btnSubmitItem = findViewById(R.id.btnSubmitItem);
@@ -51,13 +82,13 @@ public class DBTest2Activity extends AppCompatActivity {
         String title = etTitle.getText().toString();
 
         if(!TextUtils.isEmpty(title)){
-            iid = dbItems.push().getKey();
+            iid = dbItemsByUser.push().getKey();
 
             //new item to add
             Item newItem = new Item(iid, genre, title, "dummy details string", uid);
 
             //add item to db
-            dbItems.child(iid).setValue(newItem);
+            dbItemsByUser.child(iid).setValue(newItem);
 
             /*//add iid to return intent
             Intent resultIntent = new Intent();
