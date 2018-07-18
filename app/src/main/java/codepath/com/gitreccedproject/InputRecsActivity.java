@@ -127,7 +127,12 @@ public class InputRecsActivity extends AppCompatActivity {
                 Log.i("Snapshot", dataSnapshot.toString());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("snapshot", postSnapshot.getValue().toString());
-                    Item item = new Item("","","","", new User());
+
+
+                    Item item = new Item("","","","", (User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
+
+                    item.iid = postSnapshot.getKey().toString();
+                    Log.i("test", item.iid);
                     item.genre = postSnapshot.child("genre").getValue().toString();
                     item.details = postSnapshot.child("overview").getValue().toString();
                     item.title = postSnapshot.child("title").getValue().toString();

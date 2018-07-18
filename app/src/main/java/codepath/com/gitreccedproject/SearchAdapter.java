@@ -10,9 +10,19 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+    DatabaseReference dbItemsByUser;
+    DatabaseReference dbUsersbyItem;
+
+    String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
+
+
     Context context;
     public List<Item> mItems;
 
@@ -27,6 +37,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(context);
         View searchView = inflater.inflate(R.layout.item_search, parent, false);
         ViewHolder viewHolder = new ViewHolder(searchView);
+
         return viewHolder;
     }
 
@@ -61,9 +72,22 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 // get the item at the position
                 final Item item = mItems.get(position);
+                addItem(position);
                 Log.i("select", String.format("Got item at %s", position));
                 // TODO - insert into firebase
             }
         }
+    }
+
+    private void addItem(int position) {
+
+        iid = mItems.get(position).getIid();
+        uid = mItems.get(position).getUser().getUid();
+
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+
+        Log.i("test", "setting dbItemsByUser");
+        dbItemsByUser.child(iid).setValue(mItems.get(position));
     }
 }
