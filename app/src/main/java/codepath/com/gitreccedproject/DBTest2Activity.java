@@ -1,20 +1,12 @@
 package codepath.com.gitreccedproject;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class DBTest2Activity extends AppCompatActivity {
 
@@ -32,7 +24,7 @@ public class DBTest2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest2);
 
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
 
         //reference to items field of json array in database
@@ -89,7 +81,7 @@ public class DBTest2Activity extends AppCompatActivity {
                 addItem();
                 //finish();
             }
-        });
+        });*/
     }
 
     private void addItem(){
@@ -100,10 +92,10 @@ public class DBTest2Activity extends AppCompatActivity {
             iid = dbItemsByUser.push().getKey();
 
             //new item to add
-            Item newItem = new Item(iid, genre, title, "dummy details string", uid);
+            //Item newItem = new Item(iid, genre, title, "dummy details string", uid);
 
             //add item to db
-            dbItemsByUser.child(iid).setValue(newItem);
+            //dbItemsByUser.child(iid).setValue(newItem);
 
             /*//add iid to return intent
             Intent resultIntent = new Intent();

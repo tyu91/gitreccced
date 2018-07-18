@@ -2,6 +2,7 @@ package codepath.com.gitreccedproject;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +11,22 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+    DatabaseReference dbItemsByUser;
+    DatabaseReference dbUsersbyItem;
+
+    String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
+
+
     Context context;
     public List<Item> mItems;
 
@@ -27,6 +41,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(context);
         View searchView = inflater.inflate(R.layout.item_search, parent, false);
         ViewHolder viewHolder = new ViewHolder(searchView);
+
         return viewHolder;
     }
 
@@ -35,7 +50,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         // get the data according to position
         Item item = mItems.get(position);
         // populate the views according to position
-        holder.title_tv.setText(item.title); //TODO - change this later
+        holder.title_tv.setText(item.title);
     }
 
     @Override
@@ -61,9 +76,62 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 // get the item at the position
                 final Item item = mItems.get(position);
+                addItem(position);
                 Log.i("select", String.format("Got item at %s", position));
-                // TODO - insert into firebase
+
+
+                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+                dbItemsByUser.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                        //get snapshot of item added under user in itemsbyuser
+                        Item item = dataSnapshot.getValue(Item.class);
+
+                        //generate user from item
+                        User user = item.getUser();
+
+                        iid = item.getIid();
+
+                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+
+                        //add user to usersbyitem
+                        dbUsersbyItem
+                                .setValue(user);
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.i("childeventlistener", "cancelled");
+                    }
+                });
             }
         }
+    }
+
+    private void addItem(int position) {
+
+        iid = mItems.get(position).getIid();
+        uid = mItems.get(position).getUser().getUid();
+
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+
+        Log.i("test", "setting dbItemsByUser");
+        dbItemsByUser.child(iid).setValue(mItems.get(position));
     }
 }

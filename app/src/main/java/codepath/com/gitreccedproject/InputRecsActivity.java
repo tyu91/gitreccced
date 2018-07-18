@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 
@@ -27,9 +29,6 @@ public class InputRecsActivity extends AppCompatActivity {
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
-
-    //firebase
-    //FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,25 +63,25 @@ public class InputRecsActivity extends AppCompatActivity {
     }
 
     public void getSearchResults(String input) {
-        // TODO  - firebase query
         com.google.firebase.database.Query query = null;
         DatabaseReference itemsRef;
         itemsRef = FirebaseDatabase.getInstance().getReference("movies");
-        //DatabaseReference itemsRef = database.getReference("items");
+
         query = itemsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff");
-        //goOnline();
+
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("snapshot", "loadPost:onDataChange");
-                Log.i("Snapshot", dataSnapshot.toString());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //cities.add(postSnapshot.getValue().toString());
-                    Log.i("snapshot", postSnapshot.getValue().toString());
-                    Item item = new Item("","","","","");
-                    item.genre = postSnapshot.child("genre").getValue().toString();
-                    item.details = postSnapshot.child("overview").getValue().toString();
-                    item.title = postSnapshot.child("title").getValue().toString();
+
+                    Item item = new Item();
+
+                    item.setIid(postSnapshot.getKey());
+                    item.setGenre(postSnapshot.child("genre").getValue().toString());
+                    item.setDetails(postSnapshot.child("overview").getValue().toString());
+                    item.setTitle(postSnapshot.child("title").getValue().toString());
+                    item.setUser((User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
+
                     items.add(item);
                     searchAdapter.notifyItemInserted(items.size() - 1);
                 }
@@ -95,5 +94,3 @@ public class InputRecsActivity extends AppCompatActivity {
         });
     }
 }
-
-///implementation 'com.google.firebase:firebase-database:16.0.1'
