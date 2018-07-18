@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class DBTest2Activity extends AppCompatActivity {
 
     DatabaseReference dbItemsByUser;
+    DatabaseReference dbUsersbyItem;
     EditText etGenre;
     EditText etTitle;
     Button btnSubmitItem;
@@ -36,9 +37,23 @@ public class DBTest2Activity extends AppCompatActivity {
 
         //reference to items field of json array in database
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+        //dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
         dbItemsByUser.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                //get snapshot of item added under user in itemsbyuser
+                Item item = dataSnapshot.getValue(Item.class);
+
+                //generate user from item
+                User user = new User(item.getUser(), getIntent().getStringExtra("username"), getIntent().getStringExtra("password"), item.getIid());
+
+                iid = item.getIid();
+
+                dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+
+                //add user to usersbyitem
+                dbUsersbyItem
+                        .setValue(user);
 
             }
 

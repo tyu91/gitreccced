@@ -14,10 +14,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class InputRecsActivity extends AppCompatActivity {
@@ -57,6 +56,8 @@ public class InputRecsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String search_text = search_et.getText().toString();
+                items.clear();
+                searchAdapter.notifyDataSetChanged();
                 getSearchResults(search_text);
             }
         });
@@ -64,55 +65,26 @@ public class InputRecsActivity extends AppCompatActivity {
 
     public void getSearchResults(String input) {
         // TODO  - firebase query
-        //goOnline();
-        /*//DatabaseReference itemsRef;
-        //itemsRef = FirebaseDatabase.getInstance().getReference().getRoot();
-        //DatabaseReference itemsRef = database.getReference("items");
-        //Query query = itemsRef.child("movies").orderByChild("title").startAt(input);
-        //goOnline();
-
-        DatabaseReference dbMovies;
-        //dbMovies = FirebaseDatabase.getInstance().getReference().getRoot();
-        dbMovies = FirebaseDatabase.getInstance().getReference("movies");
-        Query query = dbMovies.orderByChild("title").equalTo(input);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("snapshot", "loadPost:onDataChange");
-                if(!dataSnapshot.exists()) {
-                    //if item does not exist in the database
-                }
-            }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("snapshot", "loadPost:onCancelled", databaseError.toException());
-            }
-
-
-        });
-
-        /*query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("snapshot", "loadPost:onDataChange");*/
         com.google.firebase.database.Query query = null;
         DatabaseReference itemsRef;
         itemsRef = FirebaseDatabase.getInstance().getReference("movies");
         //DatabaseReference itemsRef = database.getReference("items");
-        query = itemsRef.orderByChild("title").startAt(input);
+        query = itemsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff");
         //goOnline();
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i("snapshot", "loadPost:onDataChange");
                 Log.i("Snapshot", dataSnapshot.toString());
-                List<String> cities = new ArrayList<String>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    cities.add(postSnapshot.getValue().toString());
+                    //cities.add(postSnapshot.getValue().toString());
                     Log.i("snapshot", postSnapshot.getValue().toString());
+                    Item item = new Item("","","","","");
+                    item.genre = postSnapshot.child("genre").getValue().toString();
+                    item.details = postSnapshot.child("overview").getValue().toString();
+                    item.title = postSnapshot.child("title").getValue().toString();
+                    items.add(item);
+                    searchAdapter.notifyItemInserted(items.size() - 1);
                 }
             }
 
@@ -121,13 +93,6 @@ public class InputRecsActivity extends AppCompatActivity {
                 Log.i("snapshot", "loadPost:onCancelled");
             }
         });
-
-
-        for (int i=0; i<5; i++) {
-            Item item = null;
-            items.add(item);
-            searchAdapter.notifyItemInserted(items.size() - 1);
-        }
     }
 }
 

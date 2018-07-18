@@ -92,6 +92,8 @@ public class DBTestActivity extends AppCompatActivity {
             //pass userid to test recommendations page
             Intent intent = new Intent(DBTestActivity.this, DBTest2Activity.class);
             intent.putExtra("uid", uid);
+            intent.putExtra("username", username);
+            intent.putExtra("password", password);
             startActivityForResult(intent, DB_TEST_REQUEST_CODE);
 
             //new user to add

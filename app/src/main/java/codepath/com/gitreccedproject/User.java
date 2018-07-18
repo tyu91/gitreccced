@@ -18,4 +18,43 @@ public class User{
         this.password = password;
         this.item = item;
     }
+
+    public User (String uid) {
+        this.uid = uid;
+        this.username = username;
+        this.password = password;
+        this.item = item;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
 }
