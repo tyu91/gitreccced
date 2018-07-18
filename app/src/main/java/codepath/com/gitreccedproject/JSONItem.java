@@ -8,18 +8,16 @@ public class JSONItem {
     public String genre;
     public String title;
     public String overview;
-    public String user;
 
     public JSONItem() {
         //empty constructor
     }
 
-    public JSONItem(String iid, String user, JSONObject object) throws JSONException {
-        iid = this.iid;
+    public JSONItem(String iid, JSONObject object) throws JSONException {
+        this.iid = iid;
         genre = "Movie";
         title = object.getString("title");
         overview = object.getString("overview");
-        user = this.user;
     }
 
     public String getIid() {
@@ -36,9 +34,5 @@ public class JSONItem {
 
     public String getOverview() {
         return overview;
-    }
-
-    public String getUser() {
-        return user;
     }
 }
