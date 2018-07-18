@@ -15,7 +15,6 @@ public class MyLibraryActivity extends AppCompatActivity {
     Button logOut;
     TextView greeting;
     FirebaseAuth mAuth;
-    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +22,14 @@ public class MyLibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_library);
 
         mAuth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         logOut = findViewById(R.id.btnLogOut);
         greeting = findViewById(R.id.tvGreeting);
 
-        greeting.setText( "Hello, " + user.getDisplayName());
+        if (user != null) {
+            greeting.setText("Hey, " + user.getDisplayName());
+        }
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
