@@ -2,6 +2,10 @@ package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+<<<<<<< HEAD
+=======
+import android.support.annotation.Nullable;
+>>>>>>> d871c9d06bf3bc43566e544d1302d078719851ce
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +14,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+<<<<<<< HEAD
+=======
+import com.google.firebase.database.ChildEventListener;
+>>>>>>> d871c9d06bf3bc43566e544d1302d078719851ce
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+<<<<<<< HEAD
 import com.google.firebase.database.ValueEventListener;
+=======
+>>>>>>> d871c9d06bf3bc43566e544d1302d078719851ce
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +98,7 @@ public class InputRecsActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.i("snapshot", "loadPost:onCancelled", databaseError.toException());
             }
+
 
         });
 
