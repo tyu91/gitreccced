@@ -56,6 +56,8 @@ public class InputRecsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String search_text = search_et.getText().toString();
+                items.clear();
+                searchAdapter.notifyDataSetChanged();
                 getSearchResults(search_text);
             }
         });
