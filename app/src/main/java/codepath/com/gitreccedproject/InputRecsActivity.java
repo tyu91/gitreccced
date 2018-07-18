@@ -23,18 +23,12 @@ import java.util.ArrayList;
 
 public class InputRecsActivity extends AppCompatActivity {
 
-    DatabaseReference dbItemsByUser;
-    DatabaseReference dbUsersbyItem;
-
     public EditText search_et;
     public RecyclerView searchlist_rv;
     public ImageButton search_btn;
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
-
-    String uid = "ir: user id not set yet"; //user id (initialized to dummy string for testing)
-    String iid = "ir: item id not set yet"; //item id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +63,6 @@ public class InputRecsActivity extends AppCompatActivity {
     }
 
     public void getSearchResults(String input) {
-        // TODO  - firebase query
         com.google.firebase.database.Query query = null;
         DatabaseReference itemsRef;
         itemsRef = FirebaseDatabase.getInstance().getReference("movies");
@@ -79,18 +72,16 @@ public class InputRecsActivity extends AppCompatActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("snapshot", "loadPost:onDataChange");
-                Log.i("Snapshot", dataSnapshot.toString());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Log.i("snapshot", postSnapshot.getValue().toString());
 
+                    Item item = new Item();
 
-                    Item item = new Item("","","","", (User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
+                    item.setIid(postSnapshot.getKey());
+                    item.setGenre(postSnapshot.child("genre").getValue().toString());
+                    item.setDetails(postSnapshot.child("overview").getValue().toString());
+                    item.setTitle(postSnapshot.child("title").getValue().toString());
+                    item.setUser((User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
 
-                    item.iid = postSnapshot.getKey().toString();
-                    item.genre = postSnapshot.child("genre").getValue().toString();
-                    item.details = postSnapshot.child("overview").getValue().toString();
-                    item.title = postSnapshot.child("title").getValue().toString();
                     items.add(item);
                     searchAdapter.notifyItemInserted(items.size() - 1);
                 }
@@ -103,5 +94,3 @@ public class InputRecsActivity extends AppCompatActivity {
         });
     }
 }
-
-///implementation 'com.google.firebase:firebase-database:16.0.1'

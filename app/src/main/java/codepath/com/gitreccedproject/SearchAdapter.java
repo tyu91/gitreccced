@@ -2,6 +2,7 @@ package codepath.com.gitreccedproject;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         // get the data according to position
         Item item = mItems.get(position);
         // populate the views according to position
-        holder.title_tv.setText(item.title); //TODO - change this later
+        holder.title_tv.setText(item.title);
     }
 
     @Override
@@ -77,11 +78,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 final Item item = mItems.get(position);
                 addItem(position);
                 Log.i("select", String.format("Got item at %s", position));
-                // TODO - insert into firebase
 
-                //reference to items field of json array in database
+
                 dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
-                //dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
                 dbItemsByUser.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
@@ -98,11 +97,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         //add user to usersbyitem
                         dbUsersbyItem
                                 .setValue(user);
-
                     }
 
                     @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                     }
 
@@ -112,13 +110,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     }
 
                     @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Log.i("childeventlistener", "cancelled");
                     }
                 });
             }
