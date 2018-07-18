@@ -18,13 +18,16 @@ public class DBTest2Activity extends AppCompatActivity {
     EditText etTitle;
     Button btnSubmitItem;
 
-    String uid = "user id not set yet"; //user id (initialized to dummy string for testing)
-    String iid = "item id not set yet"; //item id (initialized to dummy string for testing)
+    String uid = "2: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "2: item id not set yet"; //item id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest2);
+
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
 
         //reference to items field of json array in database
         dbItems = FirebaseDatabase.getInstance().getReference("items").child(uid);
@@ -38,7 +41,7 @@ public class DBTest2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 //add new item to items field
                 addItem();
-                finish();
+                //finish();
             }
         });
     }
@@ -50,14 +53,17 @@ public class DBTest2Activity extends AppCompatActivity {
         if(!TextUtils.isEmpty(title)){
             iid = dbItems.push().getKey();
 
-            Intent intent = getIntent();
-            String uid = intent.getStringExtra("uid");
-
             //new item to add
             Item newItem = new Item(iid, genre, title, "dummy details string", uid);
 
+            //add item to db
             dbItems.child(iid).setValue(newItem);
 
+            /*//add iid to return intent
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("iid", iid);
+            setResult(DBTestActivity.DB_TEST_REQUEST_CODE, resultIntent);
+*/
         }
     }
 }

@@ -2,21 +2,24 @@ package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.firebase.database.DatabaseReference.goOnline;
 
 public class InputRecsActivity extends AppCompatActivity {
 
@@ -62,38 +65,29 @@ public class InputRecsActivity extends AppCompatActivity {
 
     public void getSearchResults(String input) {
         // TODO  - firebase query
+        goOnline();
         DatabaseReference itemsRef;
-        itemsRef = FirebaseDatabase.getInstance().getReference().child("items");
+        itemsRef = FirebaseDatabase.getInstance().getReference().getRoot();
         //DatabaseReference itemsRef = database.getReference("items");
-        com.google.firebase.database.Query query = itemsRef.child("-LHe38UpsfNvcDQti1KG").orderByChild("title");
-                //.orderByChild("title").startAt(input);
-        query.addChildEventListener(new ChildEventListener() {
+        com.google.firebase.database.Query query = itemsRef.child("movies").orderByChild("title").startAt(input);
+        //goOnline();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("snapshot", "loadPost:onDataChange");
+                List<String> cities = new ArrayList<String>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    cities.add(postSnapshot.getValue().toString());
+                    Log.i("snapshot", postSnapshot.getValue().toString());
+                }
             }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.i("snapshot", "loadPost:onCancelled", databaseError.toException());
             }
-            // TODO: implement the ChildEventListener methods as documented above
-            // ...
+
         });
 
 
@@ -104,3 +98,5 @@ public class InputRecsActivity extends AppCompatActivity {
         }
     }
 }
+
+///implementation 'com.google.firebase:firebase-database:16.0.1'

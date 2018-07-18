@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -14,6 +14,7 @@
         android:layout_marginTop="37dp"
         android:text="App Name"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="26sp"
         android:textStyle="bold|italic"
         tools:layout_editor_absoluteX="124dp"
@@ -25,10 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="109dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
+        android:textColor="#000000"
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="135dp" />
 
@@ -36,10 +38,13 @@
         android:id="@+id/etPassword"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="185dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="#000000"
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="215dp" />
 
@@ -58,23 +63,12 @@
         android:id="@+id/btnSignUp"
         android:layout_width="143dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="86dp"
+        android:layout_marginTop="-161dp"
         android:text="Sign Up"
         tools:layout_editor_absoluteX="121dp"
         tools:layout_editor_absoluteY="387dp" />
-
-    <EditText
-        android:id="@+id/etName"
-        android:layout_width="348dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="103dp"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/btnDbTest"
