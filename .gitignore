@@ -62,4 +62,4 @@ local.properties
 .buildpath
 
 #secret files
-
+secrets.xml
