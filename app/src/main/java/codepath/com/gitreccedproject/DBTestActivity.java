@@ -1,26 +1,12 @@
 package codepath.com.gitreccedproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
 
 public class DBTestActivity extends AppCompatActivity {
 
@@ -50,7 +36,7 @@ public class DBTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest);
 
-        //reference to users field of json array in database
+        /*//reference to users field of json array in database
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         enterUsername = findViewById(R.id.etSubmitUsername);
         enterPassword = findViewById(R.id.etSubmitPassword);
@@ -78,10 +64,10 @@ public class DBTestActivity extends AppCompatActivity {
                 //add movies to db
                 addMovies();
             }
-        });
+        });*/
     }
 
-    //adds user to db
+    /*//adds user to db
     private void addUser(){
         String username = enterUsername.getText().toString();
         String password = enterPassword.getText().toString();
@@ -153,5 +139,5 @@ public class DBTestActivity extends AppCompatActivity {
         if (requestCode == DB_TEST_REQUEST_CODE) {
             Toast.makeText(this, "successfully entered item into database!", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 }

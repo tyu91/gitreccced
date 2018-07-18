@@ -1,17 +1,20 @@
 package codepath.com.gitreccedproject;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Item {
     public String iid;
     public String genre;
     public String title;
     public String details;
-    public String user;
+    public User user;
 
     public Item () {
         //empty constructor
     }
 
-    public Item(String iid, String genre, String title, String details, String user) {
+    public Item(String iid, String genre, String title, String details, User user) {
         this.iid = iid;
         this.genre = genre;
         this.title = title;
@@ -35,7 +38,7 @@ public class Item {
         return details;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -55,7 +58,7 @@ public class Item {
         this.details = details;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

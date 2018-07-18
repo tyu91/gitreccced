@@ -10,16 +10,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 
 public class InputRecsActivity extends AppCompatActivity {
+
+    DatabaseReference dbItemsByUser;
+    DatabaseReference dbUsersbyItem;
 
     public EditText search_et;
     public RecyclerView searchlist_rv;
@@ -28,8 +34,8 @@ public class InputRecsActivity extends AppCompatActivity {
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
-    //firebase
-    //FirebaseDatabase database = FirebaseDatabase.getInstance();
+    String uid = "ir: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "ir: item id not set yet"; //item id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,49 @@ public class InputRecsActivity extends AppCompatActivity {
                 getSearchResults(search_text);
             }
         });
+
+        //reference to items field of json array in database
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+        //dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+        dbItemsByUser.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                //get snapshot of item added under user in itemsbyuser
+                Item item = dataSnapshot.getValue(Item.class);
+
+                //generate user from item
+                User user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+
+                iid = item.getIid();
+
+                dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+
+                //add user to usersbyitem
+                dbUsersbyItem
+                        .setValue(user);
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void getSearchResults(String input) {
@@ -68,18 +117,17 @@ public class InputRecsActivity extends AppCompatActivity {
         com.google.firebase.database.Query query = null;
         DatabaseReference itemsRef;
         itemsRef = FirebaseDatabase.getInstance().getReference("movies");
-        //DatabaseReference itemsRef = database.getReference("items");
+
         query = itemsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff");
-        //goOnline();
+
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i("snapshot", "loadPost:onDataChange");
                 Log.i("Snapshot", dataSnapshot.toString());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //cities.add(postSnapshot.getValue().toString());
                     Log.i("snapshot", postSnapshot.getValue().toString());
-                    Item item = new Item("","","","","");
+                    Item item = new Item("","","","", new User());
                     item.genre = postSnapshot.child("genre").getValue().toString();
                     item.details = postSnapshot.child("overview").getValue().toString();
                     item.title = postSnapshot.child("title").getValue().toString();
