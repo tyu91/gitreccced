@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -75,6 +78,49 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 addItem(position);
                 Log.i("select", String.format("Got item at %s", position));
                 // TODO - insert into firebase
+
+                //reference to items field of json array in database
+                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+                //dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+                dbItemsByUser.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                        //get snapshot of item added under user in itemsbyuser
+                        Item item = dataSnapshot.getValue(Item.class);
+
+                        //generate user from item
+                        User user = item.getUser();
+
+                        iid = item.getIid();
+
+                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+
+                        //add user to usersbyitem
+                        dbUsersbyItem
+                                .setValue(user);
+
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         }
     }

@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,49 +66,6 @@ public class InputRecsActivity extends AppCompatActivity {
                 getSearchResults(search_text);
             }
         });
-
-        //reference to items field of json array in database
-        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
-        //dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
-        dbItemsByUser.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                //get snapshot of item added under user in itemsbyuser
-                Item item = dataSnapshot.getValue(Item.class);
-
-                //generate user from item
-                User user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
-
-                iid = item.getIid();
-
-                dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
-
-                //add user to usersbyitem
-                dbUsersbyItem
-                        .setValue(user);
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void getSearchResults(String input) {
@@ -132,7 +88,6 @@ public class InputRecsActivity extends AppCompatActivity {
                     Item item = new Item("","","","", (User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
 
                     item.iid = postSnapshot.getKey().toString();
-                    Log.i("test", item.iid);
                     item.genre = postSnapshot.child("genre").getValue().toString();
                     item.details = postSnapshot.child("overview").getValue().toString();
                     item.title = postSnapshot.child("title").getValue().toString();
