@@ -18,8 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.firebase.database.DatabaseReference.goOnline;
-
 public class InputRecsActivity extends AppCompatActivity {
 
     public EditText search_et;
@@ -64,16 +62,18 @@ public class InputRecsActivity extends AppCompatActivity {
 
     public void getSearchResults(String input) {
         // TODO  - firebase query
-        goOnline();
-        DatabaseReference itemsRef;
-        itemsRef = FirebaseDatabase.getInstance().getReference().getRoot();
-        //DatabaseReference itemsRef = database.getReference("items");
-        com.google.firebase.database.Query query = itemsRef.child("movies").orderByChild("title").startAt(input);
         //goOnline();
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        com.google.firebase.database.Query query = null;
+        DatabaseReference itemsRef;
+        itemsRef = FirebaseDatabase.getInstance().getReference().getRoot().child("movies");
+        //DatabaseReference itemsRef = database.getReference("items");
+        query = itemsRef.orderByChild("title").startAt(input);
+        //goOnline();
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i("snapshot", "loadPost:onDataChange");
+                Log.i("Snapshot", dataSnapshot.toString());
                 List<String> cities = new ArrayList<String>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     cities.add(postSnapshot.getValue().toString());
@@ -81,13 +81,10 @@ public class InputRecsActivity extends AppCompatActivity {
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("snapshot", "loadPost:onCancelled", databaseError.toException());
+                Log.i("snapshot", "loadPost:onCancelled");
             }
-
-
         });
 
 
