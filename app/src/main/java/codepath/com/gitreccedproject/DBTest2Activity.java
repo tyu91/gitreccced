@@ -26,8 +26,11 @@ public class DBTest2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest2);
 
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
+
         //reference to items field of json array in database
-        dbItems = FirebaseDatabase.getInstance().getReference("items").child(getIntent().getStringExtra("uid"));
+        dbItems = FirebaseDatabase.getInstance().getReference("items").child(uid);
         etGenre = findViewById(R.id.etGenre);
         etTitle = findViewById(R.id.etTitle);
         btnSubmitItem = findViewById(R.id.btnSubmitItem);
@@ -49,9 +52,6 @@ public class DBTest2Activity extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(title)){
             iid = dbItems.push().getKey();
-
-            Intent intent = getIntent();
-            uid = intent.getStringExtra("uid");
 
             //new item to add
             Item newItem = new Item(iid, genre, title, "dummy details string", uid);
