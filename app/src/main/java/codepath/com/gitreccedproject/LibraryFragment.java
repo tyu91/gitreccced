@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 public class LibraryFragment extends Fragment {
+
     public static Fragment getInstance(int position) {
         Bundle bundle = new Bundle();
         bundle.putInt("pos", position);
@@ -48,6 +49,5 @@ public class LibraryFragment extends Fragment {
             Item item = null;items.add(item);
             libAdapter.notifyItemInserted(items.size() - 1);
         }
-
     }
 }
