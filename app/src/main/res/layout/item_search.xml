@@ -11,5 +11,7 @@
         android:layout_height="30dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="Title" />
+        android:background="#424242"
+        android:text="Title"
+        android:textColor="#c8c6d0" />
 </RelativeLayout>
