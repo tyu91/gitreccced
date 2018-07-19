@@ -29,7 +29,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 
-public class InputRecsActivity extends AppCompatActivity {
+public class InputRecsMoviesActivity extends AppCompatActivity {
 
     Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
@@ -90,7 +90,7 @@ public class InputRecsActivity extends AppCompatActivity {
         algolia_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(InputRecsActivity.this, AlgoliaActivity.class);
+                Intent i = new Intent(InputRecsMoviesActivity.this, AlgoliaActivity.class);
                 startActivity(i);
             }
         });

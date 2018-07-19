@@ -23,7 +23,7 @@ public class AlgoliaActivity extends AppCompatActivity {
     public Button movies_btn;
     public Button tv_btn;
 
-    Client client = new Client("IF4OZJWJDV", ""); //TODO - add API key instead of ""
+    Client client = new Client("IF4OZJWJDV", "b358e6dfae0ae90df1c6a9e815225088"); //TODO - add API key instead of ""
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
