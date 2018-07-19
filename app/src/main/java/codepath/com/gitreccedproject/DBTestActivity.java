@@ -25,7 +25,7 @@ public class DBTestActivity extends AppCompatActivity {
     //base url of API
     public final static String API_BASE_URL = "https://api.themoviedb.org/3";
     //parameter name
-    public final static String API__KEY_PARAM = "api_key";
+    public final static String API_KEY_PARAM = "api_key";
 
     AsyncHttpClient client;
 
@@ -112,43 +112,55 @@ public class DBTestActivity extends AppCompatActivity {
         String url = API_BASE_URL + "/movie/popular";
         //set up request parameters
         RequestParams params = new RequestParams();
-        params.put(API__KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
-        //execute a GET request that expects a response from JSON object
+        String pagenum;
 
-        client.get(url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+        //adds &api_key=<API key>
 
-                try {
-                    JSONArray results = response.getJSONArray("results");
-                    //iterate thru result array list and create Movie objects
-                    for(int i = 0; i < results.length(); i++) {
-                        //TODO: change iid and uid to what they should actually be
+        for(int i = 1; i <= 2; i++) {
 
-                        //create new item id
-                        iid = dbItems.push().getKey();
+            pagenum = String.valueOf(i);
 
-                        JSONItem newItem = new JSONItem(iid, results.getJSONObject(i));
+            params.put(API_KEY_PARAM, getString(R.string.movieApiKey));
 
-                        //add item to db
-                        dbItems.child(iid).setValue(newItem);
+            //adds &page=<pagenum>
+            params.put("page", pagenum);
+            //execute a GET request that expects a response from JSON object
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                        //movies.add(movie);
-                        //notify adapter a new row was added
-                        //adapter.notifyItemInserted(movies.size() - 1);
+                    try {
+                        JSONArray results = response.getJSONArray("results");
+                        //iterate thru result array list and create Movie objects
+                        for (int j = 0; j < results.length(); j++) {
+                            //TODO: change iid and uid to what they should actually be
+
+                            //create new item id
+                            iid = dbItems.push().getKey();
+
+                            JSONItem newItem = new JSONItem(iid, results.getJSONObject(j));
+
+                            //add item to db
+                            dbItems.child(iid).setValue(newItem);
+
+                            //movies.add(movie);
+                            //notify adapter a new row was added
+                            //adapter.notifyItemInserted(movies.size() - 1);
+                        }
+
+                        Log.i("TestActivity", "Loaded 5 movies");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    Log.i("TestActivity", "Loaded 5 movies");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                }
+            });
+        }
 
     }
 
