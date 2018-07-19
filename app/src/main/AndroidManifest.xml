@@ -22,7 +22,8 @@
         <activity android:name=".DBTestActivity" />
         <activity android:name=".DBTest2Activity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".MyLibraryActivity"></activity>
+        <activity android:name=".MyLibraryActivity" />
+        <activity android:name=".AlgoliaActivity"></activity>
     </application>
 
 </manifest>

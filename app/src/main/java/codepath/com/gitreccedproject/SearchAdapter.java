@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -77,6 +78,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 final Item item = mItems.get(position);
                 addItem(position);
+                Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
 
 
