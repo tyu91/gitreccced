@@ -19,7 +19,7 @@
         android:ems="10"
         android:hint="Search"
         android:inputType="textPersonName"
-        android:textColor="#e1e1e1" />
+        android:textColor="#c8c6d0" />
 
     <ImageButton
         android:id="@+id/search_btn"
