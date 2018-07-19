@@ -30,8 +30,6 @@ import java.util.ArrayList;
 
 public class InputRecsActivity extends AppCompatActivity {
 
-//    String apikey = getString(R.string.searchApiKey);
-
     Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
 
@@ -60,31 +58,6 @@ public class InputRecsActivity extends AppCompatActivity {
         uid = SignUpActivity.mAuth.getCurrentUser().getUid();
         dbUsers.child(uid).setValue(resultUser);
         resultUser.setUid(uid);
-
-        /*
-        //algolia
-        {
-            try {
-                client.getIndex("contacts").addObjectAsync(new JSONObject()
-                        .put("firstname", "Jim")
-                        .put("lastname", "Barn")
-                        .put("followers", 90)
-                        .put("company", "California"), null);
-                Log.i("algolia","success");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //client.getIndex("contacts").searchAsync(new Query("jimmie"), null, null);
-
-        client.getIndex("contacts").searchAsync(new Query("jimmie"), null, new CompletionHandler() {
-            @Override
-            public void requestCompleted(JSONObject content, AlgoliaException error) {
-                Log.i("content", content.toString());
-            }
-        });*/
-
 
         // find the views
         search_et = findViewById(R.id.search_et);
@@ -175,7 +148,7 @@ public class InputRecsActivity extends AppCompatActivity {
                     searchAdapter.notifyDataSetChanged();
                     JSONArray array = content.getJSONArray("hits");
                     for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = (JSONObject) array.getJSONObject(i);
+                        JSONObject object = array.getJSONObject(i);
 
                         Item item = new Item();
 
