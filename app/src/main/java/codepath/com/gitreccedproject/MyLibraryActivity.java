@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +53,10 @@ public class MyLibraryActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
+                        if (menuItem.getItemId() == R.id.logout) {
+                            Log.i("menu","logout selected");
+                            signOut();
+                        }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
 
