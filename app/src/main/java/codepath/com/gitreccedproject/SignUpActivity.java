@@ -31,6 +31,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     DatabaseReference dbUsers;
 
+    static User user;
+
     String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "su: item id not set yet"; //item id (initialized to dummy string for testing)
 
@@ -120,15 +122,14 @@ public class SignUpActivity extends AppCompatActivity {
 
             User newUser = new User(uid, mUsername, mPassword, new Item ());
 
-            dbUsers.push().setValue(newUser);
+            user = newUser;
+
+            dbUsers.child(uid).setValue(newUser);
 
             //pass userid to test recommendations page
             Intent intent = new Intent(SignUpActivity.this, InputRecsActivity.class);
             intent.putExtra("user", Parcels.wrap(newUser));
             startActivityForResult(intent, DB_TEST_REQUEST_CODE);
-
-            /*//new user to add
-            */
 
         }
     }

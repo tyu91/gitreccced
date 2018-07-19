@@ -2,11 +2,22 @@ package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class DBTestActivity extends AppCompatActivity {
 
@@ -14,7 +25,7 @@ public class DBTestActivity extends AppCompatActivity {
     //base url of API
     public final static String API_BASE_URL = "https://api.themoviedb.org/3";
     //parameter name
-    public final static String API__KEY_PARAM = "api_key";
+    public final static String API_KEY_PARAM = "api_key";
 
     AsyncHttpClient client;
 
@@ -23,8 +34,8 @@ public class DBTestActivity extends AppCompatActivity {
     EditText enterPassword;
     Button btnSubmit;
 
-    DatabaseReference dbMovies;
-    Button btnAddMovies;
+    DatabaseReference dbItems;
+    Button btnAddItems;
 
     String uid = "1: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "1: item id not set yet"; //item id (initialized to dummy string for testing)
@@ -40,15 +51,26 @@ public class DBTestActivity extends AppCompatActivity {
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         enterUsername = findViewById(R.id.etSubmitUsername);
         enterPassword = findViewById(R.id.etSubmitPassword);
-        btnSubmit = findViewById(R.id.btnSubmit);
+        btnSubmit = findViewById(R.id.btnSubmit);*/
 
         //set up movie population button and movies db
-        dbMovies = FirebaseDatabase.getInstance().getReference("movies");
-        btnAddMovies = findViewById(R.id.btnAddMovies);
+        dbItems = FirebaseDatabase.getInstance().getReference("items");
+        btnAddItems = findViewById(R.id.btnAddItems);
 
         client = new AsyncHttpClient();
 
-        //set click listener to submit user info to realtime db
+        //set click listener to populate movies to realtime db
+        btnAddItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //add movies to db
+                addMovies();
+                //add tv shows to db
+                addTVShows();
+            }
+        });
+
+        /*//set click listener to submit user info to realtime db
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,17 +79,12 @@ public class DBTestActivity extends AppCompatActivity {
             }
         });
 
-        //set click listener to populate movies to realtime db
-        btnAddMovies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //add movies to db
-                addMovies();
-            }
-        });*/
+        */
     }
 
     /*//adds user to db
+
+
     private void addUser(){
         String username = enterUsername.getText().toString();
         String password = enterPassword.getText().toString();
@@ -88,52 +105,128 @@ public class DBTestActivity extends AppCompatActivity {
             dbUsers.push().setValue(newUser);
 
         }
-    }
+    }*/
 
     //adds movies to db from themoviedb.org
     private void addMovies() {
 
         //create the url
-        String url = API_BASE_URL + "/movie/now_playing";
+        String url = API_BASE_URL + "/movie/popular";
         //set up request parameters
         RequestParams params = new RequestParams();
-        params.put(API__KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
-        //execute a GET request that expects a response from JSON object
-        client.get(url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    JSONArray results = response.getJSONArray("results");
-                    //iterate thru result array list and create Movie objects
-                    for(int i = 0; i < 5; i++) {
-                        //TODO: change iid and uid to what they should actually be
-                        JSONItem newItem = new JSONItem(iid, uid, results.getJSONObject(i));
+        String pagenum;
 
-                        //create new item id
-                        iid = dbMovies.push().getKey();
+        //adds &api_key=<API key>
 
-                        //add item to db
-                        dbMovies.child(iid).setValue(newItem);
+        for(int i = 1; i <= 2; i++) {
 
-                        //movies.add(movie);
-                        //notify adapter a new row was added
-                        //adapter.notifyItemInserted(movies.size() - 1);
+            pagenum = String.valueOf(i);
+
+            params.put(API_KEY_PARAM, getString(R.string.movieApiKey));
+
+            //adds &page=<pagenum>
+            params.put("page", pagenum);
+            //execute a GET request that expects a response from JSON object
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                    try {
+                        JSONArray results = response.getJSONArray("results");
+                        //iterate thru result array list and create Movie objects
+                        for (int j = 0; j < results.length(); j++) {
+                            //TODO: change iid and uid to what they should actually be
+
+                            //create new item id
+                            iid = dbItems.push().getKey();
+
+                            JSONItem newItem = new JSONItem(iid, results.getJSONObject(j));
+
+                            //add item to db
+                            dbItems.child(iid).setValue(newItem);
+
+                            //movies.add(movie);
+                            //notify adapter a new row was added
+                            //adapter.notifyItemInserted(movies.size() - 1);
+                        }
+
+                        Log.i("TestActivity", "Loaded 5 movies");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    Log.i("TestActivity", "Loaded 5 movies");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.e("onFailure", "failure");
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                }
+            });
+        }
 
     }
 
+    //adds tv shows to db from themoviedb.org
+    private void addTVShows() {
+
+        //create the url
+        String url = API_BASE_URL + "/tv/popular";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        String pagenum;
+
+        //adds &api_key=<API key>
+
+        for(int i = 1; i <= 2; i++) {
+
+            pagenum = String.valueOf(i);
+
+            //adds apikey to request
+            params.put(API_KEY_PARAM, getString(R.string.movieApiKey));
+
+            //adds &page=<pagenum>
+            params.put("page", pagenum);
+            //execute a GET request that expects a response from JSON object
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                    try {
+                        JSONArray results = response.getJSONArray("results");
+                        //iterate thru result array list and create Movie objects
+                        for (int j = 0; j < results.length(); j++) {
+                            //TODO: change iid and uid to what they should actually be
+
+                            //create new item id
+                            iid = dbItems.push().getKey();
+
+                            JSONItem newItem = new JSONItem(iid, results.getJSONObject(j));
+
+                            //add item to db
+                            dbItems.child(iid).setValue(newItem);
+
+                            //movies.add(movie);
+                            //notify adapter a new row was added
+                            //adapter.notifyItemInserted(movies.size() - 1);
+                        }
+
+                        Log.i("TestActivity", "Loaded 5 movies");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                }
+            });
+        }
+
+    }
+
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DB_TEST_REQUEST_CODE) {
