@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private String title[] = {"Recommendations", "Library"};
+    private String title[] = {"Recommendations","Library"};
 
     public ViewPagerAdapter(FragmentManager manager) {
         super(manager);
@@ -15,7 +15,7 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         //return TabFragment.getInstance(position);
-        if (position == 0) {
+        if (position == 1) {
             return LibraryFragment.getInstance(position);
         }
         return RecsFragment.getInstance(position);
