@@ -65,6 +65,8 @@ public class DBTestActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //add movies to db
                 addMovies();
+                //add tv shows to db
+                addTVShows();
             }
         });
 
@@ -120,6 +122,66 @@ public class DBTestActivity extends AppCompatActivity {
 
             pagenum = String.valueOf(i);
 
+            params.put(API_KEY_PARAM, getString(R.string.movieApiKey));
+
+            //adds &page=<pagenum>
+            params.put("page", pagenum);
+            //execute a GET request that expects a response from JSON object
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                    try {
+                        JSONArray results = response.getJSONArray("results");
+                        //iterate thru result array list and create Movie objects
+                        for (int j = 0; j < results.length(); j++) {
+                            //TODO: change iid and uid to what they should actually be
+
+                            //create new item id
+                            iid = dbItems.push().getKey();
+
+                            JSONItem newItem = new JSONItem(iid, results.getJSONObject(j));
+
+                            //add item to db
+                            dbItems.child(iid).setValue(newItem);
+
+                            //movies.add(movie);
+                            //notify adapter a new row was added
+                            //adapter.notifyItemInserted(movies.size() - 1);
+                        }
+
+                        Log.i("TestActivity", "Loaded 5 movies");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                }
+            });
+        }
+
+    }
+
+    //adds tv shows to db from themoviedb.org
+    private void addTVShows() {
+
+        //create the url
+        String url = API_BASE_URL + "/tv/popular";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        String pagenum;
+
+        //adds &api_key=<API key>
+
+        for(int i = 1; i <= 2; i++) {
+
+            pagenum = String.valueOf(i);
+
+            //adds apikey to request
             params.put(API_KEY_PARAM, getString(R.string.movieApiKey));
 
             //adds &page=<pagenum>
