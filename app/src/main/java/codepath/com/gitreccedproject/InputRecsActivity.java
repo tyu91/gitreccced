@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class InputRecsActivity extends AppCompatActivity {
 
-    Client client = new Client("IF4OZJWJDV", ""); //add API key
+    Client client = new Client("IF4OZJWJDV", ""); //TODO - add API key instead of ""
     //Index index;
 
 
