@@ -55,7 +55,7 @@ public class MyLibraryActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         if (menuItem.getItemId() == R.id.logout) {
                             Log.i("menu","logout selected");
-                            signOut();
+                            //signOut();
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
