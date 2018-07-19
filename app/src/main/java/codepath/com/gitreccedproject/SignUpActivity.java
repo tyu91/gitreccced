@@ -63,14 +63,8 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     callSignUp(em, pass);
 
-                    /*final Intent i = new Intent(SignUpActivity.this, InputRecsActivity.class);
-                    startActivity(i);
-                    finish();*/
-
                     addUser();
                 }
-
-                value = mAuth.getCurrentUser().getUid();
             }
         });
 
@@ -123,14 +117,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(mUsername)){
 
-            //set userid to authentication id
-            uid = mAuth.getCurrentUser().getUid();
-
-            User newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
+            //create new user with dummy uid since current user is actually previous user (fix later)
+            User newUser = new User("", mUsername, mPassword, mEmail, new Item ());
 
             user = newUser;
 
-            dbUsers.child(uid).setValue(newUser);
+            //dbUsers.child(uid).setValue(newUser);
 
             //pass userid to test recommendations page
             Intent intent = new Intent(SignUpActivity.this, InputRecsActivity.class);

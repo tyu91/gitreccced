@@ -17,10 +17,13 @@ import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.CompletionHandler;
 import com.algolia.search.saas.Query;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -38,15 +41,25 @@ public class InputRecsActivity extends AppCompatActivity {
     public ImageButton search_btn;
     public Button algolia_btn;
 
+    DatabaseReference dbUsers;
+
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
+
+    String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
 
-        String value = SignUpActivity.mAuth.getCurrentUser().getUid();
+        dbUsers = FirebaseDatabase.getInstance().getReference("users");
+
+        //add user id from sign up activity
+        User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        uid = SignUpActivity.mAuth.getCurrentUser().getUid();
+        dbUsers.child(uid).setValue(resultUser);
+        resultUser.setUid(uid);
 
         /*
         //algolia
