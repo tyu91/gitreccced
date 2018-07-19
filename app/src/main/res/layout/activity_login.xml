@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#424242"
     tools:context=".LoginActivity">
 
     <TextView
@@ -14,7 +15,7 @@
         android:layout_marginTop="46dp"
         android:text="PikIt"
         android:textAlignment="center"
-        android:textColor="#000000"
+        android:textColor="#c8c6d0"
         android:textSize="36sp"
         android:textStyle="bold|italic"
         tools:layout_editor_absoluteX="124dp"
@@ -30,7 +31,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
-        android:textColor="#000000"
+        android:textColor="#e1e1e1"
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="135dp" />
 
@@ -44,7 +45,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:textColor="#000000"
+        android:textColor="#c8c6d0"
         tools:layout_editor_absoluteX="17dp"
         tools:layout_editor_absoluteY="215dp" />
 
