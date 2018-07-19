@@ -8,17 +8,18 @@ public class User{
     public String uid;
     public String username;
     public String password;
-    // item is currently a string for simplicity
+    public String email;
     public Item item;
 
     public User() {
         //empty constructor
     }
 
-    public User (String uid, String username, String password, Item item) {
+    public User (String uid, String username, String password, String email, Item item) {
         this.uid = uid;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.item = item;
     }
 
@@ -41,6 +42,10 @@ public class User{
         return password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public Item getItem() {
         return item;
     }
@@ -59,5 +64,9 @@ public class User{
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
