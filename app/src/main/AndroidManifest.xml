@@ -18,13 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InputRecsActivity"/>
-        <activity android:name=".DBTestActivity"/>
-        <activity android:name=".DBTest2Activity"/>
-        <activity android:name=".SignUpActivity"/>
-        <activity android:name=".MyLibraryActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".AlgoliaActivity"/>
+        <activity android:name=".InputRecsActivity" />
+        <activity android:name=".DBTestActivity" />
+        <activity android:name=".DBTest2Activity" />
+        <activity android:name=".SignUpActivity" />
+        <activity
+            android:name=".MyLibraryActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".AlgoliaActivity" />
+        <activity android:name=".RecActivity"></activity>
     </application>
 
 </manifest>
