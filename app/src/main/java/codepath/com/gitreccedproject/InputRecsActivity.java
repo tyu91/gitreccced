@@ -27,7 +27,9 @@ import java.util.ArrayList;
 
 public class InputRecsActivity extends AppCompatActivity {
 
-    Client client = new Client("IF4OZJWJDV", ""); //TODO - add API key instead of ""
+//    String apikey = getString(R.string.searchApiKey);
+
+    Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
 
 
@@ -43,6 +45,8 @@ public class InputRecsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
+
+        String value = SignUpActivity.mAuth.getCurrentUser().getUid();
 
         /*
         //algolia

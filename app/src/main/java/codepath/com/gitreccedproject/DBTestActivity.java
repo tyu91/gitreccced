@@ -66,7 +66,7 @@ public class DBTestActivity extends AppCompatActivity {
                 //add movies to db
                 addMovies();
                 //add tv shows to db
-                addTVShows();
+                //addTVShows();
             }
         });
 
@@ -118,7 +118,7 @@ public class DBTestActivity extends AppCompatActivity {
 
         //adds &api_key=<API key>
 
-        for(int i = 1; i <= 100; i++) {
+        for(int i = 1; i <= 994; i++) {
 
             pagenum = String.valueOf(i);
 
@@ -177,7 +177,7 @@ public class DBTestActivity extends AppCompatActivity {
 
         //adds &api_key=<API key>
 
-        for(int i = 1; i <= 100; i++) {
+        for(int i = 1; i <= 1003; i++) {
 
             pagenum = String.valueOf(i);
 
@@ -210,7 +210,7 @@ public class DBTestActivity extends AppCompatActivity {
                             //adapter.notifyItemInserted(movies.size() - 1);
                         }
 
-                        Log.i("TestActivity", "Loaded 5 movies");
+                        Log.i("TestActivity", "Loaded some tv shows");
 
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -22,16 +22,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
-import static codepath.com.gitreccedproject.DBTestActivity.DB_TEST_REQUEST_CODE;
-
 public class SignUpActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    static FirebaseAuth mAuth; //TODO: change back to private
     private EditText email, password, name;
     private Button createAccount;
 
     DatabaseReference dbUsers;
 
     static User user;
+
+    String value;
 
     String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "su: item id not set yet"; //item id (initialized to dummy string for testing)
@@ -69,8 +69,11 @@ public class SignUpActivity extends AppCompatActivity {
 
                     addUser();
                 }
+
+                value = mAuth.getCurrentUser().getUid();
             }
         });
+
     }
 
     //Create Account
@@ -116,11 +119,14 @@ public class SignUpActivity extends AppCompatActivity {
     private void addUser(){
         String mUsername = name.getText().toString();
         String mPassword = password.getText().toString().trim();
+        String mEmail = email.getText().toString();
 
         if(!TextUtils.isEmpty(mUsername)){
-            uid = dbUsers.push().getKey();
 
-            User newUser = new User(uid, mUsername, mPassword, new Item ());
+            //set userid to authentication id
+            uid = mAuth.getCurrentUser().getUid();
+
+            User newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
 
             user = newUser;
 
@@ -129,7 +135,7 @@ public class SignUpActivity extends AppCompatActivity {
             //pass userid to test recommendations page
             Intent intent = new Intent(SignUpActivity.this, InputRecsActivity.class);
             intent.putExtra("user", Parcels.wrap(newUser));
-            startActivityForResult(intent, DB_TEST_REQUEST_CODE);
+            startActivity(intent);
 
         }
     }
