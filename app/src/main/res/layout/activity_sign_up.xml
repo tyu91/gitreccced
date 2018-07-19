@@ -17,7 +17,7 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
-        android:textColor="#000000"
+        android:textColor="#c8c6d0"
         tools:layout_editor_absoluteX="54dp"
         tools:layout_editor_absoluteY="113dp" />
 
@@ -27,11 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="179dp"
+        android:layout_marginTop="168dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
-        android:textColor="#000000"
+        android:textColor="#c8c6d0"
         app:layout_constraintTop_toBottomOf="@+id/etUID"
         tools:layout_editor_absoluteX="54dp" />
 
@@ -39,13 +39,13 @@
         android:id="@+id/etPass"
         android:layout_width="277dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="219dp"
+        android:layout_marginTop="221dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:textColor="#000000"
+        android:textColor="#c8c6d0"
         app:layout_constraintTop_toBottomOf="@+id/etEmail"
         tools:layout_editor_absoluteX="54dp" />
 
@@ -66,7 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPass"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-199dp"
         android:text="Password must be at least 6 chracters long"
         android:textColor="#FF4081"
         tools:layout_editor_absoluteX="57dp"
