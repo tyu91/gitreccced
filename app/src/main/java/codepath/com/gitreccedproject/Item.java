@@ -8,18 +8,16 @@ public class Item {
     public String genre;
     public String title;
     public String details;
-    public User user;
 
     public Item () {
         //empty constructor
     }
 
-    public Item(String iid, String genre, String title, String details, User user) {
+    public Item(String iid, String genre, String title, String details) {
         this.iid = iid;
         this.genre = genre;
         this.title = title;
         this.details = details;
-        this.user = user;
     }
 
     public String getIid() {
@@ -38,10 +36,6 @@ public class Item {
         return details;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public void setIid(String iid) {
         this.iid = iid;
     }
@@ -56,9 +50,5 @@ public class Item {
 
     public void setDetails(String details) {
         this.details = details;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

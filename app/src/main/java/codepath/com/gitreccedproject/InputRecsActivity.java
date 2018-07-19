@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class InputRecsActivity extends AppCompatActivity {
 
-    Client client = new Client("IF4OZJWJDV", "1861adc1f4aacbd9ad22f5b5056cc096"); //TODO - put this in secrets
+    Client client = new Client("IF4OZJWJDV", ""); //TODO - put this in secrets
     //Index index;
 
 
@@ -132,7 +132,6 @@ public class InputRecsActivity extends AppCompatActivity {
                                 item.setGenre(object.getString("genre"));
                                 item.setDetails(object.getString("overview"));
                                 item.setTitle(object.getString("title"));
-                                item.setUser((User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
 
                                 items.add(item);
                                 searchAdapter.notifyItemInserted(items.size() - 1);
@@ -167,7 +166,6 @@ public class InputRecsActivity extends AppCompatActivity {
                         item.setGenre(object.getString("genre"));
                         item.setDetails(object.getString("overview"));
                         item.setTitle(object.getString("title"));
-                        item.setUser((User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
 
                         items.add(item);
                         searchAdapter.notifyItemInserted(items.size() - 1);
@@ -180,6 +178,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
         /*
         com.google.firebase.database.Query query = null;
+        Query query = null;
         DatabaseReference itemsRef;
         itemsRef = FirebaseDatabase.getInstance().getReference("items");
 
@@ -196,7 +195,6 @@ public class InputRecsActivity extends AppCompatActivity {
                     item.setGenre(postSnapshot.child("genre").getValue().toString());
                     item.setDetails(postSnapshot.child("overview").getValue().toString());
                     item.setTitle(postSnapshot.child("title").getValue().toString());
-                    item.setUser((User) Parcels.unwrap(getIntent().getParcelableExtra("user")));
 
                     items.add(item);
                     searchAdapter.notifyItemInserted(items.size() - 1);
