@@ -176,35 +176,5 @@ public class InputRecsActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        com.google.firebase.database.Query query = null;
-        Query query = null;
-        DatabaseReference itemsRef;
-        itemsRef = FirebaseDatabase.getInstance().getReference("items");
-
-        query = itemsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff");
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-
-                    Item item = new Item();
-
-                    item.setIid(postSnapshot.getKey());
-                    item.setGenre(postSnapshot.child("genre").getValue().toString());
-                    item.setDetails(postSnapshot.child("overview").getValue().toString());
-                    item.setTitle(postSnapshot.child("title").getValue().toString());
-
-                    items.add(item);
-                    searchAdapter.notifyItemInserted(items.size() - 1);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("snapshot", "loadPost:onCancelled");
-            }
-        });*/
     }
 }

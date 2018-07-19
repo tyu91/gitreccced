@@ -3,17 +3,17 @@ package codepath.com.gitreccedproject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONItem {
+public class JSONMovie {
     public String iid;
     public String genre;
     public String title;
     public String overview;
 
-    public JSONItem() {
+    public JSONMovie() {
         //empty constructor
     }
 
-    public JSONItem(String iid, JSONObject object) throws JSONException {
+    public JSONMovie(String iid, JSONObject object) throws JSONException {
         this.iid = iid;
         genre = "Movie";
         title = object.getString("title");

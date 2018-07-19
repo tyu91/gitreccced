@@ -118,7 +118,7 @@ public class DBTestActivity extends AppCompatActivity {
 
         //adds &api_key=<API key>
 
-        for(int i = 1; i <= 2; i++) {
+        for(int i = 1; i <= 100; i++) {
 
             pagenum = String.valueOf(i);
 
@@ -140,7 +140,7 @@ public class DBTestActivity extends AppCompatActivity {
                             //create new item id
                             iid = dbItems.push().getKey();
 
-                            JSONItem newItem = new JSONItem(iid, results.getJSONObject(j));
+                            JSONMovie newItem = new JSONMovie(iid, results.getJSONObject(j));
 
                             //add item to db
                             dbItems.child(iid).setValue(newItem);
@@ -177,7 +177,7 @@ public class DBTestActivity extends AppCompatActivity {
 
         //adds &api_key=<API key>
 
-        for(int i = 1; i <= 2; i++) {
+        for(int i = 1; i <= 100; i++) {
 
             pagenum = String.valueOf(i);
 
@@ -200,7 +200,7 @@ public class DBTestActivity extends AppCompatActivity {
                             //create new item id
                             iid = dbItems.push().getKey();
 
-                            JSONItem newItem = new JSONItem(iid, results.getJSONObject(j));
+                            JSONTv newItem = new JSONTv(iid, results.getJSONObject(j));
 
                             //add item to db
                             dbItems.child(iid).setValue(newItem);
