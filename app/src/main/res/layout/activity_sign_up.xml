@@ -68,7 +68,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-199dp"
         android:text="Password must be at least 6 chracters long"
-        android:textColor="#1d36f4"
+        android:textColor="#FF4081"
         tools:layout_editor_absoluteX="57dp"
         tools:layout_editor_absoluteY="290dp" />
 

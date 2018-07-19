@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#424242"
     tools:context=".InputRecsActivity">
 
     <EditText
@@ -14,9 +15,11 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="52dp"
         android:layout_marginTop="79dp"
+        android:background="#424242"
         android:ems="10"
         android:hint="Search"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="#e1e1e1" />
 
     <ImageButton
         android:id="@+id/search_btn"
@@ -30,11 +33,12 @@
         android:id="@+id/searchlist_rv"
         android:layout_width="281dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/search_et"
-        android:layout_alignRight="@id/search_btn"
         android:layout_alignLeft="@+id/search_et"
-        android:layout_marginStart="52dp" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@id/search_btn"
+        android:layout_below="@+id/search_et"
+        android:layout_marginStart="52dp"
+        android:background="#424242" />
 
     <Button
         android:id="@+id/algolia_btn"
