@@ -17,6 +17,7 @@ import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.CompletionHandler;
 import com.algolia.search.saas.Query;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -55,7 +56,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
         //add user id from sign up activity
         User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        uid = SignUpActivity.mAuth.getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbUsers.child(uid).setValue(resultUser);
         resultUser.setUid(uid);
 
@@ -103,7 +104,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                client.getIndex("items").searchAsync(new Query(search_et.getText().toString()), null, new CompletionHandler() {
+                client.getIndex("movies").searchAsync(new Query(search_et.getText().toString()), null, new CompletionHandler() {
                     @Override
                     public void requestCompleted(JSONObject content, AlgoliaException error) {
                         Log.i("content", content.toString());
@@ -139,7 +140,7 @@ public class InputRecsActivity extends AppCompatActivity {
     }
 
     public void getSearchResults(String input) {
-        client.getIndex("items").searchAsync(new Query(input), null, new CompletionHandler() {
+        client.getIndex("movies").searchAsync(new Query(input), null, new CompletionHandler() {
             @Override
             public void requestCompleted(JSONObject content, AlgoliaException error) {
                 Log.i("content", content.toString());

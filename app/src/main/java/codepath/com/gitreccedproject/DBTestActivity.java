@@ -34,7 +34,8 @@ public class DBTestActivity extends AppCompatActivity {
     EditText enterPassword;
     Button btnSubmit;
 
-    DatabaseReference dbItems;
+    DatabaseReference dbMovies;
+    DatabaseReference dbTVShows;
     Button btnAddItems;
 
     String uid = "1: user id not set yet"; //user id (initialized to dummy string for testing)
@@ -54,7 +55,8 @@ public class DBTestActivity extends AppCompatActivity {
         btnSubmit = findViewById(R.id.btnSubmit);*/
 
         //set up movie population button and movies db
-        dbItems = FirebaseDatabase.getInstance().getReference("items");
+        dbMovies = FirebaseDatabase.getInstance().getReference("movies");
+        dbTVShows = FirebaseDatabase.getInstance().getReference("tv");
         btnAddItems = findViewById(R.id.btnAddItems);
 
         client = new AsyncHttpClient();
@@ -64,9 +66,9 @@ public class DBTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //add movies to db
-                addMovies();
+                //addMovies();
                 //add tv shows to db
-                //addTVShows();
+                addTVShows();
             }
         });
 
@@ -138,12 +140,12 @@ public class DBTestActivity extends AppCompatActivity {
                             //TODO: change iid and uid to what they should actually be
 
                             //create new item id
-                            iid = dbItems.push().getKey();
+                            iid = dbMovies.push().getKey();
 
                             JSONMovie newItem = new JSONMovie(iid, results.getJSONObject(j));
 
                             //add item to db
-                            dbItems.child(iid).setValue(newItem);
+                            dbMovies.child(iid).setValue(newItem);
 
                             //movies.add(movie);
                             //notify adapter a new row was added
@@ -198,12 +200,12 @@ public class DBTestActivity extends AppCompatActivity {
                             //TODO: change iid and uid to what they should actually be
 
                             //create new item id
-                            iid = dbItems.push().getKey();
+                            iid = dbTVShows.push().getKey();
 
                             JSONTv newItem = new JSONTv(iid, results.getJSONObject(j));
 
                             //add item to db
-                            dbItems.child(iid).setValue(newItem);
+                            dbTVShows.child(iid).setValue(newItem);
 
                             //movies.add(movie);
                             //notify adapter a new row was added

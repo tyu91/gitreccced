@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
@@ -44,8 +43,6 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
-
-        dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         name = findViewById(R.id.etUID);
         email = findViewById(R.id.etEmail);
