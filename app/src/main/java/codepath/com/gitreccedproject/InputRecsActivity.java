@@ -21,14 +21,13 @@ import com.algolia.search.saas.Query;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
 
 public class InputRecsActivity extends AppCompatActivity {
 
-    Client client = new Client("IF4OZJWJDV", ""); //TODO - put this in secrets
+    Client client = new Client("IF4OZJWJDV", ""); //add API key
     //Index index;
 
 
@@ -50,10 +49,10 @@ public class InputRecsActivity extends AppCompatActivity {
         {
             try {
                 client.getIndex("contacts").addObjectAsync(new JSONObject()
-                        .put("firstname", "Jimmie")
-                        .put("lastname", "Barninger")
-                        .put("followers", 93)
-                        .put("company", "California Paint"), null);
+                        .put("firstname", "Jim")
+                        .put("lastname", "Barn")
+                        .put("followers", 90)
+                        .put("company", "California"), null);
                 Log.i("algolia","success");
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -67,8 +66,7 @@ public class InputRecsActivity extends AppCompatActivity {
             public void requestCompleted(JSONObject content, AlgoliaException error) {
                 Log.i("content", content.toString());
             }
-        });
-        */
+        });*/
 
 
         // find the views
@@ -115,12 +113,12 @@ public class InputRecsActivity extends AppCompatActivity {
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                items.clear();
-                searchAdapter.notifyDataSetChanged();
                 client.getIndex("items").searchAsync(new Query(search_et.getText().toString()), null, new CompletionHandler() {
                     @Override
                     public void requestCompleted(JSONObject content, AlgoliaException error) {
                         Log.i("content", content.toString());
+                        items.clear();
+                        searchAdapter.notifyDataSetChanged();
                         try {
                             JSONArray array = content.getJSONArray("hits");
                             for (int i=0; i<array.length(); i++) {
@@ -143,6 +141,7 @@ public class InputRecsActivity extends AppCompatActivity {
                 });
             }
 
+
             @Override public void afterTextChanged(Editable editable)
             {
             }
@@ -150,14 +149,15 @@ public class InputRecsActivity extends AppCompatActivity {
     }
 
     public void getSearchResults(String input) {
-
         client.getIndex("items").searchAsync(new Query(input), null, new CompletionHandler() {
             @Override
             public void requestCompleted(JSONObject content, AlgoliaException error) {
                 Log.i("content", content.toString());
                 try {
+                    items.clear();
+                    searchAdapter.notifyDataSetChanged();
                     JSONArray array = content.getJSONArray("hits");
-                    for (int i=0; i<array.length(); i++) {
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject object = (JSONObject) array.getJSONObject(i);
 
                         Item item = new Item();

@@ -18,7 +18,7 @@ import org.json.JSONObject;
 //this activity loads data from firebase into algolia
 public class AlgoliaActivity extends AppCompatActivity {
 
-    Client client = new Client("IF4OZJWJDV", ""); //TODO - put this in secrets
+    Client client = new Client("IF4OZJWJDV", ""); //add api key
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
