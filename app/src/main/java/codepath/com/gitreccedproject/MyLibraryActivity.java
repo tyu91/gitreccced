@@ -2,8 +2,10 @@ package codepath.com.gitreccedproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,6 +18,10 @@ public class MyLibraryActivity extends AppCompatActivity {
     TextView greeting;
     FirebaseAuth mAuth;
 
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,19 +30,31 @@ public class MyLibraryActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        logOut = findViewById(R.id.btnLogOut);
-        greeting = findViewById(R.id.tvGreeting);
+        //logOut = findViewById(R.id.btnLogOut);
+        //greeting = findViewById(R.id.tvGreeting);
 
         if (user != null) {
-            greeting.setText("Hey, " + user.getDisplayName());
+            //greeting.setText("Hey, " + user.getDisplayName());
         }
 
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
-            }
-        });
+        //logOut.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View view) {
+                //signOut();
+            //}
+        //});
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void signOut() {

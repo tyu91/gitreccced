@@ -22,7 +22,8 @@
         <activity android:name=".DBTestActivity"/>
         <activity android:name=".DBTest2Activity"/>
         <activity android:name=".SignUpActivity"/>
-        <activity android:name=".MyLibraryActivity"/>
+        <activity android:name=".MyLibraryActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".AlgoliaActivity"/>
     </application>
 
