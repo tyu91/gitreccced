@@ -23,7 +23,7 @@ public class AlgoliaActivity extends AppCompatActivity {
     public Button movies_btn;
     public Button tv_btn;
 
-    Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe"); //TODO - add API key instead of ""
+    Client client = new Client("IF4OZJWJDV", ""); //TODO - add API key instead of ""
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,9 @@ public class AlgoliaActivity extends AppCompatActivity {
                 moviesquery.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        int i = 0;
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-
+                            i += 1;
                             Item item = new Item();
 
                             item.setIid(postSnapshot.getKey());
@@ -62,12 +63,13 @@ public class AlgoliaActivity extends AppCompatActivity {
                                             .put("genre", postSnapshot.child("genre").getValue().toString())
                                             .put("overview", postSnapshot.child("overview").getValue().toString())
                                             .put("title", postSnapshot.child("title").getValue().toString()), null);
-                                    Log.i("algolia",postSnapshot.child("title").getValue().toString());
+                                    //Log.i("algolia",postSnapshot.child("title").getValue().toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
+                        Log.i("count",String.format("%s",i));
                     }
 
                     @Override
@@ -93,8 +95,9 @@ public class AlgoliaActivity extends AppCompatActivity {
                 tvquery.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        int i = 0;
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-
+                            i += 1;
                             Item item = new Item();
 
                             item.setIid(postSnapshot.getKey());
@@ -109,12 +112,13 @@ public class AlgoliaActivity extends AppCompatActivity {
                                             .put("genre", postSnapshot.child("genre").getValue().toString())
                                             .put("overview", postSnapshot.child("overview").getValue().toString())
                                             .put("title", postSnapshot.child("title").getValue().toString()), null);
-                                    Log.i("algolia",postSnapshot.child("title").getValue().toString());
+                                    //Log.i("algolia",postSnapshot.child("title").getValue().toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
+                        Log.i("count",String.format("%s",i));
                     }
 
                     @Override
