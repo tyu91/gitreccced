@@ -105,8 +105,8 @@ public class LoginActivity extends AppCompatActivity {
         DatabaseReference usersRef;
         usersRef = FirebaseDatabase.getInstance().getReference("users");
         com.google.firebase.database.Query usersquery = null;
-        usersquery = usersRef.orderByChild("email").equalTo(email);
-        Log.i("e","e");
+        usersquery = usersRef.orderByChild("email").equalTo(email.toLowerCase());
+        Log.i("e",email.toLowerCase());
 
         usersquery.addValueEventListener(new ValueEventListener() {
             @Override
@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     User currentuser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email, new Item());
                     Log.i("snapshot","!");
+                    Toast.makeText(getApplicationContext(), String.format("Welcome, %s!", postSnapshot.child("username").getValue()), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);
                     intent.putExtra("user", Parcels.wrap(currentuser));
                     startActivity(intent);
