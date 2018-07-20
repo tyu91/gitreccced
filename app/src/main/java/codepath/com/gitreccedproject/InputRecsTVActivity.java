@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import com.algolia.search.saas.AlgoliaException;
@@ -34,7 +33,6 @@ public class InputRecsTVActivity extends AppCompatActivity {
 
     public SearchView search_et;
     public RecyclerView searchlist_rv;
-    public ImageButton search_btn;
     public Button algolia_btn;
 
     DatabaseReference dbUsers;
@@ -60,8 +58,9 @@ public class InputRecsTVActivity extends AppCompatActivity {
         // find the views
         search_et = (SearchView) findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        search_btn = findViewById(R.id.search_btn);
         algolia_btn = findViewById(R.id.algolia_btn);
+
+        search_et.setIconifiedByDefault(false);
 
         // init the arraylist (data source)
         items = new ArrayList<>();
@@ -72,17 +71,6 @@ public class InputRecsTVActivity extends AppCompatActivity {
         searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
-
-        // implement onclick listener
-        search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String search_text = search_et.getQuery().toString();
-                items.clear();
-                searchAdapter.notifyDataSetChanged();
-                //getSearchResults(search_text);
-            }
-        });
 
         algolia_btn.setOnClickListener(new View.OnClickListener() {
             @Override
