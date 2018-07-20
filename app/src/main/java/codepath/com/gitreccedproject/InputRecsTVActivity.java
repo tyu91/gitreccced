@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.SearchView;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -28,18 +25,15 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-
-public class InputRecsMoviesActivity extends AppCompatActivity {
+public class InputRecsTVActivity extends AppCompatActivity {
 
     Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
 
 
-    public EditText search_et;
+    public SearchView search_et;
     public RecyclerView searchlist_rv;
-    public ImageButton search_btn;
     public Button algolia_btn;
-    public Button next_btn;
 
     DatabaseReference dbUsers;
 
@@ -51,22 +45,22 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_input_recs_movies);
+        setContentView(R.layout.activity_input_recs_tv);
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         //add user id from sign up activity
-        final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbUsers.child(uid).setValue(resultUser);
         resultUser.setUid(uid);
 
         // find the views
-        search_et = findViewById(R.id.search_et);
+        search_et = (SearchView) findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        search_btn = findViewById(R.id.search_btn);
         algolia_btn = findViewById(R.id.algolia_btn);
-        next_btn = findViewById(R.id.next_btn);
+
+        search_et.setIconifiedByDefault(false);
 
         // init the arraylist (data source)
         items = new ArrayList<>();
@@ -78,53 +72,28 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
 
-        // implement onclick listener
-        search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String search_text = search_et.getText().toString();
-                items.clear();
-                searchAdapter.notifyDataSetChanged();
-                getSearchResults(search_text);
-            }
-        });
-
         algolia_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(InputRecsMoviesActivity.this, AlgoliaActivity.class);
+                Intent i = new Intent(InputRecsTVActivity.this, AlgoliaActivity.class);
                 startActivity(i);
             }
         });
 
-        next_btn.setOnClickListener(new View.OnClickListener() {
+        // perform set on query text listener event
+        search_et.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(InputRecsMoviesActivity.this, InputRecsTVActivity.class);
-                i.putExtra("user",Parcels.wrap(resultUser));
-                startActivity(i);
-            }
-        });
-
-        search_et.addTextChangedListener(new TextWatcher()
-        {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-            }
-
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-                client.getIndex("movies").searchAsync(new Query(search_et.getText().toString()), null, new CompletionHandler() {
+            public boolean onQueryTextSubmit(String query) {
+                client.getIndex("tv").searchAsync(new Query(query), null, new CompletionHandler() {
                     @Override
                     public void requestCompleted(JSONObject content, AlgoliaException error) {
                         Log.i("content", content.toString());
-                        items.clear();
-                        searchAdapter.notifyDataSetChanged();
                         try {
+                            items.clear();
+                            searchAdapter.notifyDataSetChanged();
                             JSONArray array = content.getJSONArray("hits");
-                            for (int i=0; i<array.length(); i++) {
-                                JSONObject object = (JSONObject) array.getJSONObject(i);
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject object = array.getJSONObject(i);
 
                                 Item item = new Item();
 
@@ -141,17 +110,44 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                         }
                     }
                 });
+                return false;
             }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                client.getIndex("tv").searchAsync(new Query(newText), null, new CompletionHandler() {
+                    @Override
+                    public void requestCompleted(JSONObject content, AlgoliaException error) {
+                        Log.i("content", content.toString());
+                        try {
+                            items.clear();
+                            searchAdapter.notifyDataSetChanged();
+                            JSONArray array = content.getJSONArray("hits");
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject object = array.getJSONObject(i);
 
-            @Override public void afterTextChanged(Editable editable)
-            {
+                                Item item = new Item();
+
+                                item.setIid(object.getString("Iid"));
+                                item.setGenre(object.getString("genre"));
+                                item.setDetails(object.getString("overview"));
+                                item.setTitle(object.getString("title"));
+
+                                items.add(item);
+                                searchAdapter.notifyItemInserted(items.size() - 1);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return false;
             }
         });
     }
 
     public void getSearchResults(String input) {
-        client.getIndex("movies").searchAsync(new Query(input), null, new CompletionHandler() {
+        client.getIndex("tv").searchAsync(new Query(input), null, new CompletionHandler() {
             @Override
             public void requestCompleted(JSONObject content, AlgoliaException error) {
                 Log.i("content", content.toString());
