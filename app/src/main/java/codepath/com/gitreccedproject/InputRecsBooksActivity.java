@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -34,7 +33,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
     public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
-    public ImageButton search_btn;
     public Button algolia_btn;
     public Button next_btn;
 
@@ -65,7 +63,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         // find the views
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        search_btn = findViewById(R.id.search_btn);
         algolia_btn = findViewById(R.id.algolia_btn);
         next_btn = findViewById(R.id.next_btn);
 
