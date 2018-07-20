@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -102,95 +103,82 @@ public class InputRecsTVActivity extends AppCompatActivity {
         search_et.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                client.getIndex("tv").searchAsync(new Query(query), null, new CompletionHandler() {
-                    @Override
-                    public void requestCompleted(JSONObject content, AlgoliaException error) {
-                        Log.i("content", content.toString());
-                        try {
-                            items.clear();
-                            searchAdapter.notifyDataSetChanged();
-                            JSONArray array = content.getJSONArray("hits");
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject object = array.getJSONObject(i);
+                if (query != null && TextUtils.getTrimmedLength(query) > 0) {
+                    query = query.trim();
+                    Log.i("content", query);
+                    client.getIndex("tv").searchAsync(new Query(query), null, new CompletionHandler() {
+                        @Override
+                        public void requestCompleted(JSONObject content, AlgoliaException error) {
+                            Log.i("content", content.toString());
+                            try {
+                                items.clear();
+                                searchAdapter.notifyDataSetChanged();
+                                JSONArray array = content.getJSONArray("hits");
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = array.getJSONObject(i);
 
-                                Item item = new Item();
+                                    Item item = new Item();
 
-                                item.setIid(object.getString("Iid"));
-                                item.setGenre(object.getString("genre"));
-                                item.setDetails(object.getString("overview"));
-                                item.setTitle(object.getString("title"));
+                                    item.setIid(object.getString("Iid"));
+                                    item.setGenre(object.getString("genre"));
+                                    item.setDetails(object.getString("overview"));
+                                    item.setTitle(object.getString("title"));
 
-                                items.add(item);
-                                searchAdapter.notifyItemInserted(items.size() - 1);
+                                    items.add(item);
+                                    searchAdapter.notifyItemInserted(items.size() - 1);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
+                } else {
+                    Log.i("search", "empty!");
+                    items.clear();
+                    searchAdapter.notifyDataSetChanged();
+                }
                 return false;
             }
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                client.getIndex("tv").searchAsync(new Query(newText), null, new CompletionHandler() {
-                    @Override
-                    public void requestCompleted(JSONObject content, AlgoliaException error) {
-                        Log.i("content", content.toString());
-                        try {
-                            items.clear();
-                            searchAdapter.notifyDataSetChanged();
-                            JSONArray array = content.getJSONArray("hits");
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject object = array.getJSONObject(i);
+                if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
+                    newText = newText.trim();
+                    Log.i("content", newText);
+                    client.getIndex("tv").searchAsync(new Query(newText), null, new CompletionHandler() {
+                        @Override
+                        public void requestCompleted(JSONObject content, AlgoliaException error) {
+                            Log.i("content", content.toString());
+                            try {
+                                items.clear();
+                                searchAdapter.notifyDataSetChanged();
+                                JSONArray array = content.getJSONArray("hits");
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = array.getJSONObject(i);
 
-                                Item item = new Item();
+                                    Item item = new Item();
 
-                                item.setIid(object.getString("Iid"));
-                                item.setGenre(object.getString("genre"));
-                                item.setDetails(object.getString("overview"));
-                                item.setTitle(object.getString("title"));
+                                    item.setIid(object.getString("Iid"));
+                                    item.setGenre(object.getString("genre"));
+                                    item.setDetails(object.getString("overview"));
+                                    item.setTitle(object.getString("title"));
 
-                                items.add(item);
-                                searchAdapter.notifyItemInserted(items.size() - 1);
+                                    items.add(item);
+                                    searchAdapter.notifyItemInserted(items.size() - 1);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
+                } else {
+                    Log.i("search", "empty!");
+                    items.clear();
+                    searchAdapter.notifyDataSetChanged();
+                }
                 return false;
             }
         });
-    }
-
-    public void getSearchResults(String input) {
-        client.getIndex("tv").searchAsync(new Query(input), null, new CompletionHandler() {
-            @Override
-            public void requestCompleted(JSONObject content, AlgoliaException error) {
-                Log.i("content", content.toString());
-                try {
-                    items.clear();
-                    searchAdapter.notifyDataSetChanged();
-                    JSONArray array = content.getJSONArray("hits");
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.getJSONObject(i);
-
-                        Item item = new Item();
-
-                        item.setIid(object.getString("Iid"));
-                        item.setGenre(object.getString("genre"));
-                        item.setDetails(object.getString("overview"));
-                        item.setTitle(object.getString("title"));
-
-                        items.add(item);
-                        searchAdapter.notifyItemInserted(items.size() - 1);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
     }
 }

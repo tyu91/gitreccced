@@ -16,9 +16,41 @@
         android:textColor="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_movies"
+        android:id="@+id/rv_libMovies"
         android:layout_width="252dp"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:layout_alignStart="@+id/movies_tv"
         android:layout_below="@+id/movies_tv" />
+
+    <TextView
+        android:id="@+id/shows_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/movies_tv"
+        android:layout_below="@+id/rv_libMovies"
+        android:text="TV Shows"
+        android:textColor="@android:color/white" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_libTvShows"
+        android:layout_width="252dp"
+        android:layout_height="120dp"
+        android:layout_alignStart="@+id/movies_tv"
+        android:layout_below="@+id/shows_tv" />
+
+    <TextView
+        android:id="@+id/tv_books"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/movies_tv"
+        android:layout_below="@+id/rv_libTvShows"
+        android:text="Books"
+        android:textColor="@android:color/white" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_libBooks"
+        android:layout_width="252dp"
+        android:layout_height="120dp"
+        android:layout_alignStart="@+id/movies_tv"
+        android:layout_below="@+id/tv_books" />
 </RelativeLayout>
