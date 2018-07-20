@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -35,6 +36,8 @@ public class InputRecsTVActivity extends AppCompatActivity {
     public RecyclerView searchlist_rv;
     public Button algolia_btn;
 
+    public Button next_btn;
+
     DatabaseReference dbUsers;
 
     public SearchAdapter searchAdapter;
@@ -47,10 +50,16 @@ public class InputRecsTVActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_tv);
 
+        Toast toast = Toast.makeText(getApplicationContext(), "Recommending TV Shows.",
+                Toast.LENGTH_SHORT);
+        toast.show();
+
+        next_btn = findViewById(R.id.next_btn);
+
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         //add user id from sign up activity
-        User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbUsers.child(uid).setValue(resultUser);
         resultUser.setUid(uid);
@@ -76,6 +85,15 @@ public class InputRecsTVActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(InputRecsTVActivity.this, AlgoliaActivity.class);
+                startActivity(i);
+            }
+        });
+
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(InputRecsTVActivity.this, InputRecsBooksActivity.class);
+                i.putExtra("user",Parcels.wrap(resultUser));
                 startActivity(i);
             }
         });

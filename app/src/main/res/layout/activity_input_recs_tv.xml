@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#424242"
-    tools:context=".InputRecsMoviesActivity">
+    tools:context=".InputRecsTVActivity">
 
     <SearchView
         android:id="@+id/search_et"
@@ -40,5 +40,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:text="Algolia" />
+
+    <Button
+        android:id="@+id/next_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:text="Next" />
 
 </RelativeLayout>

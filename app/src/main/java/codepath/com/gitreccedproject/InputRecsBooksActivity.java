@@ -5,21 +5,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
+import android.widget.Toast;
 
-import com.algolia.search.saas.AlgoliaException;
-import com.algolia.search.saas.Client;
-import com.algolia.search.saas.CompletionHandler;
-import com.algolia.search.saas.Query;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,13 +24,15 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.Header;
+
 public class InputRecsBooksActivity extends AppCompatActivity {
 
     BookClient bClient = new BookClient();
     //Index index;
 
 
-    public EditText search_et;
+    public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
     public ImageButton search_btn;
     public Button algolia_btn;
@@ -52,16 +50,20 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_books);
 
+        Toast toast = Toast.makeText(getApplicationContext(), "Recommending Books.",
+                Toast.LENGTH_SHORT);
+        toast.show();
+
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
-        //add user id from sign up activity
+        //add user id from previous activity, the inputrecstv activity
         final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbUsers.child(uid).setValue(resultUser);
         resultUser.setUid(uid);
 
         // find the views
-        search_et = findViewById(R.id.search_et);
+        search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         search_btn = findViewById(R.id.search_btn);
         algolia_btn = findViewById(R.id.algolia_btn);
@@ -73,20 +75,96 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         searchAdapter = new SearchAdapter(items);
         // RecyclerView setup (layout manager, use adapter)
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        searchlist_rv.setLayoutManager(linearLayoutManager);
+        //searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
-        searchlist_rv.setAdapter(searchAdapter);
+        //searchlist_rv.setAdapter(searchAdapter);
 
         // implement onclick listener
-        search_btn.setOnClickListener(new View.OnClickListener() {
+        search_sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                String search_text = search_et.getText().toString();
+            public boolean onQueryTextSubmit(String query) {
                 items.clear();
                 searchAdapter.notifyDataSetChanged();
-                getSearchResults(search_text);
+                bClient.getBooks(query, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            JSONArray docs;
+                            if (response != null) {
+                                // Get the docs json array
+                                docs = response.getJSONArray("docs");
+                                // Parse json array into array of model objects
+                                final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
+                                // Remove all books from the adapter
+                                items.clear();
+                                // Load model objects into the adapter
+                                for (JSONBook book : books) {
+                                    items.add(book); // add book through the adapter
+                                    String title = book.getTitle().toString();
+                                    Log.i("Books", "Title: " + title);
+                                }
+                                searchAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            // Invalid JSON format, show appropriate error.
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                    }
+                });
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
             }
         });
+
+
+        /*search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String search_text = search_sv.getQuery().toString();
+                items.clear();
+                searchAdapter.notifyDataSetChanged();
+                bClient.getBooks(search_text, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            JSONArray docs;
+                            if(response != null) {
+                                // Get the docs json array
+                                docs = response.getJSONArray("docs");
+                                // Parse json array into array of model objects
+                                final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
+                                // Remove all books from the adapter
+                                items.clear();
+                                // Load model objects into the adapter
+                                for (JSONBook book : books) {
+                                    items.add(book); // add book through the adapter
+                                }
+                                searchAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            // Invalid JSON format, show appropriate error.
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                    }
+                });
+                //getSearchResults(search_text);
+            }
+        });*/
 
         algolia_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,79 +182,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        search_et.addTextChangedListener(new TextWatcher()
-        {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-            }
-
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-                bClient.getIndex("movies").searchAsync(new Query(search_et.getText().toString()), null, new CompletionHandler() {
-                    @Override
-                    public void requestCompleted(JSONObject content, AlgoliaException error) {
-                        Log.i("content", content.toString());
-                        items.clear();
-                        searchAdapter.notifyDataSetChanged();
-                        try {
-                            JSONArray array = content.getJSONArray("hits");
-                            for (int i=0; i<array.length(); i++) {
-                                JSONObject object = (JSONObject) array.getJSONObject(i);
-
-                                Item item = new Item();
-
-                                item.setIid(object.getString("Iid"));
-                                item.setGenre(object.getString("genre"));
-                                item.setDetails(object.getString("overview"));
-                                item.setTitle(object.getString("title"));
-
-                                items.add(item);
-                                searchAdapter.notifyItemInserted(items.size() - 1);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-
-
-            @Override public void afterTextChanged(Editable editable)
-            {
-            }
-        });
-    }
-
-    public void getSearchResults(String input) {
-        bClient.getIndex("movies").searchAsync(new Query(input), null, new CompletionHandler() {
-            @Override
-            public void requestCompleted(JSONObject content, AlgoliaException error) {
-                Log.i("content", content.toString());
-                try {
-                    items.clear();
-                    searchAdapter.notifyDataSetChanged();
-                    JSONArray array = content.getJSONArray("hits");
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.getJSONObject(i);
-
-                        Item item = new Item();
-
-                        item.setIid(object.getString("Iid"));
-                        item.setGenre(object.getString("genre"));
-                        item.setDetails(object.getString("overview"));
-                        item.setTitle(object.getString("title"));
-
-                        items.add(item);
-                        searchAdapter.notifyItemInserted(items.size() - 1);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Parcel
 
-public class JSONBook implements Serializable {
+public class JSONBook extends Item implements Serializable {
     /*public String iid;
     public String genre;
     public String title;

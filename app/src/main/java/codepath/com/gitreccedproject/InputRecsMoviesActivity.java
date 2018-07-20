@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -52,6 +53,10 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_movies);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Recommending Movies.",
+                Toast.LENGTH_SHORT);
+        toast.show();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
