@@ -18,21 +18,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
 public class SignUpActivity extends AppCompatActivity {
-    static FirebaseAuth mAuth; //TODO: change back to private
+    private FirebaseAuth mAuth;
     private EditText email, password, name;
     private Button createAccount;
 
     DatabaseReference dbUsers;
 
-    static User user;
+    //static User user;
 
     String value;
 
-    String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
+    //String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "su: item id not set yet"; //item id (initialized to dummy string for testing)
 
     @Override
@@ -43,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
+        dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         name = findViewById(R.id.etUID);
         email = findViewById(R.id.etEmail);
@@ -58,9 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (em.isEmpty() || pass.isEmpty()){
                     Toast.makeText(SignUpActivity.this, "Please complete all fields before Signing up", Toast.LENGTH_SHORT).show();
                 } else {
-                    callSignUp(em, pass);
-
-                    addUser();
+                    callSignUp(em, pass, name.getText().toString());
                 }
             }
         });
@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //Create Account
-    private void callSignUp(String email, String password){
+    private void callSignUp(String email, String password, final String name){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -76,12 +76,22 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.d("TESTING", "Sign Up Successful" + task.isSuccessful());
                         FirebaseUser user = mAuth.getCurrentUser();
 
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignUpActivity.this, "Sign up Failed", Toast.LENGTH_SHORT).show();
+                        if (!task.isSuccessful()) {
+                            Log.i("task",task.getException().toString());
+                            if (task.getException().toString().contains("The email address is badly formatted")) {
+                                Toast.makeText(SignUpActivity.this, "Invalid email!", Toast.LENGTH_SHORT).show();
+                            } else if (task.getException().toString().contains("The given password is invalid")) {
+                                Toast.makeText(SignUpActivity.this, "Password too short!", Toast.LENGTH_SHORT).show();
+                            } else if (task.getException().toString().contains("The email address is already in use by another account")) {
+                                Toast.makeText(SignUpActivity.this, "Email address already associated with an account!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SignUpActivity.this, "Sign up failed", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            userProfile();
-                            Toast.makeText(SignUpActivity.this, "Account created", Toast.LENGTH_LONG).show();
+                            //userProfile();
+                            Toast.makeText(SignUpActivity.this, String.format("Welcome, %s!", name), Toast.LENGTH_LONG).show();
                             Log.d("TESTING", "Created account");
+                            addUser(user);
                         }
                     }
                 });
@@ -107,17 +117,18 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //adds user to db
-    private void addUser(){
+    private void addUser(FirebaseUser user){
         String mUsername = name.getText().toString();
         String mPassword = password.getText().toString().trim();
-        String mEmail = email.getText().toString();
+        String mEmail = email.getText().toString().toLowerCase();
+        String uid = user.getUid();
 
         if(!TextUtils.isEmpty(mUsername)){
 
             //create new user with dummy uid since current user is actually previous user (fix later)
-            User newUser = new User("", mUsername, mPassword, mEmail, new Item ());
-
-            user = newUser;
+            User newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
+            dbUsers.child(uid).setValue(newUser);
+            newUser.setUid(uid);
 
             //dbUsers.child(uid).setValue(newUser);
 

@@ -37,11 +37,13 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     public Button next_btn;
 
     DatabaseReference dbUsers;
+    DatabaseReference dbBooks;
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
     String uid = "inputrecsbooksactivity: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "inputrecsbooksactivity: item id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         toast.show();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        dbBooks = FirebaseDatabase.getInstance().getReference("books");
 
         //add user id from previous activity, the inputrecstv activity
         final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
@@ -72,9 +75,9 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         searchAdapter = new SearchAdapter(items);
         // RecyclerView setup (layout manager, use adapter)
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        //searchlist_rv.setLayoutManager(linearLayoutManager);
+        searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
-        //searchlist_rv.setAdapter(searchAdapter);
+        searchlist_rv.setAdapter(searchAdapter);
 
         // implement onclick listener
         search_sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -95,12 +98,36 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                 // Remove all books from the adapter
                                 items.clear();
                                 // Load model objects into the adapter
-                                for (JSONBook book : books) {
-                                    items.add(book); // add book through the adapter
-                                    String title = book.getTitle().toString();
-                                    Log.i("Books", "Title: " + title);
-                                }
-                                searchAdapter.notifyDataSetChanged();
+
+                                //if results exist
+                                if (response.getInt("num_found") != 0) {
+
+                                        JSONBook book = books.get(0);
+
+                                        String title = book.getTitle().toString();
+                                        Log.i("Books", "Title: " + title);
+
+                                        //create item id for new book
+
+                                        //create new item id
+                                        iid = dbBooks.push().getKey();
+
+                                        setOverview(book);
+
+                                        Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
+
+                                        //add item to db
+                                        dbBooks.child(iid).setValue(bookItem);
+                                        items.add(bookItem); // add book through the adapter
+                                        Log.i("Books", "Title: " + title);
+                                        searchAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    Toast toast = Toast.makeText(getApplicationContext(), "No results. Please try again!",
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+
+
                             }
                         } catch (JSONException e) {
                             // Invalid JSON format, show appropriate error.
@@ -123,46 +150,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             }
         });
 
-
-        /*search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String search_text = search_sv.getQuery().toString();
-                items.clear();
-                searchAdapter.notifyDataSetChanged();
-                bClient.getBooks(search_text, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try {
-                            JSONArray docs;
-                            if(response != null) {
-                                // Get the docs json array
-                                docs = response.getJSONArray("docs");
-                                // Parse json array into array of model objects
-                                final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
-                                // Remove all books from the adapter
-                                items.clear();
-                                // Load model objects into the adapter
-                                for (JSONBook book : books) {
-                                    items.add(book); // add book through the adapter
-                                }
-                                searchAdapter.notifyDataSetChanged();
-                            }
-                        } catch (JSONException e) {
-                            // Invalid JSON format, show appropriate error.
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                    }
-                });
-                //getSearchResults(search_text);
-            }
-        });*/
-
         algolia_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,6 +164,33 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                 Intent i = new Intent(InputRecsBooksActivity.this, InputRecsTVActivity.class);
                 i.putExtra("user", Parcels.wrap(resultUser));
                 startActivity(i);
+            }
+        });
+    }
+
+    public void setOverview(final JSONBook book) {
+        bClient.getExtraBookDetails(book.getOpenLibraryId(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String description = "description unavailable";
+                    if (response != null && response.has("description")) {
+                        // Get the docs json array
+                        description = response.getString("description");
+                        //set overview of book
+                        book.setOverview(description);
+                    }
+
+                    Log.i("Books", "description: " + description);
+                } catch (JSONException e) {
+                    // Invalid JSON format, show appropriate error.
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
     }
