@@ -39,11 +39,13 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     public Button next_btn;
 
     DatabaseReference dbUsers;
+    DatabaseReference dbBooks;
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
     String uid = "inputrecsbooksactivity: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "inputrecsbooksactivity: item id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         toast.show();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        dbBooks = FirebaseDatabase.getInstance().getReference("books");
 
         //add user id from previous activity, the inputrecstv activity
         final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
@@ -65,7 +68,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         // find the views
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        search_btn = findViewById(R.id.search_btn);
         algolia_btn = findViewById(R.id.algolia_btn);
         next_btn = findViewById(R.id.next_btn);
 
@@ -98,11 +100,28 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                 // Remove all books from the adapter
                                 items.clear();
                                 // Load model objects into the adapter
-                                for (JSONBook book : books) {
+                                /*for (JSONBook book : books) {
                                     items.add(book); // add book through the adapter
                                     String title = book.getTitle().toString();
                                     Log.i("Books", "Title: " + title);
-                                }
+                                }*/
+
+                                JSONBook book = books.get(0);
+
+                                //create item id for new book
+
+                                //create new item id
+                                iid = dbBooks.push().getKey();
+
+                                setOverview(book);
+
+                                Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
+
+                                //add item to db
+                                dbBooks.child(iid).setValue(bookItem);
+                                items.add(book); // add book through the adapter
+                                String title = book.getTitle().toString();
+                                Log.i("Books", "Title: " + title);
                                 searchAdapter.notifyDataSetChanged();
                             }
                         } catch (JSONException e) {
@@ -126,46 +145,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             }
         });
 
-
-        /*search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String search_text = search_sv.getQuery().toString();
-                items.clear();
-                searchAdapter.notifyDataSetChanged();
-                bClient.getBooks(search_text, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try {
-                            JSONArray docs;
-                            if(response != null) {
-                                // Get the docs json array
-                                docs = response.getJSONArray("docs");
-                                // Parse json array into array of model objects
-                                final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
-                                // Remove all books from the adapter
-                                items.clear();
-                                // Load model objects into the adapter
-                                for (JSONBook book : books) {
-                                    items.add(book); // add book through the adapter
-                                }
-                                searchAdapter.notifyDataSetChanged();
-                            }
-                        } catch (JSONException e) {
-                            // Invalid JSON format, show appropriate error.
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                    }
-                });
-                //getSearchResults(search_text);
-            }
-        });*/
-
         algolia_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,6 +159,32 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                 Intent i = new Intent(InputRecsBooksActivity.this, InputRecsTVActivity.class);
                 i.putExtra("user", Parcels.wrap(resultUser));
                 startActivity(i);
+            }
+        });
+    }
+
+    public void setOverview(final JSONBook book){
+        bClient.getExtraBookDetails(book.getOpenLibraryId(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    String description;
+                    if (response != null) {
+                        // Get the docs json array
+                        description = response.getString("description");
+                        Log.i("Books", "description: " + description);
+                        //set overview of book
+                        book.setOverview(description);
+                    }
+                } catch (JSONException e) {
+                    // Invalid JSON format, show appropriate error.
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
     }
