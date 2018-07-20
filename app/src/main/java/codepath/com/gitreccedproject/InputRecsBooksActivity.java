@@ -104,23 +104,30 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                     Log.i("Books", "Title: " + title);
                                 }*/
 
-                                JSONBook book = books.get(0);
+                                //if results exist
+                                if (response.getInt("num_found") != 0) {
+                                    JSONBook book = books.get(0);
 
-                                //create item id for new book
+                                    //create item id for new book
 
-                                //create new item id
-                                iid = dbBooks.push().getKey();
+                                    //create new item id
+                                    iid = dbBooks.push().getKey();
 
-                                setOverview(book);
+                                    setOverview(book);
 
-                                Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
+                                    Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
 
-                                //add item to db
-                                dbBooks.child(iid).setValue(bookItem);
-                                items.add(book); // add book through the adapter
-                                String title = book.getTitle().toString();
-                                Log.i("Books", "Title: " + title);
-                                searchAdapter.notifyDataSetChanged();
+                                    //add item to db
+                                    dbBooks.child(iid).setValue(bookItem);
+                                    items.add(bookItem); // add book through the adapter
+                                    String title = book.getTitle().toString();
+                                    Log.i("Books", "Title: " + title);
+                                    searchAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast toast = Toast.makeText(getApplicationContext(), "No results. Please try again!",
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
                             }
                         } catch (JSONException e) {
                             // Invalid JSON format, show appropriate error.
@@ -161,19 +168,20 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         });
     }
 
-    public void setOverview(final JSONBook book){
+    public void setOverview(final JSONBook book) {
         bClient.getExtraBookDetails(book.getOpenLibraryId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    String description;
-                    if (response != null) {
+                    String description = "description unavailable";
+                    if (response != null && response.has("description")) {
                         // Get the docs json array
                         description = response.getString("description");
-                        Log.i("Books", "description: " + description);
                         //set overview of book
                         book.setOverview(description);
                     }
+
+                    Log.i("Books", "description: " + description);
                 } catch (JSONException e) {
                     // Invalid JSON format, show appropriate error.
                     e.printStackTrace();
