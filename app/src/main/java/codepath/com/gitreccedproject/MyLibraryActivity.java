@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -72,7 +73,11 @@ public class MyLibraryActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         if (menuItem.getItemId() == R.id.logout) {
                             Log.i("menu","logout selected");
-                            //signOut();
+                            mAuth.signOut();
+                            final Intent i = new Intent(MyLibraryActivity.this, LoginActivity.class);
+                            startActivity(i);
+                            finish();
+                            Toast.makeText(getApplicationContext(), "Logged out!", Toast.LENGTH_SHORT).show();
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
