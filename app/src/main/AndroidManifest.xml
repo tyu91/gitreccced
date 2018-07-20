@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InputRecsActivity"/>
+        <activity android:name=".InputRecsMoviesActivity"/>
         <activity android:name=".DBTestActivity"/>
         <activity android:name=".DBTest2Activity"/>
         <activity android:name=".SignUpActivity"/>
