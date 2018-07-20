@@ -1,5 +1,6 @@
 package codepath.com.gitreccedproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -10,8 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.parceler.Parcels;
 
 public class MyLibraryActivity extends AppCompatActivity {
 
@@ -21,6 +26,7 @@ public class MyLibraryActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private DrawerLayout mDrawerLayout;
+    private ImageView plus_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,17 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        plus_btn = toolbar.findViewById(R.id.plus_btn);
+        plus_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("plus","clicked!");
+                Intent i = new Intent(MyLibraryActivity.this, InputRecsMoviesActivity.class);
+                i.putExtra("user", Parcels.wrap(new User())); // TODO - change this so it passes in the actual user
+                startActivity(i);
+            }
+        });
 
         viewPager = findViewById(R.id.viewpager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
