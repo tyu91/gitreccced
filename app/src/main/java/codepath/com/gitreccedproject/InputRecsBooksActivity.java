@@ -75,9 +75,9 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         searchAdapter = new SearchAdapter(items);
         // RecyclerView setup (layout manager, use adapter)
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        //searchlist_rv.setLayoutManager(linearLayoutManager);
+        searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
-        //searchlist_rv.setAdapter(searchAdapter);
+        searchlist_rv.setAdapter(searchAdapter);
 
         // implement onclick listener
         search_sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -98,36 +98,38 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                 // Remove all books from the adapter
                                 items.clear();
                                 // Load model objects into the adapter
-                                /*for (JSONBook book : books) {
-                                    items.add(book); // add book through the adapter
-                                    String title = book.getTitle().toString();
-                                    Log.i("Books", "Title: " + title);
-                                }*/
 
                                 //if results exist
                                 if (response.getInt("num_found") != 0) {
-                                    JSONBook book = books.get(0);
 
-                                    //create item id for new book
+                                        JSONBook book = books.get(0);
 
-                                    //create new item id
-                                    iid = dbBooks.push().getKey();
+                                        String title = book.getTitle().toString();
+                                        Log.i("Books", "Title: " + title);
 
-                                    setOverview(book);
+                                        JSONBook tempBook = books.get(0);
 
-                                    Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
+                                        //create item id for new book
 
-                                    //add item to db
-                                    dbBooks.child(iid).setValue(bookItem);
-                                    items.add(bookItem); // add book through the adapter
-                                    String title = book.getTitle().toString();
-                                    Log.i("Books", "Title: " + title);
-                                    searchAdapter.notifyDataSetChanged();
+                                        //create new item id
+                                        iid = dbBooks.push().getKey();
+
+                                        setOverview(tempBook);
+
+                                        Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
+
+                                        //add item to db
+                                        dbBooks.child(iid).setValue(bookItem);
+                                        items.add(bookItem); // add book through the adapter
+                                        Log.i("Books", "Title: " + title);
+                                        searchAdapter.notifyDataSetChanged();
+                                    }
                                 } else {
                                     Toast toast = Toast.makeText(getApplicationContext(), "No results. Please try again!",
                                             Toast.LENGTH_SHORT);
                                     toast.show();
-                                }
+
+
                             }
                         } catch (JSONException e) {
                             // Invalid JSON format, show appropriate error.
