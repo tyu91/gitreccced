@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -42,12 +45,16 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
-    String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
+    String uid = "inputrecsmovieactivity: user id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_movies);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Recommending Movies.",
+                Toast.LENGTH_SHORT);
+        toast.show();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
