@@ -19,8 +19,10 @@ public class JSONBook extends Item implements Serializable {
     public String overview;
     */
     public String iid;
+    public String overview;
+    public String genre;
     public String openLibraryId;
-    public String author;
+    //public String author;
     public String title;
 
     public String getOpenLibraryId() {
@@ -31,10 +33,10 @@ public class JSONBook extends Item implements Serializable {
         return title;
     }
 
-    public String getAuthor() {
+    /*public String getAuthor() {
         return author;
     }
-
+*/
     // Get book cover from covers API
     public String getCoverUrl() {
         return "http://covers.openlibrary.org/b/olid/" + openLibraryId + "-L.jpg?default=false";
@@ -47,15 +49,15 @@ public class JSONBook extends Item implements Serializable {
         try {
             // Deserialize json into object fields
             // Check if a cover edition is available
-            if (jsonObject.has("cover_edition_key")) {
-                book.openLibraryId = jsonObject.getString("cover_edition_key");
-            } else if(jsonObject.has("edition_key")) {
-                final JSONArray ids = jsonObject.getJSONArray("edition_key");
-                book.openLibraryId = ids.getString(0);
+            if(jsonObject.has("key")) {
+                //final JSONObject ids = jsonObject.getJSONObject("key");
+                book.openLibraryId = jsonObject.getString("key");
             }
             book.iid = "";
+            book.genre = "Book";
             book.title = jsonObject.has("title_suggest") ? jsonObject.getString("title_suggest") : "";
-            book.author = getAuthor(jsonObject);
+            //book.author = getAuthor(jsonObject);
+            book.overview = "no description available";
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -79,6 +81,7 @@ public class JSONBook extends Item implements Serializable {
         }
     }
 
+
     public static ArrayList<JSONBook> fromJson(JSONArray jsonArray) {
         ArrayList<JSONBook> books = new ArrayList<JSONBook>(jsonArray.length());
         // Process each result in json array, decode and convert to business
@@ -98,5 +101,23 @@ public class JSONBook extends Item implements Serializable {
             }
         }
         return books;
+    }
+
+    @Override
+    public String getIid() {
+        return iid;
+    }
+
+    @Override
+    public void setIid(String iid) {
+        this.iid = iid;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 }
