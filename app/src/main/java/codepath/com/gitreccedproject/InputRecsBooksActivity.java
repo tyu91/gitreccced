@@ -107,14 +107,12 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                         String title = book.getTitle().toString();
                                         Log.i("Books", "Title: " + title);
 
-                                        JSONBook tempBook = books.get(0);
-
                                         //create item id for new book
 
                                         //create new item id
                                         iid = dbBooks.push().getKey();
 
-                                        setOverview(tempBook);
+                                        setOverview(book);
 
                                         Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
 
