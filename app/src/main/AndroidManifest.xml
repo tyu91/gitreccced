@@ -18,7 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".InputRecsMoviesActivity" />
         <activity android:name=".DBTestActivity" />
         <activity android:name=".DBTest2Activity" />
@@ -27,7 +26,8 @@
             android:name=".MyLibraryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".AlgoliaActivity" />
-        <activity android:name=".InputRecsTVActivity"></activity>
+        <activity android:name=".InputRecsTVActivity" />
+        <activity android:name=".InputRecsBooksActivity"></activity>
     </application>
 
 </manifest>

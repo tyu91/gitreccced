@@ -46,7 +46,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
-    String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
+    String uid = "irma: user id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
