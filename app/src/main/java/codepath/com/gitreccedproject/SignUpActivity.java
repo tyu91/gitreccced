@@ -23,17 +23,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.parceler.Parcels;
 
 public class SignUpActivity extends AppCompatActivity {
-    static FirebaseAuth mAuth; //TODO: change back to private
+    private FirebaseAuth mAuth;
     private EditText email, password, name;
     private Button createAccount;
 
     DatabaseReference dbUsers;
 
-    static User user;
+    //static User user;
 
     String value;
 
-    String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
+    //String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "su: item id not set yet"; //item id (initialized to dummy string for testing)
 
     @Override
@@ -76,14 +76,14 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.d("TESTING", "Sign Up Successful" + task.isSuccessful());
                         FirebaseUser user = mAuth.getCurrentUser();
 
-                        if (task.isSuccessful()) {
+                        if (!task.isSuccessful()) {
                             Toast.makeText(SignUpActivity.this, "Sign up Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            userProfile();
+                            //userProfile();
                             Toast.makeText(SignUpActivity.this, "Account created", Toast.LENGTH_LONG).show();
                             Log.d("TESTING", "Created account");
+                            addUser(user);
                         }
-                        addUser(user);
                     }
                 });
     }

@@ -40,6 +40,8 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
+    static User resultUser;
+
     String uid = "inputrecsmovieactivity: user id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
@@ -54,7 +56,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         //dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         //add user id from sign up activity
-        final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("uid",resultUser.getUid().toString());
         //uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //dbUsers.child(uid).setValue(resultUser);

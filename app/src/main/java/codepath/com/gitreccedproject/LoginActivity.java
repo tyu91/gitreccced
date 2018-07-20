@@ -111,9 +111,12 @@ public class LoginActivity extends AppCompatActivity {
         usersquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Log.i("e",dataSnapshot.toString());
+                if (dataSnapshot.getValue() == null) {
+                    Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+                }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     User currentuser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email, new Item());
+                    Log.i("snapshot","!");
                     Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);
                     intent.putExtra("user", Parcels.wrap(currentuser));
                     startActivity(intent);

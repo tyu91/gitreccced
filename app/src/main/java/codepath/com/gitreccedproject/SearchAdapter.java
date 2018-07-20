@@ -90,7 +90,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         Item item = dataSnapshot.getValue(Item.class);
 
                         //generate user
-                        User user = SignUpActivity.user;
+                        User user = InputRecsMoviesActivity.resultUser;
 
                         iid = item.getIid();
                         uid = user.getUid();
@@ -129,7 +129,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private void addItem(int position) {
 
         iid = mItems.get(position).getIid();
-        uid = SignUpActivity.user.getUid();
+        uid = InputRecsMoviesActivity.resultUser.getUid();
 
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
