@@ -14,6 +14,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.parceler.Parcels;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -71,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Start Sign In process
-    private  void callLogIn(String email, String password){
+    private  void callLogIn(final String email, String password){
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -88,11 +95,36 @@ public class LoginActivity extends AppCompatActivity {
                             Log.v("TESTING", "signInWithEmail : failed", task.getException());
                             Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent i = new Intent(LoginActivity.this, MyLibraryActivity.class);
-                            startActivity(i);
-                            finish();
+                            getUserfromdb(email);
                         }
                     }
                 });
+    }
+
+    private void getUserfromdb(final String email) {
+        DatabaseReference usersRef;
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
+        com.google.firebase.database.Query usersquery = null;
+        usersquery = usersRef.orderByChild("email").equalTo(email);
+        Log.i("e","e");
+
+        usersquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.i("e",dataSnapshot.toString());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    User currentuser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email, new Item());
+                    Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);
+                    intent.putExtra("user", Parcels.wrap(currentuser));
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("snapshot", "loadPost:onCancelled");
+            }
+        });
     }
 }

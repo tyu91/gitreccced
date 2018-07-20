@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.parceler.Parcels;
 
@@ -43,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
+        dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         name = findViewById(R.id.etUID);
         email = findViewById(R.id.etEmail);
@@ -59,8 +61,6 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Please complete all fields before Signing up", Toast.LENGTH_SHORT).show();
                 } else {
                     callSignUp(em, pass);
-
-                    addUser();
                 }
             }
         });
@@ -83,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(SignUpActivity.this, "Account created", Toast.LENGTH_LONG).show();
                             Log.d("TESTING", "Created account");
                         }
+                        addUser(user);
                     }
                 });
     }
@@ -107,17 +108,18 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //adds user to db
-    private void addUser(){
+    private void addUser(FirebaseUser user){
         String mUsername = name.getText().toString();
         String mPassword = password.getText().toString().trim();
         String mEmail = email.getText().toString();
+        String uid = user.getUid();
 
         if(!TextUtils.isEmpty(mUsername)){
 
             //create new user with dummy uid since current user is actually previous user (fix later)
-            User newUser = new User("", mUsername, mPassword, mEmail, new Item ());
-
-            user = newUser;
+            User newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
+            dbUsers.child(uid).setValue(newUser);
+            newUser.setUid(uid);
 
             //dbUsers.child(uid).setValue(newUser);
 

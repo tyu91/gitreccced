@@ -42,13 +42,16 @@ public class MyLibraryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
+        final User currentuser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        Log.i("libuser",currentuser.toString());
+
         plus_btn = toolbar.findViewById(R.id.plus_btn);
         plus_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("plus","clicked!");
                 Intent i = new Intent(MyLibraryActivity.this, InputRecsMoviesActivity.class);
-                i.putExtra("user", Parcels.wrap(new User())); // TODO - change this so it passes in the actual user
+                i.putExtra("user", Parcels.wrap(currentuser)); // TODO - change this so it passes in the actual user
                 startActivity(i);
             }
         });
