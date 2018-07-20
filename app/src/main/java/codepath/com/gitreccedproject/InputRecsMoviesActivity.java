@@ -15,9 +15,6 @@ import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.CompletionHandler;
 import com.algolia.search.saas.Query;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +35,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public Button algolia_btn;
     public Button next_btn;
 
-    DatabaseReference dbUsers;
+    //DatabaseReference dbUsers;
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
@@ -54,13 +51,14 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT);
         toast.show();
 
-        dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        //dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
         //add user id from sign up activity
         final User resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        dbUsers.child(uid).setValue(resultUser);
-        resultUser.setUid(uid);
+        Log.i("uid",resultUser.getUid().toString());
+        //uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //dbUsers.child(uid).setValue(resultUser);
+        //resultUser.setUid(uid);
 
         // find the views
         search_et = findViewById(R.id.search_et);

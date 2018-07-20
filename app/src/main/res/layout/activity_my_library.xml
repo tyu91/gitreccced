@@ -33,9 +33,11 @@
             app:popupTheme="@style/Theme.AppCompat">
 
             <ImageView
+                android:id="@+id/plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
+                android:clickable="true"
                 app:srcCompat="@android:drawable/ic_input_add" />
         </android.support.v7.widget.Toolbar>
 
