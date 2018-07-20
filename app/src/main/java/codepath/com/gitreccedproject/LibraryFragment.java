@@ -23,9 +23,7 @@ public class LibraryFragment extends Fragment {
     public RecyclerView rv_libMovies;
     public RecyclerView rv_libTvShows;
     public RecyclerView rv_libBooks;
-    public RecyclerView.LayoutManager RecyclerViewLayoutManager;
     public libAdapter libAdapter;
-    public LinearLayoutManager HorizontalLayout ;
     public ArrayList<Item> items;
 
     @Override
