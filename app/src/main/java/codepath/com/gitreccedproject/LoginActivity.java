@@ -38,6 +38,11 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null){
+            // TODO - Log them in
+            Log.i("signin", mAuth.getCurrentUser().getEmail());
+            getUserfromdb(mAuth.getCurrentUser().getEmail());
+        }
 
         email = findViewById(R.id.etEmail);
         password = findViewById(R.id.etPassword);
