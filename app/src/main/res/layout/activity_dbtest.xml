@@ -43,4 +43,11 @@
         android:layout_marginBottom="33dp"
         android:text="Add Items" />
 
+    <SearchView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="205dp" />
+
 </RelativeLayout>

@@ -26,7 +26,8 @@
             android:name=".MyLibraryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".AlgoliaActivity" />
-        <activity android:name=".InputRecsTVActivity"></activity>
+        <activity android:name=".InputRecsTVActivity" />
+        <activity android:name=".InputRecsBooksActivity"></activity>
     </application>
 
 </manifest>
