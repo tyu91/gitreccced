@@ -21,9 +21,9 @@ public class RecsFragment extends Fragment {
     }
 
     public RecyclerView rv_movies;
-    public RecyclerView.LayoutManager RecyclerViewLayoutManager;
+    public RecyclerView rv_tvShows;
+    public RecyclerView rv_books;
     public RecAdapter recAdapter;
-    public LinearLayoutManager HorizontalLayout ;
     public ArrayList<Item> items;
 
     @Override
@@ -38,11 +38,19 @@ public class RecsFragment extends Fragment {
         items = new ArrayList<>();
         // construct the adapter from this datasource
         recAdapter = new RecAdapter(items);
-        rv_movies = view.findViewById(R.id.rv_movies);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rv_movies.setLayoutManager(linearLayoutManager);
+        rv_movies = view.findViewById(R.id.rv_libMovies);
+        rv_tvShows = view.findViewById(R.id.rv_tv);
+        rv_books = view.findViewById(R.id.rv_books);
+        LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager tvShows = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager books = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rv_movies.setLayoutManager(movies);
+        rv_tvShows.setLayoutManager(tvShows);
+        rv_books.setLayoutManager(books);
         // set the adapter
         rv_movies.setAdapter(recAdapter);
+        rv_tvShows.setAdapter(recAdapter);
+        rv_books.setAdapter(recAdapter);
 
         //TODO - change this to get actual data
         for (int i = 0; i < 5; i++) {
