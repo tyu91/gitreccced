@@ -26,6 +26,8 @@ public class LibraryFragment extends Fragment {
     public libAdapter libAdapter;
     public ArrayList<Item> items;
 
+    public EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -36,6 +38,7 @@ public class LibraryFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // this is the fragment equivalent of onCreate
         items = new ArrayList<>();
+
         // construct the adapter from this datasource
         libAdapter = new libAdapter(items);
         rv_libMovies = view.findViewById(R.id.rv_libMovies);
@@ -55,8 +58,21 @@ public class LibraryFragment extends Fragment {
 
         //TODO - change this to get actual data
         for (int i = 0; i < 5; i++) {
-            Item item = null;items.add(item);
+            Item item = new Item();
+            item.setTitle(String.format("%s",i));
+            items.add(item);
             libAdapter.notifyItemInserted(items.size() - 1);
         }
+
+        scrollListener = new EndlessRecyclerViewScrollListener(movies) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                rv_libMovies.getLayoutManager().scrollToPosition(page*items.size());
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rv_libMovies.addOnScrollListener(scrollListener);
     }
 }

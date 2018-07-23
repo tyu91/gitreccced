@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -33,19 +34,22 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull libAdapter.ViewHolder holder, int position) {
         // get the data according to position
-        Item item = mItems.get(position);
+        Item item = mItems.get(position % mItems.size());
         // populate the views according to position
-        //holder.title_tv.setText(item.title);
+        holder.textview1.setText(item.title);
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        //return mItems.size();
+        return Integer.MAX_VALUE;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView textview1;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            textview1 = itemView.findViewById(R.id.textview1);
         }
     }
 }
