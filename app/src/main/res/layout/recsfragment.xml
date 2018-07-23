@@ -8,14 +8,14 @@
         android:id="@+id/rv_libMovies"
         android:layout_width="252dp"
         android:layout_height="120dp"
-        android:layout_below="@+id/movies_tv2"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/movies_tv2"
+        android:layout_below="@+id/movies_tv2" />
 
     <TextView
         android:id="@+id/shows_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv2"
+        android:layout_alignStart="@+id/rv_libMovies"
         android:layout_below="@+id/rv_libMovies"
         android:text="TV Shows"
         android:textColor="@android:color/white" />
@@ -24,9 +24,10 @@
         android:id="@+id/movies_tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/rv_tv"
-        android:layout_marginTop="29dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="52dp"
         android:text="Movies"
         android:textColor="@android:color/white" />
 
@@ -34,14 +35,14 @@
         android:id="@+id/rv_tv"
         android:layout_width="252dp"
         android:layout_height="120dp"
-        android:layout_below="@+id/shows_tv"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/rv_libMovies"
+        android:layout_below="@+id/shows_tv" />
 
     <TextView
         android:id="@+id/tv_books"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv2"
+        android:layout_alignStart="@+id/rv_libMovies"
         android:layout_below="@+id/rv_tv"
         android:text="Books"
         android:textColor="@android:color/white" />
@@ -50,6 +51,6 @@
         android:id="@+id/rv_books"
         android:layout_width="252dp"
         android:layout_height="120dp"
-        android:layout_below="@+id/tv_books"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/rv_libMovies"
+        android:layout_below="@+id/tv_books" />
 </RelativeLayout>
