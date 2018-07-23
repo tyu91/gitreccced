@@ -36,17 +36,21 @@ public class RecsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // this is the fragment equivalent of onCreate
         items = new ArrayList<>();
+
         // construct the adapter from this datasource
         recAdapter = new RecAdapter(items);
         rv_movies = view.findViewById(R.id.rv_libMovies);
         rv_tvShows = view.findViewById(R.id.rv_tv);
         rv_books = view.findViewById(R.id.rv_books);
-        LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        final LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager tvShows = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager books = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
         rv_movies.setLayoutManager(movies);
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
+
         // set the adapter
         rv_movies.setAdapter(recAdapter);
         rv_tvShows.setAdapter(recAdapter);
