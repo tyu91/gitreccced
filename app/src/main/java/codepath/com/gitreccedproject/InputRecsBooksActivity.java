@@ -71,6 +71,8 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         algolia_btn = findViewById(R.id.algolia_btn);
         next_btn = findViewById(R.id.next_btn);
 
+        search_sv.setIconifiedByDefault(false);
+
         // init the arraylist (data source)
         items = new ArrayList<>();
         // construct the adapter from this datasource
