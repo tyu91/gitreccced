@@ -169,10 +169,12 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                     final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
                                     // Remove all books from the adapter
                                     items.clear();
+                                    searchAdapter.notifyDataSetChanged();
                                     // Load model objects into the adapter
 
-                                    //if results exist
-                                    if (response.getInt("num_found") != 0) {
+                                    //if results exist and text hasn't been deleted
+                                    String text = search_sv.getQuery().toString();
+                                    if (response.getInt("num_found") != 0 && TextUtils.getTrimmedLength(text) > 0) {
 
                                         //for each entry in response array, add entry to searchAdapter.
                                         int num_results = 10;

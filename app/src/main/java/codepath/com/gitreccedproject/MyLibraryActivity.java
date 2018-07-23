@@ -1,6 +1,7 @@
 package codepath.com.gitreccedproject;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -46,7 +47,7 @@ public class MyLibraryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Drawable mDrawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_menu);
-        mDrawable.setColorFilter(new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.ADD));
+        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
 
         //new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY)
 
