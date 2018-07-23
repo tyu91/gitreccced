@@ -23,6 +23,9 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     DatabaseReference dbItemsByUser;
     DatabaseReference dbUsersbyItem;
+    DatabaseReference dbBooks;
+
+    BookClient bClient = new BookClient();
 
     String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
@@ -75,8 +78,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         public void onClick(View view) {
             final int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
+
                 // get the item at the position
                 final Item item = mItems.get(position);
+                //if item is a book, add to DB
+                if(item.getGenre() == "Book") {
+                    dbBooks = FirebaseDatabase.getInstance().getReference("books");
+                    //create new item id
+                    iid = dbBooks.push().getKey();
+                    dbBooks.child(iid).setValue(item);
+                }
+                //TODO: if item exists in DB, do not re-add book!
                 addItem(position);
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
