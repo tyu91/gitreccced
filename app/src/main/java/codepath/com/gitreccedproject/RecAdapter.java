@@ -32,14 +32,14 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecAdapter.ViewHolder holder, int position) {
         // get the data according to position
-        Item item = mItems.get(position);
+        Item item = mItems.get(position % mItems.size());
         // populate the views according to position
         //holder.title_tv.setText(item.title);
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return Integer.MAX_VALUE;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

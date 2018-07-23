@@ -26,7 +26,7 @@ public class LibraryFragment extends Fragment {
     public libAdapter libAdapter;
     public ArrayList<Item> items;
 
-    public EndlessRecyclerViewScrollListener scrollListener;
+    //public EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class LibraryFragment extends Fragment {
             libAdapter.notifyItemInserted(items.size() - 1);
         }
 
-        scrollListener = new EndlessRecyclerViewScrollListener(movies) {
+        /*scrollListener = new EndlessRecyclerViewScrollListener(movies) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
@@ -73,6 +73,6 @@ public class LibraryFragment extends Fragment {
             }
         };
         // Adds the scroll listener to RecyclerView
-        rv_libMovies.addOnScrollListener(scrollListener);
+        rv_libMovies.addOnScrollListener(scrollListener);*/
     }
 }
