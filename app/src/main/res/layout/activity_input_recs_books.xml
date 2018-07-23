@@ -34,12 +34,12 @@
         android:text="Algolia" />
 
     <Button
-        android:id="@+id/next_btn"
+        android:id="@+id/finish_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:text="Next" />
+        android:text="Finish" />
 
     <TextView
         android:id="@+id/textView2"
