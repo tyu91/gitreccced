@@ -67,10 +67,10 @@ public class RecsFragment extends Fragment {
         }
 
         // TODO - uncomment this if statement if we want to enable infinite scrolling in both directions
-        /*if (items.size() > 0) {
+        if (items.size() > 0) {
             movies.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
-            shows.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
+            tvShows.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
             books.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
-        }*/
+        }
     }
 }
