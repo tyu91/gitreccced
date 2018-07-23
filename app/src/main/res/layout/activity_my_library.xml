@@ -38,6 +38,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:clickable="true"
+                android:tint="@android:color/white"
                 app:srcCompat="@android:drawable/ic_input_add" />
         </android.support.v7.widget.Toolbar>
 
