@@ -35,7 +35,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
     public Button algolia_btn;
-    public Button next_btn;
+    public Button finish_btn;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -69,7 +69,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         algolia_btn = findViewById(R.id.algolia_btn);
-        next_btn = findViewById(R.id.next_btn);
+        finish_btn = findViewById(R.id.finish_btn);
 
         search_sv.setIconifiedByDefault(false);
 
@@ -289,10 +289,10 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             }
         });
 
-        next_btn.setOnClickListener(new View.OnClickListener() {
+        finish_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(InputRecsBooksActivity.this, InputRecsTVActivity.class);
+                Intent i = new Intent(InputRecsBooksActivity.this, MyLibraryActivity.class);
                 i.putExtra("user", Parcels.wrap(resultUser));
                 startActivity(i);
             }
