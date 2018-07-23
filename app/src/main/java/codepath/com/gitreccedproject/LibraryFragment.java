@@ -64,11 +64,11 @@ public class LibraryFragment extends Fragment {
             libAdapter.notifyItemInserted(items.size() - 1);
         }
 
-        // TODO - uncomment this if statement if we want to enable infinite scrolling in both directions
+        // TODO - comment this if statement if we want to enable infinite scrolling only to the right
         if (items.size() > 0) {
-            movies.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
-            shows.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
-            books.scrollToPosition((int) Math.floor(Integer.MAX_VALUE / (2 * items.size())) * items.size());
+            movies.scrollToPosition(items.size()*100);
+            shows.scrollToPosition(100 * items.size());
+            books.scrollToPosition(100 * items.size());
         }
 
 
