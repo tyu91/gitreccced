@@ -2,12 +2,14 @@ package codepath.com.gitreccedproject;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -45,11 +47,21 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
         return Integer.MAX_VALUE;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textview1;
+        CardView cardview;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textview1 = itemView.findViewById(R.id.textview1);
+            cardview = itemView.findViewById(R.id.cardview);
+            cardview.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition() % mItems.size();
+            Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
         }
     }
 }
