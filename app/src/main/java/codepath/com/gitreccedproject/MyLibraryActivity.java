@@ -1,9 +1,14 @@
 package codepath.com.gitreccedproject;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -40,7 +45,15 @@ public class MyLibraryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        Drawable mDrawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_menu);
+        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
+
+        //new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY)
+
+        getSupportActionBar().setHomeAsUpIndicator(mDrawable);
+
+
 
         final User currentuser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("libuser",currentuser.toString());

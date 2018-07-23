@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null){
-            // TODO - Log them in
             Log.i("signin", mAuth.getCurrentUser().getEmail());
             getUserfromdb(mAuth.getCurrentUser().getEmail());
         }
@@ -97,8 +96,16 @@ public class LoginActivity extends AppCompatActivity {
                         can be handled in the listener
                          */
                         if (!task.isSuccessful()){
-                            Log.v("TESTING", "signInWithEmail : failed", task.getException());
-                            Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                            Log.v("TESTING", task.getException().toString());
+                            if (task.getException().toString().contains("The email address is badly formatted")) {
+                                Toast.makeText(LoginActivity.this, "Invalid email!", Toast.LENGTH_SHORT).show();
+                            } else if (task.getException().toString().contains("There is no user record corresponding to this identifier")) {
+                                Toast.makeText(LoginActivity.this, "There is no account associated with this email", Toast.LENGTH_SHORT).show();
+                            } else if (task.getException().toString().contains("The password is invalid or the user does not have a password")) {
+                                Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             getUserfromdb(email);
                         }
