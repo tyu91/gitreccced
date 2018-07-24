@@ -36,7 +36,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
     public Button algolia_btn;
-    public Button next_btn, skip;
+    public Button next_btn;
 
     //DatabaseReference dbUsers;
 
@@ -68,9 +68,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         // find the views
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        algolia_btn = findViewById(R.id.algolia_btn);
         next_btn = findViewById(R.id.next_btn);
-        skip = findViewById(R.id.btnSkip);
 
         search_et.setIconifiedByDefault(false);
 
@@ -83,15 +81,6 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
-
-
-        algolia_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(InputRecsMoviesActivity.this, AlgoliaActivity.class);
-                startActivity(i);
-            }
-        });
 
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,34 +176,6 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                     searchAdapter.notifyDataSetChanged();
                 }
                 return false;
-            }
-        });
-
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InputRecsMoviesActivity.this);
-
-                final TextView tv = new TextView(InputRecsMoviesActivity.this);
-
-                tv.setText("Are you sure you want to skip this?");
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(tv);
-
-                // set dialog message
-                alertDialogBuilder.setCancelable(true).setPositiveButton("Go to My Library", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        final Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
             }
         });
     }

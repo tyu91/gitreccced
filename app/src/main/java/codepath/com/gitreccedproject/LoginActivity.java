@@ -28,8 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private Button login, signUp;
 
-    private Button btnDbTest;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,15 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 final Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(i);
             }
-        });
-
-        btnDbTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, DBTestActivity.class);
-                startActivity(intent);
-            }
-
         });
     }
 

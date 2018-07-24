@@ -34,7 +34,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
     public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
-    public Button algolia_btn;
     public Button finish_btn;
 
     DatabaseReference dbUsers;
@@ -68,7 +67,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         // find the views
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        algolia_btn = findViewById(R.id.algolia_btn);
         finish_btn = findViewById(R.id.finish_btn);
 
         search_sv.setIconifiedByDefault(false);
@@ -213,7 +211,37 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
                                         //create item id for new book
 
-                                        //create new item id
+                                        //create new item idclient.getBooks(query, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    // hide progress bar
+                    progress.setVisibility(ProgressBar.GONE);
+                    JSONArray docs = null;
+                    if(response != null) {
+                        // Get the docs json array
+                        docs = response.getJSONArray("docs");
+                        // Parse json array into array of model objects
+                        final ArrayList<Book> books = Book.fromJson(docs);
+                        // Remove all books from the adapter
+                        bookAdapter.clear();
+                        // Load model objects into the adapter
+                        for (Book book : books) {
+                            bookAdapter.add(book); // add book through the adapter
+                        }
+                        bookAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    // Invalid JSON format, show appropriate error.
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progress.setVisibility(ProgressBar.GONE);
+            }
+        });
                                         iid = dbBooks.push().getKey();
 
                                         setOverview(book);
@@ -250,14 +278,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                     searchAdapter.notifyDataSetChanged();
                 }
                 return false;
-            }
-        });
-
-        algolia_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(InputRecsBooksActivity.this, AlgoliaActivity.class);
-                startActivity(i);
             }
         });
 

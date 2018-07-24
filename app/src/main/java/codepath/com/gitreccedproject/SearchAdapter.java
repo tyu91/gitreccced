@@ -17,13 +17,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     DatabaseReference dbItemsByUser;
     DatabaseReference dbUsersbyItem;
     DatabaseReference dbBooks;
+
+    DatabaseReference dbRecItemsByUser;
 
     BookClient bClient = new BookClient();
 
@@ -33,6 +40,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     Context context;
     public List<Item> mItems;
+    public List<Item> mRecs = new ArrayList<>();
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -93,25 +101,83 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
 
-
                 dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
                 dbItemsByUser.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
-                        //get snapshot of item added under user in itemsbyuser
-                        Item item = dataSnapshot.getValue(Item.class);
+                        //array list of items that will be pared down eventually
+                        mRecs = new ArrayList<>();
 
+                        //get snapshot of item added under user in itemsbyuser
+                        //***NOTE: for some reason, iterates through every item under a user. Look into this later.
+                        final Item item = dataSnapshot.getValue(Item.class);
+
+                        //TODO: get user not from movie recs activity?
                         //generate user
                         User user = InputRecsMoviesActivity.resultUser;
 
                         iid = item.getIid();
-                        uid = user.getUid();
 
                         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
 
                         //add user to usersbyitem
-                        dbUsersbyItem.child(uid)
-                                .setValue(user);
+                        dbUsersbyItem.child(uid).setValue(user);
+
+                        readData(new FirebaseCallback() {
+                            @Override
+                            public boolean equals(Object obj) {
+                                return super.equals(obj);
+                            }
+
+                            @Override
+                            public void onCallback(List<Item> recList) {
+                                //prints out array list of recommendations
+                                for(int i = 0; i < recList.size(); i++) {
+                                    Item recItem = recList.get(i);
+                                    Log.i("RecAlgo", "Rec " + i + ": " + recItem.getTitle());
+                                }
+
+                                ArrayList<String> recIids = new ArrayList<>();
+
+                                //convert list of recommendations to list of their IDs
+                                for(int i = 0; i < recList.size(); i++) {
+                                    String recId = recList.get(i).getIid();
+                                    recIids.add(recId);
+                                    Log.i("RecAlgo", "Rec " + i + ": " + recList.get(i).getTitle());
+                                }
+
+                                //maps recItems to number of appearances
+                                final HashMap<String, Integer> recMap = new HashMap<>();
+
+                                for(int i = 0; i < recIids.size(); i++) {
+                                    if (recMap.containsKey(recIids.get(i))) {
+                                        recMap.put(recIids.get(i), recMap.get(recIids.get(i)) + 1);
+                                    } else {
+                                        recMap.put(recIids.get(i), 1);
+                                    }
+                                }
+
+                                //prints out hashmap recMap's items and frequency
+                                for(String recId : recMap.keySet()) {
+                                    Log.i("RecAlgo", "NoDupesRec: " + recId + ", Num Results: " + recMap.get(recId));
+                                }
+                                //sorts recItems based on number of appearances
+                                List<String> toRecommend = new ArrayList<String>(recMap.keySet());
+
+                                Collections.sort(toRecommend, new Comparator<String>() {
+                                    @Override
+                                    public int compare(String s1, String s2) {
+                                        return recMap.get(s2).compareTo(recMap.get(s1));
+                                    }
+                                });
+                                //prints out sorted toRecommend
+                                for(String key: toRecommend) {
+                                    Log.i("RecAlgo", "FinalRec: " + key + ", Num Results: " + recMap.get(key));
+                                }
+
+                                //removes items already in current user's library
+                            }
+                        });
                     }
 
                     @Override
@@ -138,6 +204,56 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
+    //reads data from firebase in order to generate recs
+    private void readData (final FirebaseCallback firebaseCallback) {
+        //set up value event listener for users associated with each item in current user's library
+        ValueEventListener valueEventListenerOne = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    User mUser = userSnapshot.getValue(User.class);
+                    Log.i("Users", "User ID: " + mUser.getUid());
+
+                    //sets up reference to each salient user under userbyitems
+                    dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(mUser.getUid());
+
+                    //set up value event listener for each item under each user linked to the items in current user's library
+                    ValueEventListener valueEventListenerTwo = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                                Item userItem = itemSnapshot.getValue(Item.class);
+                                mRecs.add(userItem);
+                                //Log.i("RecAlgo", "Rec Item: " + userItem.getTitle());
+                            }
+
+                            firebaseCallback.onCallback(mRecs);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    };
+
+                    dbRecItemsByUser.addListenerForSingleValueEvent(valueEventListenerTwo);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        dbUsersbyItem.addListenerForSingleValueEvent(valueEventListenerOne);
+    }
+
+    abstract class FirebaseCallback {
+        public abstract void onCallback(List<Item> recList);
+    }
+
+    //adds item to firebase
     private void addItem(int position) {
 
         iid = mItems.get(position).getIid();

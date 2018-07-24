@@ -58,32 +58,19 @@ public class RecsFragment extends Fragment {
         rv_tvShows.setAdapter(recAdapter);
         rv_books.setAdapter(recAdapter);
 
-        // Retain an instance so that you can call `resetState()` for fresh searches
-        scrollListener = new EndlessRecyclerViewScrollListener(movies) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                loadNextDataFromApi(page);
-            }
-        };
-
-        rv_movies.addOnScrollListener(scrollListener);
-
         //TODO - change this to get actual data
         for (int i = 0; i < 5; i++) {
-            Item item = null;items.add(item);
+            Item item = new Item();
+            item.setTitle(String.format("%s",i));
+            items.add(item);
             recAdapter.notifyItemInserted(items.size() - 1);
         }
-    }
 
-    // Append the next page of data into the adapter
-    // This method probably sends out a network request and appends new data items to your adapter.
-    public void loadNextDataFromApi(int offset) {
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+        // TODO - comment this if statement if we want to enable infinite scrolling only to the right
+        if (items.size() > 0) {
+            movies.scrollToPosition(items.size()*100);
+            tvShows.scrollToPosition(100 * items.size());
+            books.scrollToPosition(100 * items.size());
+        }
     }
 }
