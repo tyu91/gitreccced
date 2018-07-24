@@ -35,7 +35,6 @@ public class InputRecsTVActivity extends AppCompatActivity {
 
     public SearchView search_et;
     public RecyclerView searchlist_rv;
-    public Button algolia_btn;
 
     public Button next_btn;
 
@@ -68,7 +67,6 @@ public class InputRecsTVActivity extends AppCompatActivity {
         // find the views
         search_et = (SearchView) findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        algolia_btn = findViewById(R.id.algolia_btn);
 
         search_et.setIconifiedByDefault(false);
 
@@ -81,14 +79,6 @@ public class InputRecsTVActivity extends AppCompatActivity {
         searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
-
-        algolia_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(InputRecsTVActivity.this, AlgoliaActivity.class);
-                startActivity(i);
-            }
-        });
 
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,19 +143,24 @@ public class InputRecsTVActivity extends AppCompatActivity {
                             try {
                                 items.clear();
                                 searchAdapter.notifyDataSetChanged();
-                                JSONArray array = content.getJSONArray("hits");
-                                for (int i = 0; i < array.length(); i++) {
-                                    JSONObject object = array.getJSONObject(i);
 
-                                    Item item = new Item();
+                                String text = search_et.getQuery().toString();
+                                if (text != null && TextUtils.getTrimmedLength(text) > 0)
+                                {
+                                    JSONArray array = content.getJSONArray("hits");
+                                    for (int i = 0; i < array.length(); i++) {
+                                        JSONObject object = array.getJSONObject(i);
 
-                                    item.setIid(object.getString("Iid"));
-                                    item.setGenre(object.getString("genre"));
-                                    item.setDetails(object.getString("overview"));
-                                    item.setTitle(object.getString("title"));
+                                        Item item = new Item();
 
-                                    items.add(item);
-                                    searchAdapter.notifyItemInserted(items.size() - 1);
+                                        item.setIid(object.getString("Iid"));
+                                        item.setGenre(object.getString("genre"));
+                                        item.setDetails(object.getString("overview"));
+                                        item.setTitle(object.getString("title"));
+
+                                        items.add(item);
+                                        searchAdapter.notifyItemInserted(items.size() - 1);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -34,7 +34,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
     public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
-    public Button algolia_btn;
     public Button finish_btn;
 
     DatabaseReference dbUsers;
@@ -68,7 +67,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         // find the views
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        algolia_btn = findViewById(R.id.algolia_btn);
         finish_btn = findViewById(R.id.finish_btn);
 
         search_sv.setIconifiedByDefault(false);
@@ -169,10 +167,12 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                                     final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
                                     // Remove all books from the adapter
                                     items.clear();
+                                    searchAdapter.notifyDataSetChanged();
                                     // Load model objects into the adapter
 
-                                    //if results exist
-                                    if (response.getInt("num_found") != 0) {
+                                    //if results exist and text hasn't been deleted
+                                    String text = search_sv.getQuery().toString();
+                                    if (response.getInt("num_found") != 0 && TextUtils.getTrimmedLength(text) > 0) {
 
                                         //for each entry in response array, add entry to searchAdapter.
                                         int num_results = 10;
@@ -278,14 +278,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                     searchAdapter.notifyDataSetChanged();
                 }
                 return false;
-            }
-        });
-
-        algolia_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(InputRecsBooksActivity.this, AlgoliaActivity.class);
-                startActivity(i);
             }
         });
 

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 public class RecsFragment extends Fragment {
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public static Fragment getInstance(int position) {
         Bundle bundle = new Bundle();
@@ -43,7 +45,7 @@ public class RecsFragment extends Fragment {
         rv_tvShows = view.findViewById(R.id.rv_tv);
         rv_books = view.findViewById(R.id.rv_books);
 
-        final LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager tvShows = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager books = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
@@ -58,8 +60,17 @@ public class RecsFragment extends Fragment {
 
         //TODO - change this to get actual data
         for (int i = 0; i < 5; i++) {
-            Item item = null;items.add(item);
+            Item item = new Item();
+            item.setTitle(String.format("%s",i));
+            items.add(item);
             recAdapter.notifyItemInserted(items.size() - 1);
+        }
+
+        // TODO - comment this if statement if we want to enable infinite scrolling only to the right
+        if (items.size() > 0) {
+            movies.scrollToPosition(items.size()*100);
+            tvShows.scrollToPosition(100 * items.size());
+            books.scrollToPosition(100 * items.size());
         }
     }
 }
