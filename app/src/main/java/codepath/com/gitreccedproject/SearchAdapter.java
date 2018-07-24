@@ -116,54 +116,22 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         User user = InputRecsMoviesActivity.resultUser;
 
                         iid = item.getIid();
-                        uid = user.getUid();
+                        //uid = user.getUid();
 
                         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
 
                         //add user to usersbyitem
                         dbUsersbyItem.child(uid).setValue(user);
 
-                        dbStepOne = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
-
-                        //set up value event listener
-
-                        ValueEventListener valueEventListenerOne = new ValueEventListener() {
+                        readData(new FirebaseCallback() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-                                    User mUser = userSnapshot.getValue(User.class);
-
-                                    //BEGIN ADDING ITEMS
-                                    ValueEventListener valueEventListenerTwo = new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for(DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                                                Item userItem = itemSnapshot.getValue(Item.class);
-                                                mRecs.add(userItem);
-                                                Log.i("RecAlgo", "Rec Item: " + userItem.getTitle());
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    };
-
-                                    dbStepOne.addListenerForSingleValueEvent(valueEventListenerTwo);
-
-                                    //END ADDING ITEMS
-                                    Log.i("Rec Algo", "UserID: " + mUser.getUid());
+                            public void onCallback(List<Item> recList) {
+                                for(int i = 0; i < recList.size(); i++) {
+                                    Item recItem = recList.get(i);
+                                    Log.i("RecAlgo", "Rec " + i + ": " + recItem.getTitle());
                                 }
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        };
-
-                        dbUsersbyItem.addListenerForSingleValueEvent(valueEventListenerOne);
+                        });
                     }
 
                     @Override
@@ -187,9 +155,57 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     }
                 });
             }
-
-            Log.i("RecAlgo", "******************HERE RIGHT NOW*******************");
         }
+    }
+
+    private void readData (final FirebaseCallback firebaseCallback) {
+
+        //set up value event listener
+        ValueEventListener valueEventListenerOne = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    User mUser = userSnapshot.getValue(User.class);
+                    Log.i("Users", "User ID: " + mUser.getUid());
+
+                    dbStepOne = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(mUser.getUid());
+
+                    //BEGIN ADDING ITEMS
+                    ValueEventListener valueEventListenerTwo = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                                Item userItem = itemSnapshot.getValue(Item.class);
+                                mRecs.add(userItem);
+                                //Log.i("RecAlgo", "Rec Item: " + userItem.getTitle());
+                            }
+
+                            firebaseCallback.onCallback(mRecs);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    };
+
+                    dbStepOne.addListenerForSingleValueEvent(valueEventListenerTwo);
+
+                    //END ADDING ITEMS
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        dbUsersbyItem.addListenerForSingleValueEvent(valueEventListenerOne);
+    }
+
+    abstract class FirebaseCallback {
+        public abstract void onCallback(List<Item> recList);
     }
 
     private void addItem(int position) {
