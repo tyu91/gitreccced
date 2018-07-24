@@ -20,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
@@ -37,7 +40,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     Context context;
     public List<Item> mItems;
+    public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
+    public List<Item> finalRecs = new ArrayList<>();
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -108,13 +113,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         //get snapshot of item added under user in itemsbyuser
                         //***NOTE: for some reason, iterates through every item under a user. Look into this later.
                         final Item item = dataSnapshot.getValue(Item.class);
+                        userItems.add(item);
 
                         //TODO: get user not from movie recs activity?
                         //generate user
                         User user = InputRecsMoviesActivity.resultUser;
 
                         iid = item.getIid();
-                        //uid = user.getUid();
 
                         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
 
@@ -123,11 +128,107 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                         readData(new FirebaseCallback() {
                             @Override
+                            public boolean equals(Object obj) {
+                                return super.equals(obj);
+                            }
+
+                            @Override
                             public void onCallback(List<Item> recList) {
+                                //prints out array list of recommendations
                                 for(int i = 0; i < recList.size(); i++) {
                                     Item recItem = recList.get(i);
                                     Log.i("RecAlgo", "Rec " + i + ": " + recItem.getTitle());
                                 }
+
+                                ArrayList<String> recIids = new ArrayList<>();
+
+                                //convert list of recommendations to list of their IDs
+                                for(int i = 0; i < recList.size(); i++) {
+                                    String recId = recList.get(i).getIid();
+                                    recIids.add(recId);
+                                    Log.i("RecAlgo", "Rec " + i + ": " + recList.get(i).getTitle());
+                                }
+
+                                //maps recItems to number of appearances
+                                final HashMap<String, Integer> recMap = new HashMap<>();
+
+                                for(int i = 0; i < recIids.size(); i++) {
+                                    if (recMap.containsKey(recIids.get(i))) {
+                                        recMap.put(recIids.get(i), recMap.get(recIids.get(i)) + 1);
+                                    } else {
+                                        recMap.put(recIids.get(i), 1);
+                                    }
+                                }
+
+                                //prints out hashmap recMap's items and frequency
+                                for(String recId : recMap.keySet()) {
+                                    Log.i("RecAlgo", "NoDupesRec: " + recId + ", Num Results: " + recMap.get(recId));
+                                }
+                                //sorts recItems based on number of appearances
+                                List<String> toRecommendIids = new ArrayList<String>(recMap.keySet());
+
+                                Collections.sort(toRecommendIids, new Comparator<String>() {
+                                    @Override
+                                    public int compare(String s1, String s2) {
+                                        return recMap.get(s2).compareTo(recMap.get(s1));
+                                    }
+                                });
+                                //prints out sorted toRecommendIids
+                                for(String key : toRecommendIids) {
+                                    Log.i("RecAlgo", "FinalRec: " + key + ", Num Results: " + recMap.get(key));
+                                }
+
+                                //removes dupes from recList (slow method)
+                                for (int i = 0; i < recList.size() - 1; i++) {
+                                    for (int j = i + 1; j < recList.size(); j++) {
+                                        if(recList.get(i).getIid().equals(recList.get(j).getIid())) {
+                                            recList.remove(j);
+                                            j--;
+                                        }
+                                    }
+                                }
+
+                                //print out recList w/o dupes
+                                for(Item recItem : recList) {
+                                    Log.i("RecAlgo", "RecListNoDupes: " + recItem.getTitle());
+                                }
+
+                                finalRecs.clear();
+
+                                //recreate items list from iid toRecommendIids list:
+                                    //does this by checking iid from toRecommendIids with iid's of items in recList
+                                for (int i = 0; i < toRecommendIids.size(); i++) {
+                                    String currentIid = toRecommendIids.get(i);
+                                    for (int j = 0; j < recList.size(); j++) {
+                                        if(currentIid.equals(recList.get(j).getIid())) {
+                                            finalRecs.add(recList.get(j));
+                                        }
+                                    }
+                                }
+
+                                //print out final recommendations (but including items currently in library)
+                                for (int i = 0; i < finalRecs.size(); i++) {
+                                    Log.i("RecAlgo", "FinalItemsRec " + i + ": " + finalRecs.get(i).getTitle());
+                                }
+
+                                //removes items associated with current user from recommendations
+                                for (int i = 0; i < finalRecs.size(); i++) {
+                                    String currentIid = finalRecs.get(i).getIid();
+                                    for (int j = 0; j < userItems.size(); j++) {
+                                        if (currentIid.equals(userItems.get(j).getIid())) {
+                                            finalRecs.remove(i);
+                                            i--;
+                                        }
+                                    }
+                                }
+
+                                //print out final recommendations (but including items currently in library)
+                                for (int i = 0; i < finalRecs.size(); i++) {
+                                    Log.i("RecAlgo", "ActuallyFinalRecItems " + i + ": " + finalRecs.get(i).getTitle());
+                                }
+
+
+
                             }
                         });
                     }
