@@ -27,9 +27,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     DatabaseReference dbUsersbyItem;
     DatabaseReference dbBooks;
 
-    DatabaseReference dbStepOne;
-    DatabaseReference dbStepTwo;
-    DatabaseReference dbStepThree;
+    DatabaseReference dbRecItemsByUser;
 
     BookClient bClient = new BookClient();
 
@@ -158,9 +156,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
+    //reads data from firebase in order to generate recs
     private void readData (final FirebaseCallback firebaseCallback) {
-
-        //set up value event listener
+        //set up value event listener for users associated with each item in current user's library
         ValueEventListener valueEventListenerOne = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -168,9 +166,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     User mUser = userSnapshot.getValue(User.class);
                     Log.i("Users", "User ID: " + mUser.getUid());
 
-                    dbStepOne = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(mUser.getUid());
+                    //sets up reference to each salient user under userbyitems
+                    dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(mUser.getUid());
 
-                    //BEGIN ADDING ITEMS
+                    //set up value event listener for each item under each user linked to the items in current user's library
                     ValueEventListener valueEventListenerTwo = new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -189,9 +188,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         }
                     };
 
-                    dbStepOne.addListenerForSingleValueEvent(valueEventListenerTwo);
-
-                    //END ADDING ITEMS
+                    dbRecItemsByUser.addListenerForSingleValueEvent(valueEventListenerTwo);
                 }
             }
 
@@ -208,6 +205,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         public abstract void onCallback(List<Item> recList);
     }
 
+    //adds item to firebase
     private void addItem(int position) {
 
         iid = mItems.get(position).getIid();
