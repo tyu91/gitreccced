@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,8 +54,6 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeAsUpIndicator(mDrawable);
 
-
-
         final User currentuser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("libuser",currentuser.toString());
 
@@ -64,7 +63,7 @@ public class MyLibraryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i("plus","clicked!");
                 Intent i = new Intent(MyLibraryActivity.this, InputRecsMoviesActivity.class);
-                i.putExtra("user", Parcels.wrap(currentuser)); // TODO - change this so it passes in the actual user
+                i.putExtra("user", Parcels.wrap(currentuser));
                 startActivity(i);
             }
         });
@@ -77,8 +76,49 @@ public class MyLibraryActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        // initialize menu
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.logout).setChecked(false);
+        nav_Menu.findItem(R.id.settings).setChecked(false);
+
+        mDrawerLayout.addDrawerListener(
+                new DrawerLayout.DrawerListener() {
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                    }
+
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        if (mAuth.getCurrentUser().getUid().contains("LpPtVsPQWyeOzejQj8uLK49zlCX2")) {
+                            Log.i("user","admin");
+                            Menu nav_Menu = navigationView.getMenu();
+                            nav_Menu.findItem(R.id.algolia).setVisible(true);
+                            nav_Menu.findItem(R.id.dbtest).setVisible(true);
+                            nav_Menu.findItem(R.id.algolia).setChecked(false);
+                            nav_Menu.findItem(R.id.dbtest).setChecked(false);
+                        } else {
+                            Log.i("user",mAuth.getCurrentUser().getUid());
+                        }
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        Menu nav_Menu = navigationView.getMenu();
+                        nav_Menu.findItem(R.id.algolia).setChecked(false);
+                        nav_Menu.findItem(R.id.dbtest).setChecked(false);
+                        nav_Menu.findItem(R.id.logout).setChecked(false);
+                        nav_Menu.findItem(R.id.settings).setChecked(false);
+                    }
+
+                    @Override
+                    public void onDrawerStateChanged(int newState) {
+                        // Respond when the drawer motion state changes
+                    }
+                }
+        );
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -95,9 +135,14 @@ public class MyLibraryActivity extends AppCompatActivity {
                             finish();
                             Toast.makeText(getApplicationContext(), "Logged out!", Toast.LENGTH_SHORT).show();
                         }
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
+                        if (menuItem.getItemId() == R.id.algolia) {
+                            Intent i = new Intent(getApplicationContext(), AlgoliaActivity.class);
+                            startActivity(i);
+                        }
+                        if (menuItem.getItemId() == R.id.dbtest) {
+                            Intent intent = new Intent(getApplicationContext(), DBTestActivity.class);
+                            startActivity(intent);
+                        }
                         return true;
                     }
                 });
