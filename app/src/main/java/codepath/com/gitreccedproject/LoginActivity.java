@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnDbTest;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.etPassword);
         login = findViewById(R.id.btnLogin);
         signUp = findViewById(R.id.btnSignUp);
+
         btnDbTest = findViewById(R.id.btnDbTest);
 
         login.setOnClickListener(new View.OnClickListener() {
