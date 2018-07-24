@@ -20,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
@@ -114,7 +117,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         User user = InputRecsMoviesActivity.resultUser;
 
                         iid = item.getIid();
-                        //uid = user.getUid();
 
                         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
 
@@ -123,11 +125,57 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                         readData(new FirebaseCallback() {
                             @Override
+                            public boolean equals(Object obj) {
+                                return super.equals(obj);
+                            }
+
+                            @Override
                             public void onCallback(List<Item> recList) {
+                                //prints out array list of recommendations
                                 for(int i = 0; i < recList.size(); i++) {
                                     Item recItem = recList.get(i);
                                     Log.i("RecAlgo", "Rec " + i + ": " + recItem.getTitle());
                                 }
+
+                                ArrayList<String> recIids = new ArrayList<>();
+
+                                //convert list of recommendations to list of their IDs
+                                for(int i = 0; i < recList.size(); i++) {
+                                    String recId = recList.get(i).getIid();
+                                    recIids.add(recId);
+                                    Log.i("RecAlgo", "Rec " + i + ": " + recList.get(i).getTitle());
+                                }
+
+                                //maps recItems to number of appearances
+                                final HashMap<String, Integer> recMap = new HashMap<>();
+
+                                for(int i = 0; i < recIids.size(); i++) {
+                                    if (recMap.containsKey(recIids.get(i))) {
+                                        recMap.put(recIids.get(i), recMap.get(recIids.get(i)) + 1);
+                                    } else {
+                                        recMap.put(recIids.get(i), 1);
+                                    }
+                                }
+
+                                //prints out hashmap recMap's items and frequency
+                                for(String recId : recMap.keySet()) {
+                                    Log.i("RecAlgo", "NoDupesRec: " + recId + ", Num Results: " + recMap.get(recId));
+                                }
+                                //sorts recItems based on number of appearances
+                                List<String> toRecommend = new ArrayList<String>(recMap.keySet());
+
+                                Collections.sort(toRecommend, new Comparator<String>() {
+                                    @Override
+                                    public int compare(String s1, String s2) {
+                                        return recMap.get(s2).compareTo(recMap.get(s1));
+                                    }
+                                });
+                                //prints out sorted toRecommend
+                                for(String key: toRecommend) {
+                                    Log.i("RecAlgo", "FinalRec: " + key + ", Num Results: " + recMap.get(key));
+                                }
+
+                                //removes items already in current user's library
                             }
                         });
                     }
