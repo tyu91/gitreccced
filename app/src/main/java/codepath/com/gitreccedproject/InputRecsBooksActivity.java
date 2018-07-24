@@ -34,7 +34,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
     public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
-    public Button algolia_btn;
     public Button finish_btn;
 
     DatabaseReference dbUsers;
@@ -68,7 +67,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         // find the views
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        algolia_btn = findViewById(R.id.algolia_btn);
         finish_btn = findViewById(R.id.finish_btn);
 
         search_sv.setIconifiedByDefault(false);
@@ -250,14 +248,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                     searchAdapter.notifyDataSetChanged();
                 }
                 return false;
-            }
-        });
-
-        algolia_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(InputRecsBooksActivity.this, AlgoliaActivity.class);
-                startActivity(i);
             }
         });
 
