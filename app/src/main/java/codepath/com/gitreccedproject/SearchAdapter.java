@@ -40,6 +40,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     Context context;
     public List<Item> mItems;
+    public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
     public List<Item> finalRecs = new ArrayList<>();
 
@@ -112,6 +113,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         //get snapshot of item added under user in itemsbyuser
                         //***NOTE: for some reason, iterates through every item under a user. Look into this later.
                         final Item item = dataSnapshot.getValue(Item.class);
+                        userItems.add(item);
 
                         //TODO: get user not from movie recs activity?
                         //generate user
@@ -204,11 +206,29 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                     }
                                 }
 
+                                //print out final recommendations (but including items currently in library)
                                 for (int i = 0; i < finalRecs.size(); i++) {
                                     Log.i("RecAlgo", "FinalItemsRec " + i + ": " + finalRecs.get(i).getTitle());
                                 }
 
-                                //removes items already in current user's library
+                                //removes items associated with current user from recommendations
+                                for (int i = 0; i < finalRecs.size(); i++) {
+                                    String currentIid = finalRecs.get(i).getIid();
+                                    for (int j = 0; j < userItems.size(); j++) {
+                                        if (currentIid.equals(userItems.get(j).getIid())) {
+                                            finalRecs.remove(i);
+                                            i--;
+                                        }
+                                    }
+                                }
+
+                                //print out final recommendations (but including items currently in library)
+                                for (int i = 0; i < finalRecs.size(); i++) {
+                                    Log.i("RecAlgo", "ActuallyFinalRecItems " + i + ": " + finalRecs.get(i).getTitle());
+                                }
+
+
+
                             }
                         });
                     }
