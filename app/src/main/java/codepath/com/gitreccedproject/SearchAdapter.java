@@ -41,6 +41,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     Context context;
     public List<Item> mItems;
     public List<Item> mRecs = new ArrayList<>();
+    public List<Item> finalRecs = new ArrayList<>();
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -162,17 +163,49 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                     Log.i("RecAlgo", "NoDupesRec: " + recId + ", Num Results: " + recMap.get(recId));
                                 }
                                 //sorts recItems based on number of appearances
-                                List<String> toRecommend = new ArrayList<String>(recMap.keySet());
+                                List<String> toRecommendIids = new ArrayList<String>(recMap.keySet());
 
-                                Collections.sort(toRecommend, new Comparator<String>() {
+                                Collections.sort(toRecommendIids, new Comparator<String>() {
                                     @Override
                                     public int compare(String s1, String s2) {
                                         return recMap.get(s2).compareTo(recMap.get(s1));
                                     }
                                 });
-                                //prints out sorted toRecommend
-                                for(String key: toRecommend) {
+                                //prints out sorted toRecommendIids
+                                for(String key : toRecommendIids) {
                                     Log.i("RecAlgo", "FinalRec: " + key + ", Num Results: " + recMap.get(key));
+                                }
+
+                                //removes dupes from recList (slow method)
+                                for (int i = 0; i < recList.size() - 1; i++) {
+                                    for (int j = i + 1; j < recList.size(); j++) {
+                                        if(recList.get(i).getIid().equals(recList.get(j).getIid())) {
+                                            recList.remove(j);
+                                            j--;
+                                        }
+                                    }
+                                }
+
+                                //print out recList w/o dupes
+                                for(Item recItem : recList) {
+                                    Log.i("RecAlgo", "RecListNoDupes: " + recItem.getTitle());
+                                }
+
+                                finalRecs.clear();
+
+                                //recreate items list from iid toRecommendIids list:
+                                    //does this by checking iid from toRecommendIids with iid's of items in recList
+                                for (int i = 0; i < toRecommendIids.size(); i++) {
+                                    String currentIid = toRecommendIids.get(i);
+                                    for (int j = 0; j < recList.size(); j++) {
+                                        if(currentIid.equals(recList.get(j).getIid())) {
+                                            finalRecs.add(recList.get(j));
+                                        }
+                                    }
+                                }
+
+                                for (int i = 0; i < finalRecs.size(); i++) {
+                                    Log.i("RecAlgo", "FinalItemsRec " + i + ": " + finalRecs.get(i).getTitle());
                                 }
 
                                 //removes items already in current user's library
