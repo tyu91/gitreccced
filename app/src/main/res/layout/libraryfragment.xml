@@ -117,7 +117,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tv_books"
         android:layout_below="@+id/clayout3"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="80dp"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
     <android.support.constraint.ConstraintLayout
