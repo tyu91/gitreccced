@@ -12,42 +12,40 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
+public class libexpadapter extends RecyclerView.Adapter<libexpadapter.ViewHolder> {
 
     Context context;
     public List<Item> mItems;
 
-    public RecAdapter(List<Item> items) {
+    public libexpadapter(List<Item> items) {
         mItems = items;
     }
 
     @NonNull
     @Override
-    public RecAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public libexpadapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View searchView = inflater.inflate(R.layout.item, parent, false);
-        RecAdapter.ViewHolder viewHolder = new RecAdapter.ViewHolder(searchView);
+        libexpadapter.ViewHolder viewHolder = new libexpadapter.ViewHolder(searchView);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull libexpadapter.ViewHolder holder, int position) {
         // get the data according to position
-        Item item = mItems.get(position % mItems.size());
-        holder.textview1.setText(item.title);
+        Item item = mItems.get(position);
         // populate the views according to position
-        //holder.title_tv.setText(item.title);
+        holder.textview1.setText(item.title);
     }
 
     @Override
     public int getItemCount() {
-        return Integer.MAX_VALUE;
+        return mItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        //TODO: rename textview1 to something more appealing
         TextView textview1;
         CardView cardview;
 
@@ -60,8 +58,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition() % mItems.size();
+            int position = getAdapterPosition();
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
         }
     }
 }
+
