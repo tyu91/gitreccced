@@ -25,8 +25,12 @@ public class RecsFragment extends Fragment {
     public RecyclerView rv_movies;
     public RecyclerView rv_tvShows;
     public RecyclerView rv_books;
-    public RecAdapter recAdapter;
-    public ArrayList<Item> items;
+    public RecAdapter movieRecAdapter;
+    public RecAdapter tvRecAdapter;
+    public RecAdapter bookRecAdapter;
+    public ArrayList<Item> movieItems;
+    public ArrayList<Item> tvItems;
+    public ArrayList<Item> bookItems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -37,10 +41,41 @@ public class RecsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // this is the fragment equivalent of onCreate
-        items = new ArrayList<>();
+
+        movieItems = new ArrayList<>();
+        tvItems = new ArrayList<>();
+        bookItems = new ArrayList<>();
+
+        //setting movies to recommend
+        if(SearchAdapter.finalMovieRecs != null && SearchAdapter.finalMovieRecs.size() != 0) {
+            //if finalRecs was populated in InputRecActivities
+            movieItems = (ArrayList<Item>) SearchAdapter.finalMovieRecs;
+        } else {
+            movieItems = dummyMovieRecItems();
+        }
+
+        //setting tv shows to recommend
+        if(SearchAdapter.finalTVRecs != null && SearchAdapter.finalTVRecs.size() != 0) {
+            //if finalRecs was populated in InputRecActivities
+            tvItems = (ArrayList<Item>) SearchAdapter.finalTVRecs;
+        } else {
+            tvItems = dummyTVRecItems();
+        }
+
+        //setting books to recommend
+        if(SearchAdapter.finalBookRecs != null && SearchAdapter.finalBookRecs.size() != 0 ) {
+            //if finalRecs was populated in InputRecActivities
+            bookItems = (ArrayList<Item>) SearchAdapter.finalBookRecs;
+        } else {
+            bookItems = dummyBookRecItems();
+        }
+
 
         // construct the adapter from this datasource
-        recAdapter = new RecAdapter(items);
+        movieRecAdapter = new RecAdapter(movieItems);
+        tvRecAdapter = new RecAdapter(tvItems);
+        bookRecAdapter = new RecAdapter(bookItems);
+
         rv_movies = view.findViewById(R.id.rv_libMovies);
         rv_tvShows = view.findViewById(R.id.rv_tv);
         rv_books = view.findViewById(R.id.rv_books);
@@ -53,24 +88,73 @@ public class RecsFragment extends Fragment {
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
 
+        //TODO: modify so that each adapter is something different
         // set the adapter
-        rv_movies.setAdapter(recAdapter);
-        rv_tvShows.setAdapter(recAdapter);
-        rv_books.setAdapter(recAdapter);
+        rv_movies.setAdapter(movieRecAdapter);
+        rv_tvShows.setAdapter(tvRecAdapter);
+        rv_books.setAdapter(bookRecAdapter);
 
-        //TODO - change this to get actual data
-        for (int i = 0; i < 5; i++) {
-            Item item = new Item();
-            item.setTitle(String.format("%s",i));
-            items.add(item);
-            recAdapter.notifyItemInserted(items.size() - 1);
+        // TODO - comment these if-statements if we want to enable infinite scrolling only to the right
+        if (movieItems.size() > 0) {
+            movies.scrollToPosition(100 * movieItems.size());
         }
 
-        // TODO - comment this if statement if we want to enable infinite scrolling only to the right
-        if (items.size() > 0) {
-            movies.scrollToPosition(items.size()*100);
-            tvShows.scrollToPosition(100 * items.size());
-            books.scrollToPosition(100 * items.size());
+        if (tvItems.size() > 0) {
+            tvShows.scrollToPosition(100 * tvItems.size());
         }
+
+        if (bookItems.size() > 0) {
+            books.scrollToPosition(100 * bookItems.size());
+        }
+    }
+
+    public ArrayList<Item> dummyMovieRecItems() {
+        Item item1 = new Item();
+        item1.setIid("-LHoUNVp_jaXb7wXvO1M");
+        item1.setTitle("Thor: Ragnarok");
+        item1.setGenre("Movie");
+        item1.setDetails("Thor is on the other side of the universe and " +
+                "finds himself in a race against time to get back to Asgard " +
+                "to stop Ragnarok, the prophecy of destruction to his homeworld and the " +
+                "end of Asgardian civilization, at the hands of an all-powerful new threat, " +
+                "the ruthless Hela.");
+
+        ArrayList dummyItems = new ArrayList();
+
+        dummyItems.add(item1);
+
+        return dummyItems;
+    }
+
+    public ArrayList<Item> dummyTVRecItems() {
+        Item item1 = new Item();
+        item1.setIid("-LHo_O2XGJEFUHxxrKNi");
+        item1.setTitle("Game of Thrones");
+        item1.setGenre("TV");
+        item1.setDetails("Seven noble families fight for control of the mythical" +
+                " land of Westeros. Friction between the houses leads to full-scale " +
+                "war. All while a very ancient evil awakens in the farthest north. Amidst" +
+                " the war, a neglected military order of misfits, the Night's Watch, is" +
+                " all that stands between the realms of men and icy horrors beyond.");
+
+        ArrayList dummyItems = new ArrayList();
+
+        dummyItems.add(item1);
+
+        return dummyItems;
+    }
+
+    public ArrayList<Item> dummyBookRecItems() {
+        Item item1 = new Item();
+        item1.setIid("-LHtne3w212L5ERVRd-P");
+        item1.setTitle("Harry Potter and the Goblet of Fire");
+        item1.setGenre("Book");
+        item1.setDetails("no description available");
+
+        ArrayList dummyItems = new ArrayList();
+
+        dummyItems.add(item1);
+
+        return dummyItems;
     }
 }
