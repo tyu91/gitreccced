@@ -2,11 +2,13 @@ package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,12 @@ public class LibraryFragment extends Fragment {
     public RecyclerView rv_libTvShows;
     public RecyclerView rv_libBooks;
     public libAdapter libAdapter;
+    public libexpadapter libexpadapter;
     public ArrayList<Item> items;
+
+    public RecyclerView rv_moviesexp;
+
+    public ImageView movies_btn;
 
     //public EndlessRecyclerViewScrollListener scrollListener;
 
@@ -44,9 +51,11 @@ public class LibraryFragment extends Fragment {
         rv_libMovies = view.findViewById(R.id.rv_libMovies);
         rv_libTvShows = view.findViewById(R.id.rv_libTvShows);
         rv_libBooks = view.findViewById(R.id.rv_libBooks);
-        LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        final LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager shows = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager books = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        movies_btn = view.findViewById(R.id.movies_btn);
 
         rv_libMovies.setLayoutManager(movies);
         rv_libTvShows.setLayoutManager(shows);
@@ -56,12 +65,18 @@ public class LibraryFragment extends Fragment {
         rv_libTvShows.setAdapter(libAdapter);
         rv_libBooks.setAdapter(libAdapter);
 
+        rv_moviesexp = view.findViewById(R.id.rv_moviesexp);
+        libexpadapter = new libexpadapter(items);
+        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rv_moviesexp.setAdapter(libexpadapter);
+
         //TODO - change this to get actual data
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             Item item = new Item();
             item.setTitle(String.format("%s",i));
             items.add(item);
             libAdapter.notifyItemInserted(items.size() - 1);
+            libexpadapter.notifyItemInserted(items.size()-1);
         }
 
         // TODO - comment this if statement if we want to enable infinite scrolling only to the right
@@ -70,6 +85,21 @@ public class LibraryFragment extends Fragment {
             shows.scrollToPosition(100 * items.size());
             books.scrollToPosition(100 * items.size());
         }
+
+        movies_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (rv_moviesexp.getVisibility() == View.GONE) {
+                    rv_libMovies.setVisibility(View.GONE);
+                    rv_moviesexp.setVisibility(View.VISIBLE);
+                    movies_btn.setImageResource(android.R.drawable.arrow_up_float);
+                } else {
+                    rv_libMovies.setVisibility(View.VISIBLE);
+                    rv_moviesexp.setVisibility(View.GONE);
+                    movies_btn.setImageResource(android.R.drawable.arrow_down_float);
+                }
+            }
+        });
 
 
         /*scrollListener = new EndlessRecyclerViewScrollListener(movies) {
