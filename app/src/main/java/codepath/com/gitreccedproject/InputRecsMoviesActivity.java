@@ -36,7 +36,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
     public Button algolia_btn;
-    public Button next_btn;
+    public Button next_btn, skip;
 
     //DatabaseReference dbUsers;
 
@@ -132,7 +132,6 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 return false;
             }
 
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
@@ -178,5 +177,41 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        skip = findViewById(R.id.btnSkip);
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InputRecsMoviesActivity.this);
+
+                final TextView tv = new TextView(InputRecsMoviesActivity.this);
+                tv.setText("Are you sure you want to skip this?");
+                // set prompts.xml to alertdialog builder
+                alertDialogBuilder.setView(tv);
+
+                // set dialog message
+                alertDialogBuilder.setCancelable(true).setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 }
