@@ -42,7 +42,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> mItems;
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
-    public List<Item> finalRecs = new ArrayList<>();
+    //TODO: in here, populate with recsByUser field (to be created) in DB
+    public static List<Item> finalRecs = null;
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -116,6 +117,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         userItems.add(item);
 
                         //TODO: get user not from movie recs activity?
+                        //TODO: get user from signin/signup activity
                         //generate user
                         User user = InputRecsMoviesActivity.resultUser;
 
@@ -193,8 +195,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                     Log.i("RecAlgo", "RecListNoDupes: " + recItem.getTitle());
                                 }
 
-                                finalRecs.clear();
-
+                                if(finalRecs != null) {
+                                    finalRecs.clear();
+                                } else {
+                                    finalRecs = new ArrayList<>();
+                                }
                                 //recreate items list from iid toRecommendIids list:
                                     //does this by checking iid from toRecommendIids with iid's of items in recList
                                 for (int i = 0; i < toRecommendIids.size(); i++) {
@@ -226,6 +231,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 for (int i = 0; i < finalRecs.size(); i++) {
                                     Log.i("RecAlgo", "ActuallyFinalRecItems " + i + ": " + finalRecs.get(i).getTitle());
                                 }
+
+                                //TODO: populate recommendation library with these items
 
 
 
