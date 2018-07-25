@@ -47,6 +47,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        //TODO: rename textview1 to something more appealing
         TextView textview1;
         CardView cardview;
 

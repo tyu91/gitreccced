@@ -44,6 +44,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> mRecs = new ArrayList<>();
     //TODO: in here, populate with recsByUser field (to be created) in DB
     public static List<Item> finalRecs = null;
+    public static List<Item> finalMovieRecs = null;
+    public static List<Item> finalTVRecs = null;
+    public static List<Item> finalBookRecs = null;
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -52,6 +55,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @NonNull
     @Override
     public SearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View searchView = inflater.inflate(R.layout.item_search, parent, false);
@@ -175,6 +179,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                         return recMap.get(s2).compareTo(recMap.get(s1));
                                     }
                                 });
+
                                 //prints out sorted toRecommendIids
                                 for(String key : toRecommendIids) {
                                     Log.i("RecAlgo", "FinalRec: " + key + ", Num Results: " + recMap.get(key));
@@ -232,9 +237,32 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                     Log.i("RecAlgo", "ActuallyFinalRecItems " + i + ": " + finalRecs.get(i).getTitle());
                                 }
 
-                                //TODO: populate recommendation library with these items
+                                //sorts items based on genre
+                                for(int i = 0; i < finalRecs.size(); i++){
+                                    Item item = finalRecs.get(i);
+                                    if (item.getGenre().equals("Movie")) {
+                                        finalMovieRecs.add(item);
+                                    } else if (item.getGenre().equals("TV")) {
+                                        finalTVRecs.add(item);
+                                    } else {
+                                        finalBookRecs.add(item);
+                                    }
+                                }
 
+                                //print out final recommendations (but including items currently in library)
+                                for (int i = 0; i < finalMovieRecs.size(); i++) {
+                                    Log.i("RecAlgo", "FinalMovieRecItems " + i + ": " + finalMovieRecs.get(i).getTitle());
+                                }
 
+                                //print out final recommendations (but including items currently in library)
+                                for (int i = 0; i < finalTVRecs.size(); i++) {
+                                    Log.i("RecAlgo", "FinalTVRecItems " + i + ": " + finalTVRecs.get(i).getTitle());
+                                }
+
+                                //print out final recommendations (but including items currently in library)
+                                for (int i = 0; i < finalBookRecs.size(); i++) {
+                                    Log.i("RecAlgo", "FinalBookRecItems " + i + ": " + finalBookRecs.get(i).getTitle());
+                                }
 
                             }
                         });
