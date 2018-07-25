@@ -31,11 +31,8 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
 
     Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
-
-
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
-    public Button algolia_btn;
     public Button next_btn, skip;
 
     //DatabaseReference dbUsers;
