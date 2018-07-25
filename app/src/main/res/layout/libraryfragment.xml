@@ -46,7 +46,6 @@
             android:id="@+id/rv_moviesexp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="200dp"
             app:layout_constraintHeight_max="200dp"
             app:layout_constrainedHeight="true"
             android:visibility="gone"/>
@@ -70,12 +69,37 @@
         android:layout_alignStart="@+id/movies_tv"
         android:layout_below="@+id/shows_tv" />
 
+    <ImageView
+        android:id="@+id/shows_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/movies_tv"
+        android:layout_below="@+id/clayout2"
+        app:srcCompat="@android:drawable/arrow_down_float" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clayout2"
+        android:layout_width="252dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/shows_tv"
+        android:layout_below="@+id/rv_libTvShows">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_showsexp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintHeight_max="200dp"
+            app:layout_constrainedHeight="true"
+            android:visibility="gone"/>
+
+    </android.support.constraint.ConstraintLayout>
+
     <TextView
         android:id="@+id/tv_books"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/rv_libTvShows"
+        android:layout_below="@+id/shows_btn"
         android:layout_marginTop="30dp"
         android:text="Books"
         android:textColor="@android:color/white" />
@@ -86,6 +110,32 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/movies_tv"
         android:layout_below="@+id/tv_books" />
+
+    <ImageView
+        android:id="@+id/books_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tv_books"
+        android:layout_below="@+id/clayout3"
+        android:layout_marginBottom="50dp"
+        app:srcCompat="@android:drawable/arrow_down_float" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clayout3"
+        android:layout_width="252dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tv_books"
+        android:layout_below="@+id/rv_libBooks">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_booksexp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_max="200dp" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </RelativeLayout>

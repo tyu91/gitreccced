@@ -30,8 +30,12 @@ public class LibraryFragment extends Fragment {
     public ArrayList<Item> items;
 
     public RecyclerView rv_moviesexp;
+    public RecyclerView rv_showsexp;
+    public RecyclerView rv_booksexp;
 
     public ImageView movies_btn;
+    public ImageView shows_btn;
+    public ImageView books_btn;
 
     //public EndlessRecyclerViewScrollListener scrollListener;
 
@@ -56,6 +60,8 @@ public class LibraryFragment extends Fragment {
         LinearLayoutManager books = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         movies_btn = view.findViewById(R.id.movies_btn);
+        shows_btn = view.findViewById(R.id.shows_btn);
+        books_btn = view.findViewById(R.id.books_btn);
 
         rv_libMovies.setLayoutManager(movies);
         rv_libTvShows.setLayoutManager(shows);
@@ -66,9 +72,15 @@ public class LibraryFragment extends Fragment {
         rv_libBooks.setAdapter(libAdapter);
 
         rv_moviesexp = view.findViewById(R.id.rv_moviesexp);
+        rv_showsexp = view.findViewById(R.id.rv_showsexp);
+        rv_booksexp = view.findViewById(R.id.rv_booksexp);
         libexpadapter = new libexpadapter(items);
         rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
         rv_moviesexp.setAdapter(libexpadapter);
+        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rv_showsexp.setAdapter(libexpadapter);
+        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rv_booksexp.setAdapter(libexpadapter);
 
         //TODO - change this to get actual data
         for (int i = 0; i < 10; i++) {
@@ -97,6 +109,36 @@ public class LibraryFragment extends Fragment {
                     rv_libMovies.setVisibility(View.VISIBLE);
                     rv_moviesexp.setVisibility(View.GONE);
                     movies_btn.setImageResource(android.R.drawable.arrow_down_float);
+                }
+            }
+        });
+
+        shows_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (rv_showsexp.getVisibility() == View.GONE) {
+                    rv_libTvShows.setVisibility(View.GONE);
+                    rv_showsexp.setVisibility(View.VISIBLE);
+                    shows_btn.setImageResource(android.R.drawable.arrow_up_float);
+                } else {
+                    rv_libTvShows.setVisibility(View.VISIBLE);
+                    rv_showsexp.setVisibility(View.GONE);
+                    shows_btn.setImageResource(android.R.drawable.arrow_down_float);
+                }
+            }
+        });
+
+        books_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (rv_booksexp.getVisibility() == View.GONE) {
+                    rv_libBooks.setVisibility(View.GONE);
+                    rv_booksexp.setVisibility(View.VISIBLE);
+                    books_btn.setImageResource(android.R.drawable.arrow_up_float);
+                } else {
+                    rv_libBooks.setVisibility(View.VISIBLE);
+                    rv_booksexp.setVisibility(View.GONE);
+                    books_btn.setImageResource(android.R.drawable.arrow_down_float);
                 }
             }
         });
