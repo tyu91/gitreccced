@@ -1,12 +1,21 @@
 package codepath.com.gitreccedproject;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -32,9 +41,17 @@ public class RecsFragment extends Fragment {
     public ArrayList<Item> tvItems;
     public ArrayList<Item> bookItems;
 
+    DatabaseReference Recsmovies;
+    DatabaseReference Recsshows;
+    DatabaseReference Recsbooks;
+
+    public Activity activity;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
+        activity = (MyLibraryActivity) getActivity();
+        //activity.currentuser =
         return inflater.inflate(R.layout.recsfragment, parent, false);
     }
 
@@ -42,14 +59,38 @@ public class RecsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // this is the fragment equivalent of onCreate
 
-        movieItems = new ArrayList<>();
-        tvItems = new ArrayList<>();
-        bookItems = new ArrayList<>();
+        movieItems = dummyMovieRecItems();
+        tvItems = dummyTVRecItems();
+        bookItems = dummyBookRecItems();
 
-        //setting movies to recommend
+        Recsmovies = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid()).child("Movie");
+        Recsshows = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid()).child("TV");
+        Recsbooks = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid()).child("Book");
+        Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());
+
+        com.google.firebase.database.Query moviesquery = null;
+        moviesquery = Recsmovies;
+        moviesquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                    movieItems.add(item);
+                    Log.i("item", item.toString());
+                }
+                movieRecAdapter = new RecAdapter(movieItems);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //
+            }
+        });
+
+        /*//setting movies to recommend
         if(SearchAdapter.finalMovieRecs != null && SearchAdapter.finalMovieRecs.size() != 0) {
             //if finalRecs was populated in InputRecActivities
-            movieItems = (ArrayList<Item>) SearchAdapter.finalMovieRecs;
+            //movieItems = (ArrayList<Item>) SearchAdapter.finalMovieRecs;
         } else {
             movieItems = dummyMovieRecItems();
         }
@@ -57,7 +98,7 @@ public class RecsFragment extends Fragment {
         //setting tv shows to recommend
         if(SearchAdapter.finalTVRecs != null && SearchAdapter.finalTVRecs.size() != 0) {
             //if finalRecs was populated in InputRecActivities
-            tvItems = (ArrayList<Item>) SearchAdapter.finalTVRecs;
+            //tvItems = (ArrayList<Item>) SearchAdapter.finalTVRecs;
         } else {
             tvItems = dummyTVRecItems();
         }
@@ -65,14 +106,14 @@ public class RecsFragment extends Fragment {
         //setting books to recommend
         if(SearchAdapter.finalBookRecs != null && SearchAdapter.finalBookRecs.size() != 0 ) {
             //if finalRecs was populated in InputRecActivities
-            bookItems = (ArrayList<Item>) SearchAdapter.finalBookRecs;
+            //bookItems = (ArrayList<Item>) SearchAdapter.finalBookRecs;
         } else {
             bookItems = dummyBookRecItems();
         }
-
+*/
 
         // construct the adapter from this datasource
-        movieRecAdapter = new RecAdapter(movieItems);
+        //movieRecAdapter = new RecAdapter(movieItems);
         tvRecAdapter = new RecAdapter(tvItems);
         bookRecAdapter = new RecAdapter(bookItems);
 
