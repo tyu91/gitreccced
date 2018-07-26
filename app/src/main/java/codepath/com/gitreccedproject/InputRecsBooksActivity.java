@@ -144,10 +144,6 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                 return true;
             }
 
-            /*TODO: left off here
-            currently, onquerytextchange only updates one entry in recycler view.
-            next step is to changeJSONBook book = books.get(0); to a for-loop*/
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {

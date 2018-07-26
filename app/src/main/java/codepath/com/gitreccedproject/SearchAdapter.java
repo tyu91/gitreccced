@@ -97,14 +97,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 final Item item = mItems.get(position);
 
-                bookDecide(item, new FirebaseCallback() {
+                /*bookDecide(item, new FirebaseCallback() {
                     @Override
                     public void onCallback(List<Item> someList) {
                         addItem(position);
                         Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                         Log.i("select", String.format("Got item at %s", position));
                     }
-                });
+                });*/
+
+                addItem(position);
+                Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
+                Log.i("select", String.format("Got item at %s", position));
 
                 dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
                 dbItemsByUser.addChildEventListener(new ChildEventListener() {

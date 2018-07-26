@@ -1,5 +1,6 @@
 package codepath.com.gitreccedproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class DBTestActivity extends AppCompatActivity {
     DatabaseReference dbMovies;
     DatabaseReference dbTVShows;
     Button btnAddItems;
+    Button btnNext;
 
     String uid = "1: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "1: item id not set yet"; //item id (initialized to dummy string for testing)
@@ -58,6 +60,7 @@ public class DBTestActivity extends AppCompatActivity {
         dbMovies = FirebaseDatabase.getInstance().getReference("movies");
         dbTVShows = FirebaseDatabase.getInstance().getReference("tv");
         btnAddItems = findViewById(R.id.btnAddItems);
+        btnNext = findViewById(R.id.btnNext);
 
         client = new AsyncHttpClient();
 
@@ -69,6 +72,14 @@ public class DBTestActivity extends AppCompatActivity {
                 //addMovies();
                 //add tv shows to db
                 addTVShows();
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DBTestActivity.this, DBTest2Activity.class);
+                startActivity(intent);
             }
         });
 
