@@ -88,7 +88,6 @@ public class RecsFragment extends Fragment {
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
 
-        //TODO: modify so that each adapter is something different
         // set the adapter
         rv_movies.setAdapter(movieRecAdapter);
         rv_tvShows.setAdapter(tvRecAdapter);
