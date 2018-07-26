@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Please complete all fields before Signing up", Toast.LENGTH_SHORT).show();
                 } else {
                     callSignUp(em, pass, name.getText().toString());
+
                 }
             }
         });
@@ -97,25 +97,6 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void userProfile(){
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null){
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(name.getText().toString().trim())
-                    .build();
-
-            user.updateProfile(profileUpdates)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Log.d("TESTING", "User profile updated");
-                            }
-                        }
-                    });
-        }
-    }
-
     //adds user to db
     private void addUser(FirebaseUser user){
         String mUsername = name.getText().toString();
@@ -136,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity {
             Intent intent = new Intent(SignUpActivity.this, InputRecsMoviesActivity.class);
             intent.putExtra("user", Parcels.wrap(newUser));
             startActivity(intent);
-
+            finish();
         }
     }
 }
