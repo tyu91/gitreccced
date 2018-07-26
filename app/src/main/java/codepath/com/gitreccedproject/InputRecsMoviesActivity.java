@@ -206,9 +206,18 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 alertDialogBuilder.setView(tv);
 
                 // set dialog message
-                alertDialogBuilder.setCancelable(true).setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.
+                        setCancelable(false).
+                        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                closeContextMenu();
+                            }
+                        }).
+                        setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
+                        i.putExtra("user", Parcels.wrap(resultUser));
                         startActivity(i);
                         finish();
                     }
