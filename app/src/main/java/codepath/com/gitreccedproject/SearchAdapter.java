@@ -90,14 +90,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 // get the item at the position
                 final Item item = mItems.get(position);
-                //if item is a book, add to DB
-                if(item.getGenre() == "Book") {
-                    dbBooks = FirebaseDatabase.getInstance().getReference("books");
-                    //create new item id
-                    iid = dbBooks.push().getKey();
-                    dbBooks.child(iid).setValue(item);
-                }
-                //TODO: if item exists in DB, do not re-add book!
+
+                /*bookDecide(item, new FirebaseCallback() {
+                    @Override
+                    public void onCallback(List<Item> someList) {
+                        addItem(position);
+                        Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
+                        Log.i("select", String.format("Got item at %s", position));
+                    }
+                });*/
+
                 addItem(position);
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
@@ -134,11 +136,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                         readData(new FirebaseCallback() {
                             @Override
-                            public boolean equals(Object obj) {
-                                return super.equals(obj);
-                            }
-
-                            @Override
                             public void onCallback(List<Item> recList) {
                                 //prints out array list of recommendations
                                 for(int i = 0; i < recList.size(); i++) {
@@ -170,6 +167,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 for(String recId : recMap.keySet()) {
                                     Log.i("RecAlgo", "NoDupesRec: " + recId + ", Num Results: " + recMap.get(recId));
                                 }
+
                                 //sorts recItems based on number of appearances
                                 List<String> toRecommendIids = new ArrayList<String>(recMap.keySet());
 
@@ -277,6 +275,44 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
+    private void bookDecide (final Item item, final FirebaseCallback firebaseCallback) {
+        //if item is a book, add to DB
+        if(item.getGenre() == "Book") {
+            dbBooks = FirebaseDatabase.getInstance().getReference("books");
+
+            //check if book title already exists in dbBooks
+            dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        //if there exists title in dbBooks, do nothing
+                                /*for(DataSnapshot bookItems : dataSnapshot.getChildren()){
+                                    iid = bookItems.getValue(Item.class).getIid();
+                                    dbBooks.child(iid).setValue(item);
+                                }*/
+                        Log.i("Books", "this book already exists in the DB");
+                    } else {
+                        //the title does not exist in dbBooks, create new item id and add to dbBooks
+                        //create new item id
+                        iid = dbBooks.push().getKey();
+                        //TODO: if code doesn't work, set mItems.get(position).setIid(iid)
+                        dbBooks.child(iid).setValue(item);
+                        Log.i("Books", "Added " + item.getTitle());
+                    }
+
+                    List<Item> dummyItems = new ArrayList<>();
+
+                    firebaseCallback.onCallback(dummyItems);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     //reads data from firebase in order to generate recs
     private void readData (final FirebaseCallback firebaseCallback) {
         //set up value event listener for users associated with each item in current user's library
@@ -327,8 +363,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     //adds item to firebase
-    private void addItem(int position) {
-
+    private void addItem(final int position) {
         iid = mItems.get(position).getIid();
         uid = InputRecsMoviesActivity.resultUser.getUid();
 

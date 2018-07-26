@@ -1,143 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#424242">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/movies_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="51dp"
-        android:text="Movies"
-        android:textColor="@android:color/white" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_libMovies"
-        android:layout_width="252dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/movies_tv" />
-
-    <ImageView
-        android:id="@+id/movies_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/clayout"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/clayout"
-        android:layout_width="252dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/rv_libMovies">
+        <TextView
+            android:id="@+id/movies_tv"
+            android:layout_width="116dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="31dp"
+            android:text="Movies"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_moviesexp"
-            android:layout_width="match_parent"
+            android:id="@+id/rv_libMovies"
+            android:layout_width="295dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHeight_max="200dp"
-            app:layout_constrainedHeight="true"
-            android:visibility="gone"/>
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/movies_tv" />
 
-    </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/movies_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/clayout"
+            app:srcCompat="@android:drawable/arrow_down_float" />
 
-    <TextView
-        android:id="@+id/shows_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/movies_btn"
-        android:layout_marginTop="30dp"
-        android:text="TV Shows"
-        android:textColor="@android:color/white" />
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/clayout"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/rv_libMovies">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_libTvShows"
-        android:layout_width="252dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/shows_tv" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_moviesexp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintHeight_max="200dp"
+                app:layout_constrainedHeight="true"
+                android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/shows_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/clayout2"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+        </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/clayout2"
-        android:layout_width="252dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/shows_tv"
-        android:layout_below="@+id/rv_libTvShows">
+        <TextView
+            android:id="@+id/shows_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/movies_btn"
+            android:text="TV Shows"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_showsexp"
-            android:layout_width="match_parent"
+            android:id="@+id/rv_libTvShows"
+            android:layout_width="295dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHeight_max="200dp"
-            app:layout_constrainedHeight="true"
-            android:visibility="gone"/>
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/shows_tv" />
 
-    </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/shows_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/clayout2"
+            app:srcCompat="@android:drawable/arrow_down_float" />
 
-    <TextView
-        android:id="@+id/tv_books"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/shows_btn"
-        android:layout_marginTop="30dp"
-        android:text="Books"
-        android:textColor="@android:color/white" />
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/clayout2"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/shows_tv"
+            android:layout_below="@+id/rv_libTvShows">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_libBooks"
-        android:layout_width="252dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movies_tv"
-        android:layout_below="@+id/tv_books" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_showsexp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintHeight_max="200dp"
+                app:layout_constrainedHeight="true"
+                android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/books_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tv_books"
-        android:layout_below="@+id/clayout3"
-        android:layout_marginBottom="80dp"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+        </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/clayout3"
-        android:layout_width="252dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tv_books"
-        android:layout_below="@+id/rv_libBooks">
+        <TextView
+            android:id="@+id/tv_books"
+            android:layout_width="116dp"
+            android:layout_height="40dp"
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/shows_btn"
+            android:text="Books"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_booksexp"
-            android:layout_width="match_parent"
+            android:id="@+id/rv_libBooks"
+            android:layout_width="295dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintHeight_max="200dp" />
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/tv_books" />
 
-    </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/books_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tv_books"
+            android:layout_below="@+id/clayout3"
+            android:layout_marginBottom="80dp"
+            app:srcCompat="@android:drawable/arrow_down_float" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/clayout3"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tv_books"
+            android:layout_below="@+id/rv_libBooks">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_booksexp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constrainedHeight="true" />
+
+        </android.support.constraint.ConstraintLayout>
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </ScrollView>

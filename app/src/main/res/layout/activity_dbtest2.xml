@@ -4,37 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DBTest2Activity">
+    tools:context=".DBTest2Activity"
+    android:background="#424242">
 
-    <EditText
-        android:id="@+id/etGenre"
+    <SearchView
+        android:id="@+id/search_sv"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:background="#424242"
+        android:ems="10"
+        android:focusable="auto"
+        android:foregroundTint="#c8c6d0"
+        android:hint="Search"
+        android:inputType="textPersonName"
+        android:theme="@style/searchbartheme"
+        android:textColor="#c8c6d0">
+    </SearchView>
+
+
+    <Button
+        android:id="@+id/finish_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="217dp"
-        android:ems="10"
-        android:hint="Genre (Books, Movie, or TV)"
-        android:inputType="textPersonName" />
+        android:layout_alignParentEnd="true"
+        android:text="Finish" />
 
-    <EditText
-        android:id="@+id/etTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/etGenre"
-        android:layout_marginTop="-217dp"
-        android:ems="10"
-        android:hint="Enter Title Here"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/btnSubmitItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/etTitle"
-        android:hint="Enter Title Here"
-        android:text="Submit" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/searchlist_rv"
+        android:layout_width="253dp"
+        android:layout_height="353dp"
+        android:layout_alignEnd="@+id/search_sv"
+        android:layout_below="@+id/search_sv"
+        android:background="#424242" />
 
 </RelativeLayout>
