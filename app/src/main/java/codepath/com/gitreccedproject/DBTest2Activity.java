@@ -81,62 +81,6 @@ public class DBTest2Activity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 mQuery = query;
                 new BookAsync().execute();
-                //bClient.searchBooks(query);
-                /*items.clear();
-                searchAdapter.notifyDataSetChanged();
-                bClient.getBooks(query, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try {
-                            JSONArray docs;
-                            if (response != null) {
-                                // Get the docs json array
-                                docs = response.getJSONArray("docs");
-                                // Parse json array into array of model objects
-                                final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
-                                // Remove all books from the adapter
-                                items.clear();
-                                // Load model objects into the adapter
-
-                                //if results exist
-                                if (response.getInt("num_found") != 0) {
-
-                                    JSONBook book = books.get(0);
-
-                                    String title = book.getTitle().toString();
-                                    Log.i("Books", "Title: " + title);
-
-//                                      create new item id
-                                    iid = dbBooks.push().getKey();
-
-                                    setOverview(book);
-
-                                    Item bookItem = new Item(iid, "Book", book.getTitle(), book.getOverview());
-
-                                    //add item to db
-                                    dbBooks.child(iid).setValue(bookItem);
-                                    items.add(bookItem); // add book through the adapter
-                                    Log.i("Books", "Title: " + title);
-                                    searchAdapter.notifyDataSetChanged();
-                                }
-                            } else {
-                                Toast toast = Toast.makeText(getApplicationContext(), "No results. Please try again!",
-                                        Toast.LENGTH_SHORT);
-                                toast.show();
-
-
-                            }
-                        } catch (JSONException e) {
-                            // Invalid JSON format, show appropriate error.
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                    }
-                });*/
 
                 return true;
             }

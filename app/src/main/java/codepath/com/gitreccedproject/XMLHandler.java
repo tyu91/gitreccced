@@ -33,6 +33,7 @@ public class XMLHandler extends DefaultHandler{
     public void characters(char[] ch, int start, int length) throws SAXException {
         if(boolTitle) {
             Log.i("XMLBook", "Title: " + new String(ch, start, length));
+            //TODO: populate search query using these entries
             boolTitle = false;
         }
     }
