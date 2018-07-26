@@ -9,20 +9,19 @@
 
     <SearchView
         android:id="@+id/search_sv"
-        android:layout_width="280dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="56dp"
         android:background="#424242"
         android:ems="10"
         android:focusable="auto"
         android:foregroundTint="#c8c6d0"
         android:hint="Search"
         android:inputType="textPersonName"
-        android:theme="@style/searchbartheme"
-        android:textColor="#c8c6d0">
-    </SearchView>
+        android:textColor="#c8c6d0"
+        android:theme="@style/searchbartheme"></SearchView>
 
 
     <Button
@@ -47,8 +46,8 @@
         android:id="@+id/searchlist_rv"
         android:layout_width="253dp"
         android:layout_height="353dp"
-        android:layout_alignEnd="@+id/search_sv"
         android:layout_below="@+id/search_sv"
+        android:layout_centerHorizontal="true"
         android:background="#424242" />
 
 </RelativeLayout>
