@@ -41,9 +41,7 @@ public class RecsFragment extends Fragment {
     public ArrayList<Item> tvItems;
     public ArrayList<Item> bookItems;
 
-    DatabaseReference Recsmovies;
-    DatabaseReference Recsshows;
-    DatabaseReference Recsbooks;
+    DatabaseReference Recs;
 
     public Activity activity;
 
@@ -63,22 +61,23 @@ public class RecsFragment extends Fragment {
         tvItems = dummyTVRecItems();
         bookItems = dummyBookRecItems();
 
-        Recsmovies = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid()).child("Movie");
-        Recsshows = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid()).child("TV");
-        Recsbooks = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid()).child("Book");
+        Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid());
         Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());
 
         com.google.firebase.database.Query moviesquery = null;
-        moviesquery = Recsmovies;
+        moviesquery = Recs.child("Movie");
         moviesquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("shot",dataSnapshot.toString());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
                     movieItems.add(item);
-                    Log.i("item", item.toString());
+                    Log.i("item", item.getTitle());
                 }
                 movieRecAdapter = new RecAdapter(movieItems);
+                rv_movies.setAdapter(movieRecAdapter);
             }
 
             @Override
@@ -130,7 +129,7 @@ public class RecsFragment extends Fragment {
         rv_books.setLayoutManager(books);
 
         // set the adapter
-        rv_movies.setAdapter(movieRecAdapter);
+        //rv_movies.setAdapter(movieRecAdapter);
         rv_tvShows.setAdapter(tvRecAdapter);
         rv_books.setAdapter(bookRecAdapter);
 
