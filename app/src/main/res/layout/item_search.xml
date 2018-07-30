@@ -13,5 +13,6 @@
         android:layout_alignParentTop="true"
         android:background="#424242"
         android:text="Title"
-        android:textColor="#c8c6d0" />
+        android:textColor="#c8c6d0"
+        android:textSize="18sp" />
 </RelativeLayout>

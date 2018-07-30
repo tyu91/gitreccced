@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#424242">
@@ -18,6 +19,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="40dp"
             android:layout_marginTop="31dp"
+            android:fontFamily="sans-serif-condensed"
             android:text="Movies"
             android:textColor="@android:color/white"
             android:textSize="30sp"
@@ -61,6 +63,7 @@
             android:layout_height="40dp"
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/movies_btn"
+            android:fontFamily="sans-serif-condensed"
             android:text="TV Shows"
             android:textColor="@android:color/white"
             android:textSize="30sp"
@@ -104,6 +107,7 @@
             android:layout_height="40dp"
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/shows_btn"
+            android:fontFamily="sans-serif-condensed"
             android:text="Books"
             android:textColor="@android:color/white"
             android:textSize="30sp"

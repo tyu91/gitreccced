@@ -7,6 +7,18 @@
     android:background="#424242"
     tools:context=".InputRecsBooksActivity">
 
+    <TextView
+        android:id="@+id/tvFinish"
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/searchlist_rv"
+        android:layout_marginEnd="0dp"
+        android:text="Finish"
+        android:textColor="#e1e1e1"
+        android:textSize="24sp"
+        android:textStyle="italic" />
+
     <SearchView
         android:id="@+id/search_sv"
         android:layout_width="match_parent"
@@ -23,14 +35,6 @@
         android:textColor="#c8c6d0"
         android:theme="@style/searchbartheme"></SearchView>
 
-
-    <Button
-        android:id="@+id/finish_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="Finish" />
 
     <TextView
         android:id="@+id/textView2"
