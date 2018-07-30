@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class InputRecsMoviesActivity extends AppCompatActivity {
@@ -50,6 +51,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
+    public ArrayList<String> watched = new ArrayList<>();
 
     static User resultUser;
 
@@ -58,7 +60,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if(SearchAdapter.finalMovieRecs != null) {
+        /*if(SearchAdapter.finalMovieRecs != null) {
             SearchAdapter.finalMovieRecs.clear();
         } else {
             SearchAdapter.finalMovieRecs = new ArrayList<>();
@@ -74,7 +76,8 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             SearchAdapter.finalBookRecs.clear();
         } else {
             SearchAdapter.finalBookRecs = new ArrayList<>();
-        }
+        }*/
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_movies);
@@ -91,6 +94,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         //uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //dbUsers.child(uid).setValue(resultUser);
         //resultUser.setUid(uid);
+
 
         // find the views
         search_et = findViewById(R.id.search_et);
@@ -119,92 +123,123 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             }
         });
 
-        // perform set on query text listener event
-        search_et.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
+        com.google.firebase.database.Query query = null;
+        query = dbItemsByUser;
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (query != null && TextUtils.getTrimmedLength(query) > 0) {
-                    query = query.trim();
-                    Log.i("content", query);
-                    client.getIndex("movies").searchAsync(new Query(query), null, new CompletionHandler() {
-                        @Override
-                        public void requestCompleted(JSONObject content, AlgoliaException error) {
-                            Log.i("content", content.toString());
-                            try {
-                                items.clear();
-                                searchAdapter.notifyDataSetChanged();
-                                JSONArray array = content.getJSONArray("hits");
-                                for (int i = 0; i < array.length(); i++) {
-                                    JSONObject object = array.getJSONObject(i);
-
-                                    Item item = new Item();
-
-                                    item.setIid(object.getString("Iid"));
-                                    item.setGenre(object.getString("genre"));
-                                    item.setDetails(object.getString("overview"));
-                                    item.setTitle(object.getString("title"));
-
-                                    items.add(item);
-                                    searchAdapter.notifyItemInserted(items.size() - 1);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                } else {
-                    Log.i("search", "empty!");
-                    items.clear();
-                    searchAdapter.notifyDataSetChanged();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String id = postSnapshot.child("iid").getValue().toString();
+                    Log.i("id",id);
+                    watched.add(id);
                 }
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
-                    Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
-                    newText = newText.trim();
-                    Log.i("content", newText);
-                    client.getIndex("movies").searchAsync(new Query(newText), null, new CompletionHandler() {
-                        @Override
-                        public void requestCompleted(JSONObject content, AlgoliaException error) {
-                            Log.i("content", content.toString());
-                            try {
-                                items.clear();
-                                searchAdapter.notifyDataSetChanged();
+                // perform set on query text listener event
+                search_et.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        if (query != null && TextUtils.getTrimmedLength(query) > 0) {
+                            query = query.trim();
+                            Log.i("content", query);
+                            client.getIndex("movies").searchAsync(new Query(query), null, new CompletionHandler() {
+                                @Override
+                                public void requestCompleted(JSONObject content, AlgoliaException error) {
+                                    Log.i("content", content.toString());
+                                    try {
+                                        items.clear();
+                                        searchAdapter.notifyDataSetChanged();
+                                        JSONArray array = content.getJSONArray("hits");
+                                        for (int i = 0; i < array.length(); i++) {
+                                            JSONObject object = array.getJSONObject(i);
 
-                                String text = search_et.getQuery().toString();
-                                if (text != null && TextUtils.getTrimmedLength(text) > 0)
-                                {
-                                    JSONArray array = content.getJSONArray("hits");
-                                    for (int i = 0; i < array.length(); i++) {
-                                        JSONObject object = array.getJSONObject(i);
+                                            // check iid is not in watched
+                                            if (!Arrays.asList(watched).contains(object.getString("Iid"))) {
+                                                Item item = new Item();
 
-                                        Item item = new Item();
+                                                item.setIid(object.getString("Iid"));
+                                                item.setGenre(object.getString("genre"));
+                                                item.setDetails(object.getString("overview"));
+                                                item.setTitle(object.getString("title"));
 
-                                        item.setIid(object.getString("Iid"));
-                                        item.setGenre(object.getString("genre"));
-                                        item.setDetails(object.getString("overview"));
-                                        item.setTitle(object.getString("title"));
+                                                items.add(item);
+                                                searchAdapter.notifyItemInserted(items.size() - 1);
+                                            } else {
+                                                Log.i("watched", object.getString("title"));
+                                            }
 
-                                        items.add(item);
-                                        searchAdapter.notifyItemInserted(items.size() - 1);
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            });
+                        } else {
+                            Log.i("search", "empty!");
+                            items.clear();
+                            searchAdapter.notifyDataSetChanged();
                         }
-                    });
-                } else {
-                    Log.i("search", "empty!");
-                    items.clear();
-                    searchAdapter.notifyDataSetChanged();
-                }
-                return false;
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
+                            Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
+                            newText = newText.trim();
+                            Log.i("content", newText);
+                            client.getIndex("movies").searchAsync(new Query(newText), null, new CompletionHandler() {
+                                @Override
+                                public void requestCompleted(JSONObject content, AlgoliaException error) {
+                                    Log.i("content", content.toString());
+                                    try {
+                                        items.clear();
+                                        searchAdapter.notifyDataSetChanged();
+
+                                        String text = search_et.getQuery().toString();
+                                        if (text != null && TextUtils.getTrimmedLength(text) > 0)
+                                        {
+                                            JSONArray array = content.getJSONArray("hits");
+                                            for (int i = 0; i < array.length(); i++) {
+                                                JSONObject object = array.getJSONObject(i);
+
+                                                // check iid is not in watched
+                                                if (!Arrays.asList(watched).contains(object.getString("Iid"))) {
+                                                    Item item = new Item();
+
+                                                    item.setIid(object.getString("Iid"));
+                                                    item.setGenre(object.getString("genre"));
+                                                    item.setDetails(object.getString("overview"));
+                                                    item.setTitle(object.getString("title"));
+
+                                                    items.add(item);
+                                                    searchAdapter.notifyItemInserted(items.size() - 1);
+                                                } else {
+                                                    Log.i("watched", object.getString("title"));
+                                                }
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } else {
+                            Log.i("search", "empty!");
+                            items.clear();
+                            searchAdapter.notifyDataSetChanged();
+                        }
+                        return false;
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //
             }
         });
+
 
         skip = findViewById(R.id.btnSkip);
         skip.setOnClickListener(new View.OnClickListener() {
@@ -253,7 +288,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     }
 
     public void getrecs() {
-        dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser");
+        dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(resultUser.getUid());
 
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
         com.google.firebase.database.Query itemsquery = null;
@@ -268,6 +303,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                     Log.i("postsnap",postSnapshot.toString());
                     //get the id of the item
                     String iid = postSnapshot.child("iid").getValue().toString();
+                    Log.i("item_id",iid);
                     // query usersbyitem to get the list of users who also like that item
                     dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
                     com.google.firebase.database.Query usersquery = null;
@@ -279,22 +315,44 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                             for (DataSnapshot itemSnapshot : userSnapshot.getChildren()) {
                                 // get the id of the user
                                 String uid = itemSnapshot.child("uid").getValue().toString();
+                                Log.i("user_id",uid);
                                 // query itemsbyuser to get the list of items that user likes
-                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
+                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
                                 com.google.firebase.database.Query itemsquery2 = null;
                                 itemsquery2 = dbItemsByUser;
                                 itemsquery2.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                                         // for each item that that user likes
-                                        // clear the node first and then we will repopulate it
-                                        dbRecItemsByUser.child(resultUser.getUid()).removeValue(new DatabaseReference.CompletionListener() {
+                                        // clear the node first and then we will repopulate it // TODO - change this later
+                                        dbRecItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                    //Log.i("postsnapshot", postSnapshot.toString());
                                                     //check whether the item is in the user's library // do we have to worry about this if we filter search results so they don't show stuff already in the library?
                                                     // add the item to the recommendations list
-                                                    dbRecItemsByUser.child(resultUser.getUid()).child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).setValue(postSnapshot.getValue());
+                                                    com.google.firebase.database.Query countquery = null;
+                                                    countquery = dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count");
+                                                    countquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dSnapshot) {
+                                                            Log.i("add",dSnapshot.toString());
+                                                            if (dSnapshot.getValue() != null) {
+                                                                dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count")
+                                                                        .setValue((long) dSnapshot.getValue() + 1);
+                                                                        //.setValue((long) dSnapshot.child("count").getValue()+1);
+                                                            } else {
+                                                                dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).setValue(postSnapshot.getValue());
+                                                                dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count").setValue((long) 1);
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                            //
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });

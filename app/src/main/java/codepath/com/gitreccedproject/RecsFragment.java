@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class RecsFragment extends Fragment {
     // Store a member variable for the listener
@@ -76,6 +78,13 @@ public class RecsFragment extends Fragment {
                     movieItems.add(item);
                     Log.i("item", item.getTitle());
                 }
+                Collections.sort(movieItems, new Comparator<Item>() {
+                    @Override
+                    public int compare(Item lhs, Item rhs) {
+                        // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                        return lhs > rhs.customInt ? -1 : (lhs.customInt < rhs.customInt) ? 1 : 0;
+                    }
+                });
                 movieRecAdapter = new RecAdapter(movieItems);
                 rv_movies.setAdapter(movieRecAdapter);
             }
@@ -116,7 +125,7 @@ public class RecsFragment extends Fragment {
                 Log.i("shot",dataSnapshot.toString());
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shott", postSnapshot.toString());
-                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
                     bookItems.add(item);
                     Log.i("item", item.getTitle());
                 }
