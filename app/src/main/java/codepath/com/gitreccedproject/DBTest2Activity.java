@@ -31,7 +31,6 @@ public class DBTest2Activity extends AppCompatActivity {
     DatabaseReference dbBooks;
 
     public SearchAdapter searchAdapter;
-    public ArrayList<JSONBook> mBooks;
     public ArrayList<Item> items;
 
     DatabaseReference dbItemsByUser;
@@ -42,6 +41,8 @@ public class DBTest2Activity extends AppCompatActivity {
 
     String mQuery = "no response";
 
+    ArrayList<XMLBook> mBooks;
+
     String uid = "dbtest2activity: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "dbtest2activity: item id not set yet"; //user id (initialized to dummy string for testing)
 
@@ -49,6 +50,8 @@ public class DBTest2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbtest2);
+
+        mBooks = new ArrayList<>();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
@@ -79,89 +82,15 @@ public class DBTest2Activity extends AppCompatActivity {
         search_sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mQuery = query;
-                new BookAsync().execute();
+                //do nothing when you submit, or maybe later make the keyboard disappear
 
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                /*if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
-                    newText = newText.trim();
-                    Log.i("content", newText);
-
-                    //calls getBooks (which calls OL search functionality to query for books)
-                    bClient.getBooks(newText, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                JSONArray docs;
-                                if (response != null) {
-                                    // Get the docs json array
-                                    docs = response.getJSONArray("docs");
-                                    // Parse json array into array of model objects
-                                    final ArrayList<JSONBook> books = JSONBook.fromJson(docs);
-                                    // Remove all books from the adapter
-                                    items.clear();
-                                    searchAdapter.notifyDataSetChanged();
-                                    // Load model objects into the adapter
-
-                                    //if results exist and text hasn't been deleted
-                                    String text = search_sv.getQuery().toString();
-                                    if (response.getInt("num_found") != 0 && TextUtils.getTrimmedLength(text) > 0) {
-
-                                        //for each entry in response array, add entry to searchAdapter.
-                                        int num_results = 10;
-
-                                        Log.i("Books", "num_results before = " + num_results);
-
-                                        if (books.size() < num_results) {
-                                            num_results = books.size();
-                                        }
-
-                                        Log.i("Books", "books.size = " + books.size());
-                                        Log.i("Books", "num_results after = " + num_results);
-
-                                        for(int i = 0; i < num_results; i++){
-                                            String title = books.get(i).getTitle().toString();
-                                            Log.i("Books", "Title: " + title);
-
-                                            //create item id for new book
-
-                                            //create new item id
-                                            iid = dbBooks.push().getKey();
-
-                                            setOverview(books.get(i));
-
-                                            Item bookItem = new Item(iid, "Book", books.get(i).getTitle(), books.get(i).getOverview());
-                                            items.add(bookItem);
-                                            searchAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                } else {
-                                    Toast toast = Toast.makeText(getApplicationContext(), "No results. Please try again!",
-                                            Toast.LENGTH_SHORT);
-                                    toast.show();
-
-
-                                }
-                            } catch (JSONException e) {
-                                // Invalid JSON format, show appropriate error.
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                        }
-                    });
-                } else {
-                    Log.i("search", "empty!");
-                    items.clear();
-                    searchAdapter.notifyDataSetChanged();
-                }*/
+                mQuery = newText;
+                new BookAsync().execute();
                 return false;
             }
         });
@@ -172,7 +101,8 @@ public class DBTest2Activity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            items.clear();
+            searchAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -184,17 +114,45 @@ public class DBTest2Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            mBooks = GoodreadsClient.books;
             Log.i("AsyncTag", "Success!");
-            super.onPostExecute(aVoid);
-        }
-    }
 
-    private void addItem(){
-        String genre = etGenre.getText().toString();
-        String title = etTitle.getText().toString();
+            // BEGIN TRANSPLANTED CODE
+            //clear items array, the array that loads into searchAdapter
+            //items.clear();
+            Log.i("XMLBookBook", "Items cleared");
+            searchAdapter.notifyDataSetChanged();
 
-        if(!TextUtils.isEmpty(title)){
-            iid = dbItemsByUser.push().getKey();
+            //if text hasn't been deleted
+            String text = search_sv.getQuery().toString();
+            if (TextUtils.getTrimmedLength(text) > 0) {
+                //for each entry in response array, add entry to searchAdapter.
+                int num_results = 10;
+
+                Log.i("Books", "num_results before = " + num_results);
+
+                if (mBooks.size() < num_results) {
+                    num_results = mBooks.size();
+                }
+
+                Log.i("Books", "books.size = " + mBooks.size());
+                Log.i("Books", "num_results after = " + num_results);
+
+                for (int i = 0; i < num_results; i++) {
+                    String title = mBooks.get(i).getTitle().toString();
+                    Log.i("Books", "Title: " + title);
+
+                    //create new item id
+                    iid = dbBooks.push().getKey();
+
+                    Item bookItem = new Item(iid, "Book", mBooks.get(i).getTitle(), mBooks.get(i).getDescription());
+                    Log.i("XMLBookBook", "Item Added to Adapter: " + bookItem.getTitle());
+                    items.add(bookItem);
+                    searchAdapter.notifyDataSetChanged();
+                }
+                //END TRANSPLANTED CODE
+                super.onPostExecute(aVoid);
+            }
         }
     }
 }

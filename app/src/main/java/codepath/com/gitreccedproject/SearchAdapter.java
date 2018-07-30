@@ -97,14 +97,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 final Item item = mItems.get(position);
 
-                /*bookDecide(item, new FirebaseCallback() {
+                //TODO: populate fields of item with the book?
+
+                bookDecide(item, new FirebaseCallback() {
                     @Override
                     public void onCallback(List<Item> someList) {
                         addItem(position);
                         Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                         Log.i("select", String.format("Got item at %s", position));
                     }
-                });*/
+                });
 
                 addItem(position);
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
@@ -309,8 +311,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks
                         //create new item id
-                        iid = dbBooks.push().getKey();
-                        //TODO: if code doesn't work, set mItems.get(position).setIid(iid)
+                        //iid = dbBooks.push().getKey();
+                        iid = item.getIid();
                         dbBooks.child(iid).setValue(item);
                         Log.i("Books", "Added " + item.getTitle());
                     }
