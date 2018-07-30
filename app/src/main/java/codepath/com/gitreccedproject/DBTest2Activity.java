@@ -101,8 +101,6 @@ public class DBTest2Activity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            items.clear();
-            searchAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -114,6 +112,10 @@ public class DBTest2Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+
+            items.clear();
+            searchAdapter.notifyDataSetChanged();
+
             mBooks = GoodreadsClient.books;
             Log.i("AsyncTag", "Success!");
 
