@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class GoodreadsClient extends DefaultHandler{
+public class GoodreadsClient extends DefaultHandler {
 
     boolean boolWork = false;
     boolean boolTitle = false;
@@ -73,7 +73,6 @@ public class GoodreadsClient extends DefaultHandler{
             //generate querying url string
             String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(bookId));
             Log.i("Books", "Book URL String: " + urlString);
-            //TODO: query string OK
             //convert querying url to URL object
             URL url = new URL(urlString);
             SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
@@ -100,6 +99,7 @@ public class GoodreadsClient extends DefaultHandler{
             boolTitle = true;
         } else if (qName.equalsIgnoreCase("author")) {
             boolAuthor = true;
+            boolId = false;
         } else if (qName.equalsIgnoreCase("description")) {
             boolDetails = true;
         } else if (qName.equalsIgnoreCase("small_image_url")) {
@@ -107,13 +107,12 @@ public class GoodreadsClient extends DefaultHandler{
         } else if (qName.equalsIgnoreCase("image_url")) {
             boolImgUrl = true;
         } else if (qName.equalsIgnoreCase("best_book")) {
+            Log.i("BookIdClient", "best_book" + "==true");
             inBook = true;
-        } else if (qName.equalsIgnoreCase("author")) {
-            inBook = false;
         } else if (qName.equalsIgnoreCase("id")) {
+            Log.i("BookIdClient", "best_book id" + "==true");
             boolId = true;
-        }
-        else {
+        } else {
             Log.i("XMLBook", "skipped tag");
         }
     }
@@ -121,7 +120,7 @@ public class GoodreadsClient extends DefaultHandler{
     //setting the fields of each book
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        if(boolWork) {
+        if (boolWork) {
             Log.i("XMLBook", "Title: " + new String(ch, start, length));
             //create new XMLBook for each one
             book = new XMLBook();
@@ -144,7 +143,12 @@ public class GoodreadsClient extends DefaultHandler{
             boolImgUrl = false;
         } else if (inBook && boolId) {
             book.setBookId(new String(ch, start, length));
-        }else {
+            Log.i("BookIdClient", "Book Id: " + new String(ch, start, length) + " || Book Title: " + book.getTitle());
+            inBook = false;
+            boolId = false;
+        } else if (boolId) {
+            boolId = false;
+        } else {
             Log.i("XMLBook", "no characters to care about");
         }
     }
@@ -153,7 +157,19 @@ public class GoodreadsClient extends DefaultHandler{
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (localName.equalsIgnoreCase("work")) {
             //TODO: book added is correct
+            Log.i("BookIdClient", "BookId before added to books list: " + book.getBookId());
             books.add(book);
+            boolWork = false;
+            boolTitle = false;
+            boolAuthor = false;
+            boolDetails = false;
+            boolSmallImgUrl = false;
+            boolImgUrl = false;
+            boolId = false;
+            inBook = false;
+        } else if (localName.equalsIgnoreCase("best_book")) {
+            Log.i("BookIdClient", "best_book" + "==false");
+            inBook = false;
         }
     }
 }

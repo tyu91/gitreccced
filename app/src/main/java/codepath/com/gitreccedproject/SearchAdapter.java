@@ -283,7 +283,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if(item.getGenre() == "Book") {
             dbBooks = FirebaseDatabase.getInstance().getReference("books");
             // search up book and get description
-            client.getBook(item.getBookId());
+            //client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
             dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
@@ -390,12 +390,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         @Override
         protected Void doInBackground(Void... voids) {
             client = new GoodreadsClient();
+            Log.i("BookId", "BookId Before getBook call: " + mItem.getBookId());
             client.getBook(mItem.getBookId());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            //TODO: here, populate description field of selected book
             //add this item to database
             bookDecide(mItem, new FirebaseCallback() {
                 @Override

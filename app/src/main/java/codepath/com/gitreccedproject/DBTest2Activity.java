@@ -119,6 +119,9 @@ public class DBTest2Activity extends AppCompatActivity {
             searchAdapter.notifyDataSetChanged();
 
             mBooks = GoodreadsClient.books;
+            for (int i = 0; i < mBooks.size(); i++) {
+                Log.i("mBooks", "mBooks contents in onPostExecute: BookId: " + mBooks.get(i).getBookId() + " || Book Title: " + mBooks.get(i).getTitle());
+            }
             Log.i("AsyncTag", "Success!");
 
             // BEGIN TRANSPLANTED CODE
@@ -150,6 +153,7 @@ public class DBTest2Activity extends AppCompatActivity {
                     iid = dbBooks.push().getKey();
 
                     Item bookItem = new Item(iid, "Book", mBooks.get(i).getTitle(), mBooks.get(i).getDetails());
+                    bookItem.setBookId(mBooks.get(i).getBookId());
                     Log.i("XMLBookBook", "Item Added to Adapter: " + bookItem.getTitle());
                     items.add(bookItem);
                     searchAdapter.notifyDataSetChanged();
