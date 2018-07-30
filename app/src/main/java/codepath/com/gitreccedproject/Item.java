@@ -8,6 +8,7 @@ public class Item {
     public String genre;
     public String title;
     public String details;
+    public String bookId;
 
     public Item () {
         //empty constructor
@@ -18,6 +19,7 @@ public class Item {
         this.genre = genre;
         this.title = title;
         this.details = details;
+        bookId = "no book id";
     }
 
     public String getIid() {
@@ -34,6 +36,14 @@ public class Item {
 
     public String getDetails() {
         return details;
+    }
+
+    public String getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
     }
 
     public void setIid(String iid) {

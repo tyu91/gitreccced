@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="ERA"
         android:textAlignment="center"
         android:textColor="#c8c6d0"

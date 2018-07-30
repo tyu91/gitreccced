@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +40,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
-    public Button next_btn, skip;
+    public TextView skip, next;
 
     //DatabaseReference dbUsers;
     DatabaseReference dbItemsByUser;
@@ -99,7 +98,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         // find the views
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        next_btn = findViewById(R.id.next_btn);
+        next = findViewById(R.id.tvNext);
 
         search_et.setIconifiedByDefault(false);
 
@@ -113,7 +112,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
 
-        next_btn.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getrecs();
@@ -240,8 +239,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             }
         });
 
-
-        skip = findViewById(R.id.btnSkip);
+        skip = findViewById(R.id.tvSkip);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -262,13 +260,13 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                             }
                         }).
                         setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
-                        i.putExtra("user", Parcels.wrap(resultUser));
-                        startActivity(i);
-                        finish();
-                    }
-                });
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
+                                i.putExtra("user", Parcels.wrap(resultUser));
+                                startActivity(i);
+                                finish();
+                            }
+                        });
 
                 // create alert dialog
                 AlertDialog alertDialog = alertDialogBuilder.create();

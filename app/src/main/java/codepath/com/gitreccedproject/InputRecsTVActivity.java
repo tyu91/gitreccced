@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
@@ -36,7 +36,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
     public SearchView search_et;
     public RecyclerView searchlist_rv;
 
-    public Button next_btn;
+    public TextView next;
 
     DatabaseReference dbUsers;
 
@@ -54,7 +54,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT);
         toast.show();
 
-        next_btn = findViewById(R.id.next_btn);
+        next = findViewById(R.id.tvNext2);
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
 
@@ -80,7 +80,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
 
-        next_btn.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(InputRecsTVActivity.this, InputRecsBooksActivity.class);
