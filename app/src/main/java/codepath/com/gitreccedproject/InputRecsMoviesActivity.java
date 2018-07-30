@@ -40,7 +40,8 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
-    public Button next_btn, skip;
+    public Button next_btn;
+    public TextView skip;
 
     //DatabaseReference dbUsers;
     DatabaseReference dbItemsByUser;
@@ -206,7 +207,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             }
         });
 
-        skip = findViewById(R.id.btnSkip);
+        skip = findViewById(R.id.tvSkip);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
