@@ -22,9 +22,11 @@ public class GoodreadsClient extends DefaultHandler{
     boolean boolWork = false;
     boolean boolTitle = false;
     boolean boolAuthor = false;
-    boolean boolDescription = false;
+    boolean boolDetails = false;
     boolean boolSmallImgUrl = false;
     boolean boolImgUrl = false;
+    boolean boolId = false;
+    boolean inBook = false;
 
     private AsyncHttpClient client;
 
@@ -47,7 +49,30 @@ public class GoodreadsClient extends DefaultHandler{
             books = new ArrayList<>();
             //generate querying url string
             String urlString = getApiUrl("search.xml?key=" + goodreadsApiKey + "&q=" + URLEncoder.encode(query, "utf-8"));
-            Log.i("Books", "URL String: " + urlString);
+            Log.i("Books", "Search URL String: " + urlString);
+            //TODO: query string OK
+            //convert querying url to URL object
+            URL url = new URL(urlString);
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            SAXParser saxParser = saxParserFactory.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+
+            //XMLHandler handler = new XMLHandler();
+
+            xmlReader.setContentHandler(this);
+
+            xmlReader.parse(new InputSource(url.openStream()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getBook(final String bookId) {
+        try {
+            //generate querying url string
+            String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(bookId));
+            Log.i("Books", "Book URL String: " + urlString);
             //TODO: query string OK
             //convert querying url to URL object
             URL url = new URL(urlString);
@@ -76,11 +101,17 @@ public class GoodreadsClient extends DefaultHandler{
         } else if (qName.equalsIgnoreCase("author")) {
             boolAuthor = true;
         } else if (qName.equalsIgnoreCase("description")) {
-            boolDescription = true;
+            boolDetails = true;
         } else if (qName.equalsIgnoreCase("small_image_url")) {
             boolSmallImgUrl = true;
         } else if (qName.equalsIgnoreCase("image_url")) {
             boolImgUrl = true;
+        } else if (qName.equalsIgnoreCase("best_book")) {
+            inBook = true;
+        } else if (qName.equalsIgnoreCase("author")) {
+            inBook = false;
+        } else if (qName.equalsIgnoreCase("id")) {
+            boolId = true;
         }
         else {
             Log.i("XMLBook", "skipped tag");
@@ -102,16 +133,18 @@ public class GoodreadsClient extends DefaultHandler{
         } else if (boolAuthor) {
             book.setAuthor(new String(ch, start, length));
             boolAuthor = false;
-        } else if (boolDescription) {
-            book.setDescription(new String(ch, start, length));
-            boolDescription = false;
+        } else if (boolDetails) {
+            book.setDetails(new String(ch, start, length));
+            boolDetails = false;
         } else if (boolSmallImgUrl) {
             book.setSmallImgUrl(new String(ch, start, length));
             boolSmallImgUrl = false;
         } else if (boolImgUrl) {
             book.setImgUrl(new String(ch, start, length));
             boolImgUrl = false;
-        } else {
+        } else if (inBook && boolId) {
+            book.setBookId(new String(ch, start, length));
+        }else {
             Log.i("XMLBook", "no characters to care about");
         }
     }

@@ -1,6 +1,7 @@
 package codepath.com.gitreccedproject;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     DatabaseReference dbRecItemsByUser;
 
+    GoodreadsClient client = new GoodreadsClient();
+
     BookClient bClient = new BookClient();
 
     String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
@@ -40,6 +43,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     Context context;
     public List<Item> mItems;
+    public Item mItem;
+    public int mPosition;
+    public List<XMLBook> mBooks;
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
     //TODO: in here, populate with recsByUser field (to be created) in DB
@@ -51,6 +57,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public SearchAdapter(List<Item> items) {
         mItems = items;
     }
+
 
     @NonNull
     @Override
@@ -92,21 +99,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             final int position = getAdapterPosition();
+            mPosition = position;
             if (position != RecyclerView.NO_POSITION) {
 
                 // get the item at the position
-                final Item item = mItems.get(position);
+                mItem = mItems.get(position);
 
                 //TODO: populate fields of item with the book?
-
-                bookDecide(item, new FirebaseCallback() {
-                    @Override
-                    public void onCallback(List<Item> someList) {
-                        addItem(position);
-                        Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
-                        Log.i("select", String.format("Got item at %s", position));
-                    }
-                });
+                //set the overview + additional fields for item
+                new BookAsync().execute();
 
                 addItem(position);
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
@@ -296,6 +297,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         //if item is a book, add to DB
         if(item.getGenre() == "Book") {
             dbBooks = FirebaseDatabase.getInstance().getReference("books");
+            // search up book and get description
+            client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
             dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
@@ -389,5 +392,34 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         Log.i("test", "setting dbItemsByUser");
         dbItemsByUser.child(iid).setValue(mItems.get(position));
+    }
+
+    class BookAsync extends AsyncTask<Void, Void, Void> {
+        GoodreadsClient client;
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            client = new GoodreadsClient();
+            client.getBook(mItem.getBookId());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            //add this item to database
+            bookDecide(mItem, new FirebaseCallback() {
+                @Override
+                public void onCallback(List<Item> someList) {
+                    addItem(mPosition);
+                    Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
+                    Log.i("select", String.format("Got item at %s", mPosition));
+                }
+            });
+        }
     }
 }

@@ -90,17 +90,18 @@ public class DBTest2Activity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 mQuery = newText;
-                new BookAsync().execute();
+                new BooksAsync().execute();
                 return false;
             }
         });
     }
 
-    class BookAsync extends AsyncTask<Void, Void, Void> {
+    class BooksAsync extends AsyncTask<Void, Void, Void> {
         GoodreadsClient client;
 
         @Override
         protected void onPreExecute() {
+
         }
 
         @Override
@@ -113,6 +114,7 @@ public class DBTest2Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
 
+            //clear book search adapter
             items.clear();
             searchAdapter.notifyDataSetChanged();
 
@@ -147,7 +149,7 @@ public class DBTest2Activity extends AppCompatActivity {
                     //create new item id
                     iid = dbBooks.push().getKey();
 
-                    Item bookItem = new Item(iid, "Book", mBooks.get(i).getTitle(), mBooks.get(i).getDescription());
+                    Item bookItem = new Item(iid, "Book", mBooks.get(i).getTitle(), mBooks.get(i).getDetails());
                     Log.i("XMLBookBook", "Item Added to Adapter: " + bookItem.getTitle());
                     items.add(bookItem);
                     searchAdapter.notifyDataSetChanged();

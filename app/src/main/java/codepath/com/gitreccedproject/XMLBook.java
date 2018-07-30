@@ -6,7 +6,7 @@ public class XMLBook {
     public String title;
     public String author;
     public String genre;
-    public String description;
+    public String details;
     public String smallImgUrl;
     public String imgUrl;
 
@@ -30,8 +30,8 @@ public class XMLBook {
         return genre;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetails() {
+        return details;
     }
 
     public String getSmallImgUrl() {
@@ -62,8 +62,8 @@ public class XMLBook {
         this.genre = genre;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public void setSmallImgUrl(String smallImgUrl) {
