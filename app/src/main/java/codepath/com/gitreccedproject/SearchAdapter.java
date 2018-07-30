@@ -3,7 +3,6 @@ package codepath.com.gitreccedproject;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,9 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
@@ -39,7 +34,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
-
 
     Context context;
     public List<Item> mItems;
@@ -113,16 +107,22 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
 
-                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
-                dbItemsByUser.addChildEventListener(new ChildEventListener() {
+                User currentuser = InputRecsMoviesActivity.resultUser;
+
+                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(currentuser.getUid());
+                com.google.firebase.database.Query query = null;
+                query = dbItemsByUser;
+                query.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
                         //array list of items that will be pared down eventually
                         mRecs = new ArrayList<>();
 
+                        //Log.i("snap",dataSnapshot.toString());
+
                         //get snapshot of item added under user in itemsbyuser
                         //***NOTE: for some reason, iterates through every item under a user. Look into this later.
-                        final Item item = dataSnapshot.getValue(Item.class);
+                        /*final Item item = dataSnapshot.getValue(Item.class);
                         userItems.add(item);
 
                         //TODO: get user not from movie recs activity?
@@ -143,7 +143,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 //prints out array list of recommendations
                                 for(int i = 0; i < recList.size(); i++) {
                                     Item recItem = recList.get(i);
-                                    Log.i("RecAlgo", "Rec " + i + ": " + recItem.getTitle());
+                                    Log.i("RecAlgoLIST", "Rec " + i + ": " + recItem.getTitle());
                                 }
 
                                 ArrayList<String> recIids = new ArrayList<>();
@@ -152,7 +152,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 for(int i = 0; i < recList.size(); i++) {
                                     String recId = recList.get(i).getIid();
                                     recIids.add(recId);
-                                    Log.i("RecAlgo", "Rec " + i + ": " + recList.get(i).getTitle());
+                                    Log.i("RecAlgoID", "Rec " + i + ": " + recList.get(i).getTitle());
                                 }
 
                                 //maps recItems to number of appearances
@@ -263,32 +263,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 //print out final recommendations (but including items currently in library)
                                 for (int i = 0; i < finalBookRecs.size(); i++) {
                                     Log.i("RecAlgo", "FinalBookRecItems " + i + ": " + finalBookRecs.get(i).getTitle());
-                                }
+                                }*/
 
                             }
-                        });
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.i("childeventlistener", "cancelled");
                     }
                 });
+
+
             }
         }
     }

@@ -82,4 +82,24 @@
         android:textColor="#c8c6d0"
         android:textSize="30sp"
         android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/tvSentence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="51dp"
+        android:layout_marginStart="86dp"
+        android:text="Already have an account? "
+        android:textColor="#c8c6d0" />
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvSentence"
+        android:layout_toEndOf="@+id/tvSentence"
+        android:text="Login"
+        android:textColor="@color/colorAccent" />
 </RelativeLayout>

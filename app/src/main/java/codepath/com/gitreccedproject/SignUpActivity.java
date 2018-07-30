@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,11 +25,10 @@ import org.parceler.Parcels;
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText email, password, name;
+    private TextView logIn;
     private Button createAccount;
 
     DatabaseReference dbUsers;
-
-    //static User user;
 
     String value;
 
@@ -48,7 +48,17 @@ public class SignUpActivity extends AppCompatActivity {
         name = findViewById(R.id.etUID);
         email = findViewById(R.id.etEmail);
         password = findViewById(R.id.etPass);
+        logIn = findViewById(R.id.tvLogin);
         createAccount = findViewById(R.id.btnSignUp);
+
+        logIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent(SignUpActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override

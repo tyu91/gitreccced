@@ -3,6 +3,8 @@ package codepath.com.gitreccedproject;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,11 @@ import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.CompletionHandler;
 import com.algolia.search.saas.Query;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +40,14 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
-    public Button next_btn, skip;
+    public Button next_btn;
+    public TextView skip;
 
     //DatabaseReference dbUsers;
+    DatabaseReference dbItemsByUser;
+    DatabaseReference dbUsersbyItem;
+
+    DatabaseReference dbRecItemsByUser;
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
@@ -101,6 +113,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getrecs();
                 Intent i = new Intent(InputRecsMoviesActivity.this, InputRecsTVActivity.class);
                 i.putExtra("user",Parcels.wrap(resultUser));
                 startActivity(i);
@@ -194,7 +207,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             }
         });
 
-        skip = findViewById(R.id.btnSkip);
+        skip = findViewById(R.id.tvSkip);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,9 +219,18 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 alertDialogBuilder.setView(tv);
 
                 // set dialog message
-                alertDialogBuilder.setCancelable(true).setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
+                alertDialogBuilder.
+                        setCancelable(false).
+                        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                closeContextMenu();
+                            }
+                        }).
+                        setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
+                        i.putExtra("user", Parcels.wrap(resultUser));
                         startActivity(i);
                         finish();
                     }
@@ -229,5 +251,76 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         i.addCategory(Intent.CATEGORY_HOME);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
+    }
+
+    public void getrecs() {
+        dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser");
+
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
+        com.google.firebase.database.Query itemsquery = null;
+        itemsquery = dbItemsByUser;
+        itemsquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("snap",dataSnapshot.toString());
+
+                // for each item that the current user liked
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.i("postsnap",postSnapshot.toString());
+                    //get the id of the item
+                    String iid = postSnapshot.child("iid").getValue().toString();
+                    // query usersbyitem to get the list of users who also like that item
+                    dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+                    com.google.firebase.database.Query usersquery = null;
+                    usersquery = dbUsersbyItem;
+                    usersquery.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                            // for each user who likes that item
+                            for (DataSnapshot itemSnapshot : userSnapshot.getChildren()) {
+                                // get the id of the user
+                                String uid = itemSnapshot.child("uid").getValue().toString();
+                                // query itemsbyuser to get the list of items that user likes
+                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
+                                com.google.firebase.database.Query itemsquery2 = null;
+                                itemsquery2 = dbItemsByUser;
+                                itemsquery2.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                                        // for each item that that user likes
+                                        // clear the node first and then we will repopulate it
+                                        dbRecItemsByUser.child(resultUser.getUid()).removeValue(new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                    //check whether the item is in the user's library // do we have to worry about this if we filter search results so they don't show stuff already in the library?
+                                                    // add the item to the recommendations list
+                                                    dbRecItemsByUser.child(resultUser.getUid()).child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).setValue(postSnapshot.getValue());
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.i("childeventlistener", "cancelled");
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.i("childeventlistener", "cancelled");
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("childeventlistener", "cancelled");
+            }
+        });
     }
 }
