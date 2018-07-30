@@ -86,6 +86,50 @@ public class RecsFragment extends Fragment {
             }
         });
 
+        com.google.firebase.database.Query showsquery = null;
+        showsquery = Recs.child("TV");
+        showsquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("shot",dataSnapshot.toString());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.i("shott", postSnapshot.toString());
+                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "TV", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                    tvItems.add(item);
+                    Log.i("item", item.getTitle());
+                }
+                tvRecAdapter = new RecAdapter(tvItems);
+                rv_tvShows.setAdapter(tvRecAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //
+            }
+        });
+
+        com.google.firebase.database.Query booksquery = null;
+        booksquery = Recs.child("Book");
+        booksquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("shot",dataSnapshot.toString());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.i("shott", postSnapshot.toString());
+                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                    bookItems.add(item);
+                    Log.i("item", item.getTitle());
+                }
+                bookRecAdapter = new RecAdapter(bookItems);
+                rv_books.setAdapter(bookRecAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //
+            }
+        });
+
         /*//setting movies to recommend
         if(SearchAdapter.finalMovieRecs != null && SearchAdapter.finalMovieRecs.size() != 0) {
             //if finalRecs was populated in InputRecActivities
@@ -113,8 +157,6 @@ public class RecsFragment extends Fragment {
 
         // construct the adapter from this datasource
         //movieRecAdapter = new RecAdapter(movieItems);
-        tvRecAdapter = new RecAdapter(tvItems);
-        bookRecAdapter = new RecAdapter(bookItems);
 
         rv_movies = view.findViewById(R.id.rv_libMovies);
         rv_tvShows = view.findViewById(R.id.rv_tv);
@@ -130,8 +172,6 @@ public class RecsFragment extends Fragment {
 
         // set the adapter
         //rv_movies.setAdapter(movieRecAdapter);
-        rv_tvShows.setAdapter(tvRecAdapter);
-        rv_books.setAdapter(bookRecAdapter);
 
         // TODO - comment these if-statements if we want to enable infinite scrolling only to the right
         if (movieItems.size() > 0) {
