@@ -3,6 +3,7 @@ package codepath.com.gitreccedproject;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,11 +42,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public int mPosition;
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
-    //TODO: in here, populate with recsByUser field (to be created) in DB
-    public static List<Item> finalRecs = null;
-    public static List<Item> finalMovieRecs = null;
-    public static List<Item> finalTVRecs = null;
-    public static List<Item> finalBookRecs = null;
+    ArrayList<String> lib;
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -65,11 +62,31 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final SearchAdapter.ViewHolder holder, int position) {
         // get the data according to position
-        Item item = mItems.get(position);
+        final Item item = mItems.get(position);
         // populate the views according to position
         holder.title_tv.setText(item.getTitle());
+        // check if item is in user's library
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid());
+        com.google.firebase.database.Query itemsquery = null;
+        itemsquery = dbItemsByUser;
+        itemsquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lib = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    lib.add(postSnapshot.child("iid").getValue().toString());
+                }
+                if (lib.contains(item.getIid())) {
+                    holder.title_tv.setTextSize(20); // TODO - change this later
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -98,179 +115,34 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 mItem = mItems.get(position);
 
+                Log.i("size",String.format("%s",title_tv.getTextSize()));
+                if (title_tv.getTextSize() == 60.0) {
+                    Log.i("click", "already in lib");
+                    dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
+                    dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(InputRecsMoviesActivity.resultUser.getUid());
+                            dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    title_tv.setTextSize(18);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    getrecs(mItem);
+                    title_tv.setTextSize(20);
+                    addItem(position);
+                }
+
                 Log.d("mItem", "Title: " + mItem.getTitle());
                 //set the overview + additional fields for item
                 new BookAsync().execute();
 
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
-
-                User currentuser = InputRecsMoviesActivity.resultUser;
-
-                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(currentuser.getUid());
-                com.google.firebase.database.Query query = null;
-                query = dbItemsByUser;
-                query.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //array list of items that will be pared down eventually
-                        mRecs = new ArrayList<>();
-
-                        //Log.i("snap",dataSnapshot.toString());
-
-                        //get snapshot of item added under user in itemsbyuser
-                        //***NOTE: for some reason, iterates through every item under a user. Look into this later.
-                        /*final Item item = dataSnapshot.getValue(Item.class);
-                        userItems.add(item);
-
-                        //TODO: get user not from movie recs activity?
-                        //TODO: get user from signin/signup activity
-                        //generate user
-                        User user = InputRecsMoviesActivity.resultUser;
-
-                        iid = item.getIid();
-
-                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
-
-                        //add user to usersbyitem
-                        dbUsersbyItem.child(uid).setValue(user);
-
-                        readData(new FirebaseCallback() {
-                            @Override
-                            public void onCallback(List<Item> recList) {
-                                //prints out array list of recommendations
-                                for(int i = 0; i < recList.size(); i++) {
-                                    Item recItem = recList.get(i);
-                                    Log.i("RecAlgoLIST", "Rec " + i + ": " + recItem.getTitle());
-                                }
-
-                                ArrayList<String> recIids = new ArrayList<>();
-
-                                //convert list of recommendations to list of their IDs
-                                for(int i = 0; i < recList.size(); i++) {
-                                    String recId = recList.get(i).getIid();
-                                    recIids.add(recId);
-                                    Log.i("RecAlgoID", "Rec " + i + ": " + recList.get(i).getTitle());
-                                }
-
-                                //maps recItems to number of appearances
-                                final HashMap<String, Integer> recMap = new HashMap<>();
-
-                                for(int i = 0; i < recIids.size(); i++) {
-                                    if (recMap.containsKey(recIids.get(i))) {
-                                        recMap.put(recIids.get(i), recMap.get(recIids.get(i)) + 1);
-                                    } else {
-                                        recMap.put(recIids.get(i), 1);
-                                    }
-                                }
-
-                                //prints out hashmap recMap's items and frequency
-                                for(String recId : recMap.keySet()) {
-                                    Log.i("RecAlgo", "NoDupesRec: " + recId + ", Num Results: " + recMap.get(recId));
-                                }
-
-                                //sorts recItems based on number of appearances
-                                List<String> toRecommendIids = new ArrayList<String>(recMap.keySet());
-
-                                Collections.sort(toRecommendIids, new Comparator<String>() {
-                                    @Override
-                                    public int compare(String s1, String s2) {
-                                        return recMap.get(s2).compareTo(recMap.get(s1));
-                                    }
-                                });
-
-                                //prints out sorted toRecommendIids
-                                for(String key : toRecommendIids) {
-                                    Log.i("RecAlgo", "FinalRec: " + key + ", Num Results: " + recMap.get(key));
-                                }
-
-                                //removes dupes from recList (slow method)
-                                for (int i = 0; i < recList.size() - 1; i++) {
-                                    for (int j = i + 1; j < recList.size(); j++) {
-                                        if(recList.get(i).getIid().equals(recList.get(j).getIid())) {
-                                            recList.remove(j);
-                                            j--;
-                                        }
-                                    }
-                                }
-
-                                //print out recList w/o dupes
-                                for(Item recItem : recList) {
-                                    Log.i("RecAlgo", "RecListNoDupes: " + recItem.getTitle());
-                                }
-
-                                if(finalRecs != null) {
-                                    finalRecs.clear();
-                                } else {
-                                    finalRecs = new ArrayList<>();
-                                }
-                                //recreate items list from iid toRecommendIids list:
-                                    //does this by checking iid from toRecommendIids with iid's of items in recList
-                                for (int i = 0; i < toRecommendIids.size(); i++) {
-                                    String currentIid = toRecommendIids.get(i);
-                                    for (int j = 0; j < recList.size(); j++) {
-                                        if(currentIid.equals(recList.get(j).getIid())) {
-                                            finalRecs.add(recList.get(j));
-                                        }
-                                    }
-                                }
-
-                                //print out final recommendations (but including items currently in library)
-                                for (int i = 0; i < finalRecs.size(); i++) {
-                                    Log.i("RecAlgo", "FinalItemsRec " + i + ": " + finalRecs.get(i).getTitle());
-                                }
-
-                                //removes items associated with current user from recommendations
-                                for (int i = 0; i < finalRecs.size(); i++) {
-                                    String currentIid = finalRecs.get(i).getIid();
-                                    for (int j = 0; j < userItems.size(); j++) {
-                                        if (currentIid.equals(userItems.get(j).getIid())) {
-                                            finalRecs.remove(i);
-                                            i--;
-                                        }
-                                    }
-                                }
-
-                                //print out final recommendations (but including items currently in library)
-                                for (int i = 0; i < finalRecs.size(); i++) {
-                                    Log.i("RecAlgo", "ActuallyFinalRecItems " + i + ": " + finalRecs.get(i).getTitle());
-                                }
-
-                                //sorts items based on genre
-                                for(int i = 0; i < finalRecs.size(); i++){
-                                    Item item = finalRecs.get(i);
-                                    if (item.getGenre().equals("Movie")) {
-                                        finalMovieRecs.add(item);
-                                    } else if (item.getGenre().equals("TV")) {
-                                        finalTVRecs.add(item);
-                                    } else {
-                                        finalBookRecs.add(item);
-                                    }
-                                }
-
-                                //print out final recommendations (but including items currently in library)
-                                for (int i = 0; i < finalMovieRecs.size(); i++) {
-                                    Log.i("RecAlgo", "FinalMovieRecItems " + i + ": " + finalMovieRecs.get(i).getTitle());
-                                }
-
-                                //print out final recommendations (but including items currently in library)
-                                for (int i = 0; i < finalTVRecs.size(); i++) {
-                                    Log.i("RecAlgo", "FinalTVRecItems " + i + ": " + finalTVRecs.get(i).getTitle());
-                                }
-
-                                //print out final recommendations (but including items currently in library)
-                                for (int i = 0; i < finalBookRecs.size(); i++) {
-                                    Log.i("RecAlgo", "FinalBookRecItems " + i + ": " + finalBookRecs.get(i).getTitle());
-                                }*/
-
-                            }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.i("childeventlistener", "cancelled");
-                    }
-                });
-
 
             }
         }
@@ -337,50 +209,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
-    //reads data from firebase in order to generate recs
-    private void readData (final FirebaseCallback firebaseCallback) {
-        //set up value event listener for users associated with each item in current user's library
-        ValueEventListener valueEventListenerOne = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-                    User mUser = userSnapshot.getValue(User.class);
-                    Log.i("Users", "User ID: " + mUser.getUid());
 
-                    //sets up reference to each salient user under userbyitems
-                    dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(mUser.getUid());
-
-                    //set up value event listener for each item under each user linked to the items in current user's library
-                    ValueEventListener valueEventListenerTwo = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                                Item userItem = itemSnapshot.getValue(Item.class);
-                                mRecs.add(userItem);
-                                //Log.i("RecAlgo", "Rec Item: " + userItem.getTitle());
-                            }
-
-                            firebaseCallback.onCallback(mRecs);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    };
-
-                    dbRecItemsByUser.addListenerForSingleValueEvent(valueEventListenerTwo);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
-        dbUsersbyItem.addListenerForSingleValueEvent(valueEventListenerOne);
-    }
 
     abstract class FirebaseCallback {
         public abstract void onCallback(List<Item> recList);
@@ -398,6 +227,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         Log.i("test", "setting dbItemsByUser");
         dbItemsByUser.child(iid).setValue(mItems.get(position));
+        dbUsersbyItem.child(uid).setValue(InputRecsMoviesActivity.resultUser);
     }
 
     class BookAsync extends AsyncTask<Void, Void, Void> {
@@ -429,5 +259,101 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 }
             });
         }
+    }
+
+
+    public void getrecs(final Item item) {
+        dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid());
+        // get the list of items in the user's library
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid());
+        com.google.firebase.database.Query itemsquery = null;
+        itemsquery = dbItemsByUser;
+        itemsquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //ArrayList<String> lib = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //lib.add(postSnapshot.child("iid").getValue().toString());
+                }
+                //final ArrayList<String> finallib = lib;
+                // get the id of the item
+                String iid = item.getIid();
+                Log.i("item_id",iid);
+                // query usersbyitem to get the list of users who also like that item
+                dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
+                com.google.firebase.database.Query usersquery = null;
+                usersquery = dbUsersbyItem;
+                usersquery.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                        // for each user who likes that item
+                        for (DataSnapshot itemSnapshot : userSnapshot.getChildren()) {
+                            // get the id of the user
+                            String uid = itemSnapshot.child("uid").getValue().toString();
+                            Log.i("user_id", uid);
+                            // query itemsbyuser to get the list of items that user likes
+                            dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
+                            com.google.firebase.database.Query itemsquery2 = null;
+                            itemsquery2 = dbItemsByUser;
+                            itemsquery2.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    // for each item that that user likes
+                                    for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                        //Log.i("postsnapshot", postSnapshot.toString());
+                                        // don't add if the item is already in the user's library
+                                        boolean inlib = false;
+                                        for (int i = 0; i < lib.size(); i++) {
+                                            if (postSnapshot.child("iid").getValue().toString() == lib.get(i)) {
+                                                inlib = true;
+                                            }
+                                        }
+                                        if (!inlib) {
+                                            // add the item to the recommendations list
+                                            com.google.firebase.database.Query countquery = null;
+                                            countquery = dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count");
+                                            countquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dSnapshot) {
+                                                    Log.i("add", dSnapshot.toString());
+                                                    if (dSnapshot.getValue() != null) {
+                                                        dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count")
+                                                                .setValue((long) dSnapshot.getValue() + 1);
+                                                        //.setValue((long) dSnapshot.child("count").getValue()+1);
+                                                    } else {
+                                                        dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).setValue(postSnapshot.getValue());
+                                                        dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count").setValue((long) 1);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    //
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
