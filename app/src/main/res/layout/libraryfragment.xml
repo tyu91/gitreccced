@@ -51,9 +51,9 @@
                 android:id="@+id/rv_moviesexp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintHeight_max="200dp"
+                android:visibility="gone"
                 app:layout_constrainedHeight="true"
-                android:visibility="gone"/>
+                app:layout_constraintHeight_max="200dp" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -95,9 +95,9 @@
                 android:id="@+id/rv_showsexp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintHeight_max="200dp"
+                android:visibility="gone"
                 app:layout_constrainedHeight="true"
-                android:visibility="gone"/>
+                app:layout_constraintHeight_max="200dp" />
 
         </android.support.constraint.ConstraintLayout>
 

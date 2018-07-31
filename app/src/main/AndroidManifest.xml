@@ -3,8 +3,8 @@
     package="codepath.com.gitreccedproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +29,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".AlgoliaActivity" />
         <activity android:name=".InputRecsTVActivity" />
-        <activity android:name=".InputRecsBooksActivity"></activity>
+        <activity android:name=".InputRecsBooksActivity" />
+        <activity android:name=".DetailsActivity"></activity>
     </application>
 
 </manifest>
