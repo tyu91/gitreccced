@@ -32,6 +32,8 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     public RecyclerView searchlist_rv;
     public TextView finish_btn;
 
+    boolean testPrint = true;
+
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
 
@@ -48,8 +50,8 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
     ArrayList<Item> mBooks;
 
-    String uid = "dbtest2activity: user id not set yet"; //user id (initialized to dummy string for testing)
-    String iid = "dbtest2activity: item id not set yet"; //user id (initialized to dummy string for testing)
+    String uid = "inputrecsbooksactivity: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "inputrecsbooksactivity: item id not set yet"; //user id (initialized to dummy string for testing)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
 
         final User currentUser = InputRecsMoviesActivity.resultUser;
-        final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbUsers.child(uid).setValue(currentUser);
         currentUser.setUid(uid);
 
@@ -166,9 +168,13 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                     iid = dbBooks.push().getKey();
 
                     bookItem.setIid(iid);
-                    //Item bookItem = new Item(iid, "Book", mBooks.get(i).getTitle(), mBooks.get(i).getDetails());
                     bookItem.setBookId(mBooks.get(i).getBookId());
                     Log.i("XMLBookBook", "Item Added to Adapter: " + bookItem.getTitle());
+
+                    if (testPrint) {
+                        Log.i("IidItem", "BookId Before bookItem added to adapter: " + bookItem.getIid());
+                        testPrint = false;
+                    }
                     items.add(bookItem);
                     searchAdapter.notifyDataSetChanged();
                 }
