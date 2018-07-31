@@ -9,6 +9,12 @@ public class JSONMovie {
     public String title;
     public String overview;
 
+    public String imageBaseUrl;
+    public String posterSize;
+    public String backdropSize;
+    public String posterPath;
+    public String backdropPath;
+
     public JSONMovie() {
         //empty constructor
     }
@@ -35,4 +41,62 @@ public class JSONMovie {
     public String getOverview() {
         return overview;
     }
+
+    public void setIid(String iid) {
+        this.iid = iid;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getImageBaseUrl() {
+        return imageBaseUrl;
+    }
+
+    public void setImageBaseUrl(String imageBaseUrl) {
+        this.imageBaseUrl = imageBaseUrl;
+    }
+
+    public String getPosterSize() {
+        return posterSize;
+    }
+
+    public void setPosterSize(String posterSize) {
+        this.posterSize = posterSize;
+    }
+
+    public String getBackdropSize() {
+        return backdropSize;
+    }
+
+    public void setBackdropSize(String backdropSize) {
+        this.backdropSize = backdropSize;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
 }
+
+

@@ -73,7 +73,7 @@ public class GoodreadsClient extends DefaultHandler {
             //set book to item
             book = item;
             //generate querying url string
-            String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(item.getBookId()));
+             String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(item.getBookId()));
             Log.i("Books", "Book URL String: " + urlString);
             //convert querying url to URL object
             URL url = new URL(urlString);

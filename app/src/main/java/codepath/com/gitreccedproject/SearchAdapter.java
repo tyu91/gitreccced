@@ -289,10 +289,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
                         //if there exists title in dbBooks, do nothing
-                                /*for(DataSnapshot bookItems : dataSnapshot.getChildren()){
-                                    iid = bookItems.getValue(Item.class).getIid();
-                                    dbBooks.child(iid).setValue(item);
-                                }*/
                         Log.i("Books", "this book already exists in the DB");
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks
