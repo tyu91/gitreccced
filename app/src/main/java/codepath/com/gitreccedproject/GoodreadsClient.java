@@ -33,8 +33,8 @@ public class GoodreadsClient extends DefaultHandler {
     static final String baseURL = "https://www.goodreads.com/";
     static final String goodreadsApiKey = "NPgqXkuLfDngX9oRJa1oA";
 
-    public XMLBook book;
-    public static ArrayList<XMLBook> books;
+    public Item book;
+    public static ArrayList<Item> books;
 
     public GoodreadsClient() {
         this.client = new AsyncHttpClient();
@@ -68,10 +68,12 @@ public class GoodreadsClient extends DefaultHandler {
         }
     }
 
-    public void getBook(final String bookId) {
+    public void getBook(final Item item) {
         try {
+            //set book to item
+            book = item;
             //generate querying url string
-            String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(bookId));
+            String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(item.getBookId()));
             Log.i("Books", "Book URL String: " + urlString);
             //convert querying url to URL object
             URL url = new URL(urlString);
@@ -123,10 +125,11 @@ public class GoodreadsClient extends DefaultHandler {
         if (boolWork) {
             Log.i("XMLBook", "Title: " + new String(ch, start, length));
             //create new XMLBook for each one
-            book = new XMLBook();
+            book = new Item();
             book.setGenre("Book");
             boolWork = false;
         } else if (boolTitle) {
+            Log.i("BookIdClient", "boolTitle is True: " + book.getDetails());
             book.setTitle(new String(ch, start, length));
             boolTitle = false;
         } else if (boolAuthor) {
@@ -159,6 +162,8 @@ public class GoodreadsClient extends DefaultHandler {
             //TODO: book added is correct
             Log.i("BookIdClient", "BookId before added to books list: " + book.getBookId());
             books.add(book);
+
+            //after add book, reset all variables
             boolWork = false;
             boolTitle = false;
             boolAuthor = false;
@@ -170,6 +175,8 @@ public class GoodreadsClient extends DefaultHandler {
         } else if (localName.equalsIgnoreCase("best_book")) {
             Log.i("BookIdClient", "best_book" + "==false");
             inBook = false;
+        } else {
+            Log.i("BookIdClient", "endElement unaccounted for");
         }
     }
 }

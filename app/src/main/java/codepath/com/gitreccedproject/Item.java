@@ -8,7 +8,11 @@ public class Item {
     public String genre;
     public String title;
     public String details;
+
     public String bookId;
+    public String author;
+    public String smallImgUrl;
+    public String imgUrl;
 
     public Item () {
         //empty constructor
@@ -19,7 +23,10 @@ public class Item {
         this.genre = genre;
         this.title = title;
         this.details = details;
-        bookId = "no book id";
+        bookId = "no associated book id";
+        author = "no associated author";
+        smallImgUrl = "no associated smallImgUrl";
+        imgUrl = "no associated imgUrl";
     }
 
     public String getIid() {
@@ -44,6 +51,30 @@ public class Item {
 
     public void setBookId(String bookId) {
         this.bookId = bookId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getSmallImgUrl() {
+        return smallImgUrl;
+    }
+
+    public void setSmallImgUrl(String smallImgUrl) {
+        this.smallImgUrl = smallImgUrl;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public void setIid(String iid) {
