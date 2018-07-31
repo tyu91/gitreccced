@@ -39,7 +39,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> mItems;
     public Item mItem;
     public int mPosition;
-    public List<XMLBook> mBooks;
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
     //TODO: in here, populate with recsByUser field (to be created) in DB
@@ -99,11 +98,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 mItem = mItems.get(position);
 
-                //TODO: populate fields of item with the book?
+                Log.d("mItem", "Title: " + mItem.getTitle());
                 //set the overview + additional fields for item
                 new BookAsync().execute();
 
-                addItem(position);
                 Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
                 Log.i("select", String.format("Got item at %s", position));
 
@@ -283,7 +281,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if(item.getGenre() == "Book") {
             dbBooks = FirebaseDatabase.getInstance().getReference("books");
             // search up book and get description
-            client.getBook(item.getBookId());
+            //client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
             dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
@@ -291,16 +289,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
                         //if there exists title in dbBooks, do nothing
-                                /*for(DataSnapshot bookItems : dataSnapshot.getChildren()){
-                                    iid = bookItems.getValue(Item.class).getIid();
-                                    dbBooks.child(iid).setValue(item);
-                                }*/
                         Log.i("Books", "this book already exists in the DB");
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks
                         //create new item id
-                        //iid = dbBooks.push().getKey();
+                        iid = dbBooks.push().getKey();
                         iid = item.getIid();
+                        Log.d("BookDecide", "iid: " + iid + " || title: " + item.getTitle());
                         dbBooks.child(iid).setValue(item);
                         Log.i("Books", "Added " + item.getTitle());
                     }
@@ -390,12 +385,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         @Override
         protected Void doInBackground(Void... voids) {
             client = new GoodreadsClient();
-            client.getBook(mItem.getBookId());
+            Log.i("BookId", "BookId Before getBook call: " + mItem.getBookId());
+            client.getBook(mItem);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            //TODO: here, populate description field of selected book
             //add this item to database
             bookDecide(mItem, new FirebaseCallback() {
                 @Override
