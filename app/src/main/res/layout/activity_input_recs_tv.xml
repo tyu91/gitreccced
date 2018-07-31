@@ -8,12 +8,24 @@
     tools:context=".InputRecsTVActivity">
 
     <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="17dp"
+        android:text="Add TV Shows!"
+        android:textColor="?attr/colorButtonNormal"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/tvNext2"
         android:layout_width="65dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="48dp"
-        android:layout_toEndOf="@+id/searchlist_rv"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="49dp"
         android:text="Next"
         android:textColor="#e1e1e1"
         android:textSize="24sp"
@@ -43,15 +55,5 @@
         android:layout_below="@+id/search_et"
         android:layout_centerHorizontal="true"
         android:background="#424242" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/search_et"
-        android:layout_alignStart="@+id/search_et"
-        android:layout_marginBottom="-54dp"
-        android:text="Add TV shows!"
-        android:textColor="?attr/colorButtonNormal" />
 
 </RelativeLayout>
