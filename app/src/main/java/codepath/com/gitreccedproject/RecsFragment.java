@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class RecsFragment extends Fragment {
     public RecAdapter tvRecAdapter;
     public RecAdapter bookRecAdapter;
     public ArrayList<Item> movieItems;
+    public ArrayList<Pair<Item,String>> movieItem;
     public ArrayList<Item> tvItems;
     public ArrayList<Item> bookItems;
 
@@ -63,6 +65,8 @@ public class RecsFragment extends Fragment {
         tvItems = dummyTVRecItems();
         bookItems = dummyBookRecItems();
 
+        movieItem = new ArrayList<>();
+
         Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid());
         Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());
 
@@ -75,16 +79,21 @@ public class RecsFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
-                    movieItems.add(item);
+                    //movieItems.add(item);
+                    movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
                     Log.i("item", item.getTitle());
                 }
-                Collections.sort(movieItems, new Comparator<Item>() {
+                Collections.sort(movieItem, new Comparator<Pair<Item,String>>() {
                     @Override
-                    public int compare(Item lhs, Item rhs) {
+                    public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
                         // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                        return lhs > rhs.customInt ? -1 : (lhs.customInt < rhs.customInt) ? 1 : 0;
+                        return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
                     }
                 });
+                for (int i = 0; i < movieItem.size(); i++) {
+                    Log.i("sorted",movieItem.get(i).first.getTitle() + movieItem.get(i).second);
+                    movieItems.add(movieItem.get(i).first);
+                }
                 movieRecAdapter = new RecAdapter(movieItems);
                 rv_movies.setAdapter(movieRecAdapter);
             }
