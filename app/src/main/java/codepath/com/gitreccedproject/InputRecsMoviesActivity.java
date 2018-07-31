@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,24 +58,6 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        /*if(SearchAdapter.finalMovieRecs != null) {
-            SearchAdapter.finalMovieRecs.clear();
-        } else {
-            SearchAdapter.finalMovieRecs = new ArrayList<>();
-        }
-
-        if(SearchAdapter.finalTVRecs != null) {
-            SearchAdapter.finalTVRecs.clear();
-        } else {
-            SearchAdapter.finalTVRecs = new ArrayList<>();
-        }
-
-        if(SearchAdapter.finalBookRecs != null) {
-            SearchAdapter.finalBookRecs.clear();
-        } else {
-            SearchAdapter.finalBookRecs = new ArrayList<>();
-        }*/
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_movies);
@@ -115,7 +96,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getrecs();
+                //getrecs();
                 Intent i = new Intent(InputRecsMoviesActivity.this, InputRecsTVActivity.class);
                 i.putExtra("user",Parcels.wrap(resultUser));
                 startActivity(i);
@@ -130,7 +111,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     String id = postSnapshot.child("iid").getValue().toString();
-                    Log.i("id",id);
+                    Log.i("id",postSnapshot.child("title").getValue().toString());
                     watched.add(id);
                 }
 
@@ -151,6 +132,8 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                                         JSONArray array = content.getJSONArray("hits");
                                         for (int i = 0; i < array.length(); i++) {
                                             JSONObject object = array.getJSONObject(i);
+                                            Log.i("array", Arrays.asList(watched).toString());
+                                            Log.i("Iid", object.getString("Iid"));
 
                                             // check iid is not in watched
                                             if (!Arrays.asList(watched).contains(object.getString("Iid"))) {
@@ -273,100 +256,6 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 // show it
                 alertDialog.show();
 
-            }
-        });
-    }
-
-    public void getrecs() {
-        dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(resultUser.getUid());
-
-        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
-        com.google.firebase.database.Query itemsquery = null;
-        itemsquery = dbItemsByUser;
-        itemsquery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("snap",dataSnapshot.toString());
-
-                // for each item that the current user liked
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Log.i("postsnap",postSnapshot.toString());
-                    //get the id of the item
-                    String iid = postSnapshot.child("iid").getValue().toString();
-                    Log.i("item_id",iid);
-                    // query usersbyitem to get the list of users who also like that item
-                    dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
-                    com.google.firebase.database.Query usersquery = null;
-                    usersquery = dbUsersbyItem;
-                    usersquery.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot userSnapshot) {
-                            // for each user who likes that item
-                            for (DataSnapshot itemSnapshot : userSnapshot.getChildren()) {
-                                // get the id of the user
-                                String uid = itemSnapshot.child("uid").getValue().toString();
-                                Log.i("user_id",uid);
-                                // query itemsbyuser to get the list of items that user likes
-                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
-                                com.google.firebase.database.Query itemsquery2 = null;
-                                itemsquery2 = dbItemsByUser;
-                                itemsquery2.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                                        // for each item that that user likes
-                                        // clear the node first and then we will repopulate it // TODO - change this later
-                                        dbRecItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                                for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                                    //Log.i("postsnapshot", postSnapshot.toString());
-                                                    //check whether the item is in the user's library // do we have to worry about this if we filter search results so they don't show stuff already in the library?
-                                                    // add the item to the recommendations list
-                                                    com.google.firebase.database.Query countquery = null;
-                                                    countquery = dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count");
-                                                    countquery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot dSnapshot) {
-                                                            Log.i("add",dSnapshot.toString());
-                                                            if (dSnapshot.getValue() != null) {
-                                                                dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count")
-                                                                        .setValue((long) dSnapshot.getValue() + 1);
-                                                                        //.setValue((long) dSnapshot.child("count").getValue()+1);
-                                                            } else {
-                                                                dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).setValue(postSnapshot.getValue());
-                                                                dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count").setValue((long) 1);
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                            //
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        Log.i("childeventlistener", "cancelled");
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.i("childeventlistener", "cancelled");
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("childeventlistener", "cancelled");
             }
         });
     }
