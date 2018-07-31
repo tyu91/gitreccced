@@ -166,12 +166,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             iid = snapIid.child("iid").getValue().toString();
                             item.setIid(iid);
 
-                            item.setAuthor(snapIid.child("author").getValue().toString());
-                            item.setDetails(snapIid.child("details").getValue().toString());
-                            item.setBookId(snapIid.child("bookId").getValue().toString());
-                            item.setImgUrl(snapIid.child("imgUrl").getValue().toString());
-                            item.setSmallImgUrl(snapIid.child("smallImgUrl").getValue().toString());
-                            item.setTitle(snapIid.child("title").getValue().toString());
+                            item.setAuthor(tempItem.getAuthor());
+                            item.setDetails(tempItem.getDetails());
+                            item.setBookId(tempItem.getBookId());
+                            item.setImgUrl(tempItem.getImgUrl());
+                            item.setSmallImgUrl(tempItem.getSmallImgUrl());
+                            item.setTitle(tempItem.getTitle());
 
                             //weird way, pls fix later
                             mItems.add(mPosition, item);
