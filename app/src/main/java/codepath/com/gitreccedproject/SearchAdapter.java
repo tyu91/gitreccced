@@ -288,13 +288,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        //if there exists title in dbBooks, do nothing
+                        Log.i("SetIid", "iid: " + dataSnapshot.child(dataSnapshot.getKey()).child("iid"));
+                        //TODO: figure out why this is null
                         Log.i("Books", "this book already exists in the DB");
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks
                         //create new item id
-                        iid = dbBooks.push().getKey();
                         iid = item.getIid();
+
+                        //weird way, pls fix later
+                        mItems.add(mPosition, item);
+                        mItems.remove(mPosition + 1);
+
                         Log.d("BookDecide", "iid: " + iid + " || title: " + item.getTitle());
                         dbBooks.child(iid).setValue(item);
                         Log.i("Books", "Added " + item.getTitle());
@@ -365,7 +370,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     //adds item to firebase
     private void addItem(final int position) {
         iid = mItems.get(position).getIid();
+        Log.i("IidItem", "Iid of Item added to db: " + iid);
         uid = InputRecsMoviesActivity.resultUser.getUid();
+        Log.i("ResultUser", "Uid of current user: " + uid);
 
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
         dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
