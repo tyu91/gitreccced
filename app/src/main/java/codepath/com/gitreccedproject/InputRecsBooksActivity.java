@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +35,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
     public android.widget.SearchView search_sv;
     public RecyclerView searchlist_rv;
-    public Button finish_btn;
+    public TextView finish;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -67,7 +68,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         // find the views
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        finish_btn = findViewById(R.id.finish_btn);
+        finish = findViewById(R.id.tvFinish);
 
         search_sv.setIconifiedByDefault(false);
 
@@ -277,7 +278,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             }
         });
 
-        finish_btn.setOnClickListener(new View.OnClickListener() {
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(InputRecsBooksActivity.this, MyLibraryActivity.class);
