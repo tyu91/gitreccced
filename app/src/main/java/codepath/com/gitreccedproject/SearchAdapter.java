@@ -288,8 +288,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        Log.i("SetIid", "iid: " + dataSnapshot.child(dataSnapshot.getKey()).child("iid"));
-                        //TODO: figure out why this is null
+                        for (DataSnapshot snapIid : dataSnapshot.getChildren()) {
+                            Item tempItem = snapIid.getValue(Item.class);
+                            iid = snapIid.child("iid").getValue().toString();
+                            item.setIid(iid);
+
+                            item.setAuthor(snapIid.child("author").getValue().toString());
+                            item.setDetails(snapIid.child("details").getValue().toString());
+                            item.setBookId(snapIid.child("bookId").getValue().toString());
+                            item.setImgUrl(snapIid.child("imgUrl").getValue().toString());
+                            item.setSmallImgUrl(snapIid.child("smallImgUrl").getValue().toString());
+                            item.setTitle(snapIid.child("title").getValue().toString());
+
+                            //weird way, pls fix later
+                            mItems.add(mPosition, item);
+                            mItems.remove(mPosition + 1);
+                        }
+
+                        //TODO: set item to existing item in db
                         Log.i("Books", "this book already exists in the DB");
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks
