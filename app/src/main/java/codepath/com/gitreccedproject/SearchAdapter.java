@@ -114,6 +114,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 // get the item at the position
                 mItem = mItems.get(position);
+
                 Log.i("size",String.format("%s",title_tv.getTextSize()));
                 if (title_tv.getTextSize() == 60.0) {
                     Log.i("click", "already in lib");
@@ -207,6 +208,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         Log.i("test", "setting dbItemsByUser");
         dbItemsByUser.child(iid).setValue(mItems.get(position));
+        dbUsersbyItem.child(uid).setValue(InputRecsMoviesActivity.resultUser);
     }
 
     class BookAsync extends AsyncTask<Void, Void, Void> {
@@ -250,11 +252,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         itemsquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> lib = new ArrayList<>();
+                //ArrayList<String> lib = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    lib.add(postSnapshot.child("iid").getValue().toString());
+                    //lib.add(postSnapshot.child("iid").getValue().toString());
                 }
-                final ArrayList<String> finallib = lib;
+                //final ArrayList<String> finallib = lib;
                 // get the id of the item
                 String iid = item.getIid();
                 Log.i("item_id",iid);
@@ -282,8 +284,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                         //Log.i("postsnapshot", postSnapshot.toString());
                                         // don't add if the item is already in the user's library
                                         boolean inlib = false;
-                                        for (int i = 0; i < finallib.size(); i++) {
-                                            if (postSnapshot.child("iid").getValue().toString() == finallib.get(i)) {
+                                        for (int i = 0; i < lib.size(); i++) {
+                                            if (postSnapshot.child("iid").getValue().toString() == lib.get(i)) {
                                                 inlib = true;
                                             }
                                         }
