@@ -80,7 +80,7 @@ public class RecsFragment extends Fragment {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
                     //movieItems.add(item);
-                    movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+//                    movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
                     Log.i("item", item.getTitle());
                 }
                 Collections.sort(movieItem, new Comparator<Pair<Item,String>>() {

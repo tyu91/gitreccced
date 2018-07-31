@@ -296,6 +296,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         //create new item id
                         iid = item.getIid();
 
+                        Log.i("Books", "adding new book to db");
+
                         //weird way, pls fix later
                         mItems.add(mPosition, item);
                         mItems.remove(mPosition + 1);
