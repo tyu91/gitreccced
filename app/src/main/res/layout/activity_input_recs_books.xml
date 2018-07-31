@@ -8,6 +8,18 @@
     tools:context=".InputRecsBooksActivity">
 
     <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="17dp"
+        android:text="Add Books!"
+        android:textColor="?attr/colorButtonNormal"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/tvFinish"
         android:layout_width="98dp"
         android:layout_height="wrap_content"
@@ -36,16 +48,6 @@
         android:textColor="#c8c6d0"
         android:theme="@style/searchbartheme"></SearchView>
 
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/search_sv"
-        android:layout_alignStart="@+id/search_sv"
-        android:layout_marginBottom="-54dp"
-        android:text="Add books!"
-        android:textColor="?attr/colorButtonNormal" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchlist_rv"
