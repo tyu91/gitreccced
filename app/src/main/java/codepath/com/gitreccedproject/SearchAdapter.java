@@ -284,6 +284,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
+            //TODO: change title to book id
             dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

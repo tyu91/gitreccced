@@ -141,7 +141,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             //clear items array, the array that loads into searchAdapter
             //items.clear();
             Log.i("XMLBookBook", "Items cleared");
-            searchAdapter.notifyDataSetChanged();
+            //searchAdapter.notifyDataSetChanged();
 
             //if text hasn't been deleted
             String text = search_sv.getQuery().toString();
@@ -176,8 +176,10 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                         testPrint = false;
                     }
                     items.add(bookItem);
-                    searchAdapter.notifyDataSetChanged();
                 }
+
+                searchAdapter.notifyDataSetChanged();
+
                 //END TRANSPLANTED CODE
                 super.onPostExecute(aVoid);
             }
