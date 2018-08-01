@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private Button login, signUp;
 
+    static User currentuser;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
                 }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    User currentuser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email, new Item());
+                    currentuser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email, new Item());
                     Log.i("snapshot","!");
                     Toast.makeText(getApplicationContext(), String.format("Welcome, %s!", postSnapshot.child("username").getValue()), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);

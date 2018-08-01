@@ -79,7 +79,10 @@ public class RecsFragment extends Fragment {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
                     //movieItems.add(item);
-//                    movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+
+                    if (postSnapshot.child("count").getValue() != null) {
+                        movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+                    }
                     Log.i("item", item.getTitle());
                 }
                 Collections.sort(movieItem, new Comparator<Pair<Item,String>>() {
@@ -191,7 +194,7 @@ public class RecsFragment extends Fragment {
         //rv_movies.setAdapter(movieRecAdapter);
 
         // TODO - comment these if-statements if we want to enable infinite scrolling only to the right
-        if (movieItems.size() > 0) {
+        /*if (movieItems.size() > 0) {
             movies.scrollToPosition(100 * movieItems.size());
         }
 
@@ -201,7 +204,7 @@ public class RecsFragment extends Fragment {
 
         if (bookItems.size() > 0) {
             books.scrollToPosition(100 * bookItems.size());
-        }
+        }*/
     }
 
     public ArrayList<Item> dummyMovieRecItems() {

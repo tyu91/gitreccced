@@ -30,6 +30,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     DatabaseReference dbUsers;
 
+    static User newUser;
+
     String value;
 
     //String uid = "su: user id not set yet"; //user id (initialized to dummy string for testing)
@@ -117,9 +119,10 @@ public class SignUpActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(mUsername)){
 
             //create new user with dummy uid since current user is actually previous user (fix later)
-            User newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
+            newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
             dbUsers.child(uid).setValue(newUser);
             newUser.setUid(uid);
+            LoginActivity.currentuser = newUser;
 
             //dbUsers.child(uid).setValue(newUser);
 
