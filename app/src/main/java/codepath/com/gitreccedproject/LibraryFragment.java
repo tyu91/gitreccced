@@ -3,7 +3,6 @@ package codepath.com.gitreccedproject;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,16 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 public class LibraryFragment extends Fragment {
 
@@ -32,6 +36,16 @@ public class LibraryFragment extends Fragment {
         libraryFragment.setArguments(bundle);
         return libraryFragment;
     }
+
+    //CONSTANTS
+    //base url of API
+    public final static String API_BASE_URL = "https://api.themoviedb.org/3";
+    //parameter name
+    public final static String API_KEY_PARAM = "api_key";
+
+    AsyncHttpClient client;
+
+    Config config;
 
     public RecyclerView rv_libMovies;
     public RecyclerView rv_libTvShows;
@@ -230,4 +244,35 @@ public class LibraryFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rv_libMovies.addOnScrollListener(scrollListener);*/
     }
+
+    //get the config from API
+    private void getConfiguration() {
+        //create the url
+        String url = API_BASE_URL + "/configuration";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
+        //execute a GET request that expects a response from JSON object
+        client.get(url, params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                try {
+                    config = new Config(response);
+                    //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
+                    movieslibAdapter.setConfig(config);
+                    Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("MovieDB", "could not generate new config");
+            }
+        });
+    }
+
+
 }

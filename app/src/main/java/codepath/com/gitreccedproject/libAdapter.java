@@ -17,8 +17,15 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
     Context context;
     public List<Item> mItems;
 
+    //config required for img urls
+    Config config;
+
     public libAdapter(List<Item> items) {
         mItems = items;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     @NonNull
@@ -34,6 +41,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull libAdapter.ViewHolder holder, int position) {
+        //TODO: populate movie/tv images based on config
         // get the data according to position
         //Item item = mItems.get(position % mItems.size());
         // populate the views according to position

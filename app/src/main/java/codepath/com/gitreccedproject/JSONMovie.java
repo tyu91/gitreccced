@@ -9,11 +9,9 @@ public class JSONMovie {
     public String title;
     public String overview;
 
-    public String imageBaseUrl;
-    public String posterSize;
-    public String backdropSize;
     public String posterPath;
     public String backdropPath;
+    public int movieId;
 
     public JSONMovie() {
         //empty constructor
@@ -24,6 +22,11 @@ public class JSONMovie {
         genre = "Movie";
         title = object.getString("title");
         overview = object.getString("overview");
+
+        posterPath = object.getString("poster_path");
+        backdropPath = object.getString("backdrop_path");
+        movieId = object.getInt("id"); //TODO: might not be "id", check JSON
+
     }
 
     public String getIid() {
@@ -58,30 +61,6 @@ public class JSONMovie {
         this.overview = overview;
     }
 
-    public String getImageBaseUrl() {
-        return imageBaseUrl;
-    }
-
-    public void setImageBaseUrl(String imageBaseUrl) {
-        this.imageBaseUrl = imageBaseUrl;
-    }
-
-    public String getPosterSize() {
-        return posterSize;
-    }
-
-    public void setPosterSize(String posterSize) {
-        this.posterSize = posterSize;
-    }
-
-    public String getBackdropSize() {
-        return backdropSize;
-    }
-
-    public void setBackdropSize(String backdropSize) {
-        this.backdropSize = backdropSize;
-    }
-
     public String getPosterPath() {
         return posterPath;
     }
@@ -96,6 +75,14 @@ public class JSONMovie {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 }
 

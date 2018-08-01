@@ -30,6 +30,8 @@ public class DBTestActivity extends AppCompatActivity {
 
     AsyncHttpClient client;
 
+    Config config;
+
     DatabaseReference dbUsers;
     EditText enterUsername;
     EditText enterPassword;
