@@ -77,6 +77,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             Glide.with(context)
                     .load(item.getImgUrl())
                     .into(holder.poster_iv);
+        } else {
+            //TODO: populate movies/tv poster image
         }
 
 
