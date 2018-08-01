@@ -14,13 +14,14 @@ public class Item {
     public String backdropSize;
     public String posterPath;
     public String backdropPath;
+    public String movieTvId;
 
     public String bookId;
     public String author;
     public String smallImgUrl;
     public String imgUrl;
 
-    public Item () {
+    public Item() {
         //empty constructor
     }
 
@@ -29,6 +30,14 @@ public class Item {
         this.genre = genre;
         this.title = title;
         this.details = details;
+
+         imageBaseUrl = "no associated imageBaseUrl";
+         posterSize = "no associated posterSize";
+         backdropSize = "no associated backdropSize";
+         posterPath = "no associated posterPath";
+         backdropPath = "no associated backdropPath";
+         movieTvId = "no associated movieTvId";
+
         bookId = "no associated book id";
         author = "no associated author";
         smallImgUrl = "no associated smallImgUrl";

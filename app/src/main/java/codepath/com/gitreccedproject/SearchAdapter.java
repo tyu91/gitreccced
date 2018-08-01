@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -310,7 +311,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                         }
                                         if (!inlib) {
                                             // add the item to the recommendations list
-                                            com.google.firebase.database.Query countquery = null;
+                                            Query countquery = null;
                                             countquery = dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count");
                                             countquery.addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override

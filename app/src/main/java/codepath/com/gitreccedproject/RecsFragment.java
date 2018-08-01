@@ -53,7 +53,6 @@ public class RecsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
         activity = (MyLibraryActivity) getActivity();
-        //activity.currentuser =
         return inflater.inflate(R.layout.recsfragment, parent, false);
     }
 
