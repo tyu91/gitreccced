@@ -9,15 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -68,6 +69,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         final Item item = mItems.get(position);
         // populate the views according to position
         holder.title_tv.setText(item.getTitle());
+        holder.genre_tv.setText(item.getGenre());
+        holder.details_tv.setText(item.getDetails());
+
+        if (item.getGenre().equals("Book")) {
+            //if item is a book, get poster image this way
+            Glide.with(context)
+                    .load(item.getImgUrl())
+                    .into(holder.poster_iv);
+        }
+
+
         // check if item is in user's library
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid());
         com.google.firebase.database.Query itemsquery = null;
@@ -97,11 +109,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title_tv;
+        public TextView genre_tv;
+        public TextView details_tv;
+        public ImageView poster_iv;
         public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title_tv = itemView.findViewById(R.id.title_tv);
+            title_tv = itemView.findViewById(R.id.tvTitle);
+            genre_tv = itemView.findViewById(R.id.tvGenre);
+
+            //TODO: populate details activity once receive call to library
+            details_tv = itemView.findViewById(R.id.tvOverview);
+            poster_iv = itemView.findViewById(R.id.ivPoster);
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
