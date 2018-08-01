@@ -63,7 +63,7 @@
         android:layout_toEndOf="@+id/searchlist_rv"
         android:text="Next"
         android:textColor="#e1e1e1"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="italic" />
 
 </RelativeLayout>
