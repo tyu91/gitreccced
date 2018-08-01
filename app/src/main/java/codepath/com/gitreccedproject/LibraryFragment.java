@@ -1,14 +1,22 @@
 package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -25,8 +33,12 @@ public class LibraryFragment extends Fragment {
     public RecyclerView rv_libMovies;
     public RecyclerView rv_libTvShows;
     public RecyclerView rv_libBooks;
-    public libAdapter libAdapter;
-    public libexpadapter libexpadapter;
+    public libAdapter movieslibAdapter;
+    public libAdapter TVlibAdapter;
+    public libAdapter bookslibAdapter;
+    public libexpadapter movieslibexpadapter;
+    public libexpadapter TVlibexpadapter;
+    public libexpadapter bookslibexpadapter;
     public ArrayList<Item> items;
 
     public RecyclerView rv_moviesexp;
@@ -36,6 +48,11 @@ public class LibraryFragment extends Fragment {
     public ImageView movies_btn;
     public ImageView shows_btn;
     public ImageView books_btn;
+
+    DatabaseReference dbItemsByUser;
+    public ArrayList<Item> movieslib;
+    public ArrayList<Item> TVlib;
+    public ArrayList<Item> booklib;
 
     //public EndlessRecyclerViewScrollListener scrollListener;
 
@@ -51,7 +68,7 @@ public class LibraryFragment extends Fragment {
         items = new ArrayList<>();
 
         // construct the adapter from this datasource
-        libAdapter = new libAdapter(items);
+        //libAdapter = new libAdapter(items);
         rv_libMovies = view.findViewById(R.id.rv_libMovies);
         rv_libTvShows = view.findViewById(R.id.rv_libTvShows);
         rv_libBooks = view.findViewById(R.id.rv_libBooks);
@@ -67,36 +84,83 @@ public class LibraryFragment extends Fragment {
         rv_libTvShows.setLayoutManager(shows);
         rv_libBooks.setLayoutManager(books);
         // set the adapter
-        rv_libMovies.setAdapter(libAdapter);
-        rv_libTvShows.setAdapter(libAdapter);
-        rv_libBooks.setAdapter(libAdapter);
+        rv_libMovies.setAdapter(movieslibAdapter);
+        rv_libTvShows.setAdapter(TVlibAdapter);
+        rv_libBooks.setAdapter(bookslibAdapter);
 
         rv_moviesexp = view.findViewById(R.id.rv_moviesexp);
         rv_showsexp = view.findViewById(R.id.rv_showsexp);
         rv_booksexp = view.findViewById(R.id.rv_booksexp);
-        libexpadapter = new libexpadapter(items);
+        //libexpadapter = new libexpadapter(items);
         rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_moviesexp.setAdapter(libexpadapter);
         rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_showsexp.setAdapter(libexpadapter);
         rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_booksexp.setAdapter(libexpadapter);
 
         //TODO - change this to get actual data
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
             Item item = new Item();
             item.setTitle(String.format("%s",i));
             items.add(item);
             libAdapter.notifyItemInserted(items.size() - 1);
             libexpadapter.notifyItemInserted(items.size()-1);
-        }
+        }*/
+
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        com.google.firebase.database.Query itemsquery = null;
+        itemsquery = dbItemsByUser;
+        itemsquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                movieslib = new ArrayList<>();
+                TVlib = new ArrayList<>();
+                booklib = new ArrayList<>();
+                //actual data
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.i("shottt",postSnapshot.toString());
+                    Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
+                    if (item.getGenre().contains("Movie")) {
+                        movieslib.add(item);
+                    } else if (item.getGenre().contains("TV")) {
+                        TVlib.add(item);
+                    } else {
+                        booklib.add(item);
+                    }
+                }
+                if (movieslib.size() == 0) {
+                    movieslib.add(new Item("","","",""));
+                }
+                if (TVlib.size() == 0) {
+                    TVlib.add(new Item("","","",""));
+                }
+                if (booklib.size() == 0) {
+                    booklib.add(new Item("","","",""));
+                }
+                movieslibAdapter = new libAdapter(movieslib);
+                rv_libMovies.setAdapter(movieslibAdapter);
+                TVlibAdapter = new libAdapter(TVlib);
+                rv_libTvShows.setAdapter(TVlibAdapter);
+                bookslibAdapter = new libAdapter(booklib);
+                rv_libBooks.setAdapter(bookslibAdapter);
+
+                movieslibexpadapter = new libexpadapter(movieslib);
+                bookslibexpadapter = new libexpadapter(booklib);
+                TVlibexpadapter = new libexpadapter(TVlib);
+                rv_moviesexp.setAdapter(movieslibexpadapter);
+                rv_showsexp.setAdapter(TVlibexpadapter);
+                rv_booksexp.setAdapter(bookslibexpadapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         // TODO - comment this if statement if we want to enable infinite scrolling only to the right
-        if (items.size() > 0) {
+        /*if (items.size() > 0) {
             movies.scrollToPosition(items.size()*100);
             shows.scrollToPosition(100 * items.size());
             books.scrollToPosition(100 * items.size());
-        }
+        }*/
 
         movies_btn.setOnClickListener(new View.OnClickListener() {
             @Override
