@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -40,6 +41,9 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     public TextView finish_btn;
 
     boolean testPrint = true;
+
+    ProgressBar pb;
+    boolean isStart;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -88,6 +92,10 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         currentUser.setUid(uid);
 
         // find the views
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.bringToFront();
+        isStart = true;
+
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         finish_btn = findViewById(R.id.tvFinish);
@@ -139,7 +147,10 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            if (isStart) {
+                pb.setVisibility(ProgressBar.VISIBLE);
+                isStart = false;
+            }
         }
 
         @Override
@@ -151,7 +162,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
+            pb.setVisibility(ProgressBar.GONE);
             //clear book search adapter
             items.clear();
             searchAdapter.notifyDataSetChanged();

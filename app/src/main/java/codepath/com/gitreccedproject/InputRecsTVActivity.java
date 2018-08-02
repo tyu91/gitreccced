@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,9 @@ public class InputRecsTVActivity extends AppCompatActivity {
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
 
+    ProgressBar pb;
+    boolean isStart;
+
     String uid = "inputrecstvactivity: user id not set yet"; //user id (initialized to dummy string for testing)
 
     //CONSTANTS
@@ -82,6 +86,11 @@ public class InputRecsTVActivity extends AppCompatActivity {
         resultUser.setUid(uid);
 
         // find the views
+        // find the views
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.bringToFront();
+        isStart = true;
+
         search_et = (SearchView) findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
 
@@ -152,6 +161,10 @@ public class InputRecsTVActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (isStart) {
+                    pb.setVisibility(ProgressBar.VISIBLE);
+                    isStart = false;
+                }
                 if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
                     newText = newText.trim();
                     Log.i("content", newText);
@@ -160,6 +173,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
                         public void requestCompleted(JSONObject content, AlgoliaException error) {
                             Log.i("content", content.toString());
                             try {
+                                pb.setVisibility(ProgressBar.GONE);
                                 items.clear();
                                 searchAdapter.notifyDataSetChanged();
 

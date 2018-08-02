@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,9 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public ArrayList<Item> items;
     public ArrayList<String> watched = new ArrayList<>();
 
+    ProgressBar pb;
+    boolean isStart;
+
     static User resultUser;
 
     String uid = "inputrecsmovieactivity: user id not set yet"; //user id (initialized to dummy string for testing)
@@ -96,6 +100,11 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         next = findViewById(R.id.tvNext);
+
+        // find the views
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.bringToFront();
+        isStart = true;
 
         search_et.setIconifiedByDefault(false);
 
@@ -182,6 +191,10 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
+                        if (isStart) {
+                            pb.setVisibility(ProgressBar.VISIBLE);
+                            isStart = false;
+                        }
                         if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
                             Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
@@ -191,6 +204,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
                                     try {
+                                        pb.setVisibility(ProgressBar.GONE);
                                         items.clear();
                                         searchAdapter.notifyDataSetChanged();
 
