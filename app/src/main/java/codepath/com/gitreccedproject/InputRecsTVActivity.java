@@ -19,6 +19,9 @@ import com.algolia.search.saas.Query;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +29,8 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 public class InputRecsTVActivity extends AppCompatActivity {
 
@@ -45,10 +50,22 @@ public class InputRecsTVActivity extends AppCompatActivity {
 
     String uid = "inputrecstvactivity: user id not set yet"; //user id (initialized to dummy string for testing)
 
+    //CONSTANTS
+    //base url of API
+    public final static String API_BASE_URL = "https://api.themoviedb.org/3";
+    //parameter name
+    public final static String API_KEY_PARAM = "api_key";
+
+    AsyncHttpClient mClient;
+
+    Config config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_tv);
+
+        mClient = new AsyncHttpClient();
 
         Toast toast = Toast.makeText(getApplicationContext(), "Recommending TV Shows.",
                 Toast.LENGTH_SHORT);
@@ -113,6 +130,8 @@ public class InputRecsTVActivity extends AppCompatActivity {
                                     item.setGenre(object.getString("genre"));
                                     item.setDetails(object.getString("overview"));
                                     item.setTitle(object.getString("title"));
+                                    item.setPosterPath(object.getString("posterPath"));
+                                    item.setBackdropPath(object.getString("backdropPath"));
 
                                     items.add(item);
                                     searchAdapter.notifyItemInserted(items.size() - 1);
@@ -157,6 +176,8 @@ public class InputRecsTVActivity extends AppCompatActivity {
                                         item.setGenre(object.getString("genre"));
                                         item.setDetails(object.getString("overview"));
                                         item.setTitle(object.getString("title"));
+                                        item.setPosterPath(object.getString("posterPath"));
+                                        item.setBackdropPath(object.getString("backdropPath"));
 
                                         items.add(item);
                                         searchAdapter.notifyItemInserted(items.size() - 1);
@@ -173,6 +194,37 @@ public class InputRecsTVActivity extends AppCompatActivity {
                     searchAdapter.notifyDataSetChanged();
                 }
                 return false;
+            }
+        });
+
+        //get config for movie/tv posters
+        getConfiguration();
+    }
+
+    //get the config from API
+    private void getConfiguration() {
+        //create the url
+        String url = API_BASE_URL + "/configuration";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
+        //execute a GET request that expects a response from JSON object
+        mClient.get(url, params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                try {
+                    config = new Config(response);
+                    Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    searchAdapter.setConfig(config);
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("MovieDB", "could not generate new config");
             }
         });
     }

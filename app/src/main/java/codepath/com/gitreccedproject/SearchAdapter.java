@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +37,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
 
+    Config config;
+
     Context context;
     public List<Item> mItems;
     public Item mItem;
@@ -48,6 +49,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
 
@@ -74,11 +79,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         if (item.getGenre().equals("Book")) {
             //if item is a book, get poster image this way
-            Glide.with(context)
+            GlideApp.with(context)
                     .load(item.getImgUrl())
                     .into(holder.poster_iv);
         } else {
-            //TODO: populate movies/tv poster image
+
+            //TODO: getPosterPath: add field to movies and tv
+            String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+
+            //load image using glide
+            GlideApp.with(context)
+                    .load(imageUrl)
+                    .into(holder.poster_iv);
         }
 
 

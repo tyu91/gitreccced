@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -70,10 +71,11 @@ public class DBTestActivity extends AppCompatActivity {
         btnAddItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Not adding movies or TV shows",Toast.LENGTH_SHORT).show();
                 //add movies to db
                 //addMovies();
                 //add tv shows to db
-                addTVShows();
+                //addTVShows();
             }
         });
 
