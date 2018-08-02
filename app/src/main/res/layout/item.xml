@@ -9,6 +9,12 @@
     card_view:cardElevation="7dp"
     card_view:contentPadding="7dp">
 
+    <ImageView
+        android:id="@+id/ivPosterImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
+
     <TextView
         android:id="@+id/textview1"
         android:layout_width="match_parent"
