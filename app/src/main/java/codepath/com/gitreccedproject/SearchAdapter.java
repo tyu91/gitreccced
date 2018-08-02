@@ -39,6 +39,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
 
     Context context;
+    Config config;
     public List<Item> mItems;
     public Item mItem;
     public int mPosition;
@@ -78,7 +79,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     .load(item.getImgUrl())
                     .into(holder.poster_iv);
         } else {
-            //TODO: populate movies/tv poster image
+
         }
 
 

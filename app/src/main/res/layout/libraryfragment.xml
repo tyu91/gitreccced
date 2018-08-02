@@ -17,20 +17,13 @@
             android:layout_height="40dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="31dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="34dp"
             android:fontFamily="sans-serif-condensed"
             android:text="Movies"
             android:textColor="@android:color/white"
             android:textSize="30sp"
             android:textStyle="bold" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_libMovies"
-            android:layout_width="295dp"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/movies_tv"
-            android:layout_below="@+id/movies_tv" />
 
         <ImageView
             android:id="@+id/movies_btn"
@@ -71,10 +64,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_libTvShows"
-            android:layout_width="295dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/movies_tv"
-            android:layout_below="@+id/shows_tv" />
+            android:layout_below="@+id/shows_tv"
+            android:layout_marginStart="-40dp" />
 
         <ImageView
             android:id="@+id/shows_btn"
@@ -106,7 +100,7 @@
             android:layout_width="116dp"
             android:layout_height="40dp"
             android:layout_alignStart="@+id/movies_tv"
-            android:layout_below="@+id/shows_btn"
+            android:layout_below="@+id/rv_libTvShows"
             android:fontFamily="sans-serif-condensed"
             android:text="Books"
             android:textColor="@android:color/white"
@@ -115,10 +109,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_libBooks"
-            android:layout_width="295dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/movies_tv"
-            android:layout_below="@+id/tv_books" />
+            android:layout_below="@+id/tv_books"
+            android:layout_marginStart="-40dp" />
 
         <ImageView
             android:id="@+id/books_btn"
@@ -144,6 +139,13 @@
                 app:layout_constrainedHeight="true" />
 
         </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_libMovies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/movies_tv" />
 
 
     </RelativeLayout>

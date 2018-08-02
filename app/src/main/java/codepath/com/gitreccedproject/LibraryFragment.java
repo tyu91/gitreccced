@@ -20,6 +20,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,6 +78,9 @@ public class LibraryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        client = new AsyncHttpClient();
+
+        getConfiguration();
         // Defines the xml file for the fragment
         return inflater.inflate(R.layout.libraryfragment, parent, false);
     }
@@ -243,6 +247,8 @@ public class LibraryFragment extends Fragment {
         };
         // Adds the scroll listener to RecyclerView
         rv_libMovies.addOnScrollListener(scrollListener);*/
+
+//        getConfiguration();
     }
 
     //get the config from API
@@ -256,23 +262,60 @@ public class LibraryFragment extends Fragment {
         client.get(url, params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
+                Log.i("MovieDB",response.toString());
                 try {
                     config = new Config(response);
                     //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
-                    movieslibAdapter.setConfig(config);
                     Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    movieslibAdapter.setConfig(config);
+
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.i("MovieDB",response.toString());
+//                try {
+//                    config = new Config(response);
+//                    //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
+//                    Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+//                    movieslibAdapter.setConfig(config);
+//
+//                } catch(JSONException e) {
+//                    e.printStackTrace();
+//                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.i("MovieDB",responseString);
+//                try {
+//                    config = new Config(response);
+//                    //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
+//                    Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+//                    movieslibAdapter.setConfig(config);
+//
+//                } catch(JSONException e) {
+//                    e.printStackTrace();
+//                }
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("MovieDB", "could not generate new config");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.e("MovieDB", "could not generate new config");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e("MovieDB", "could not generate new config");
             }
         });
     }
-
-
 }
