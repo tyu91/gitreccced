@@ -3,7 +3,6 @@ package codepath.com.gitreccedproject;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.http.AsyncHttpClient;
 
 import java.util.ArrayList;
 
@@ -30,9 +30,20 @@ public class LibraryFragment extends Fragment {
         return libraryFragment;
     }
 
+    //CONSTANTS
+    //base url of API
+    public final static String API_BASE_URL = "https://api.themoviedb.org/3";
+    //parameter name
+    public final static String API_KEY_PARAM = "api_key";
+
+    AsyncHttpClient client;
+
+    Config config;
+
     public RecyclerView rv_libMovies;
     public RecyclerView rv_libTvShows;
     public RecyclerView rv_libBooks;
+
     public libAdapter movieslibAdapter;
     public libAdapter TVlibAdapter;
     public libAdapter bookslibAdapter;
@@ -49,6 +60,7 @@ public class LibraryFragment extends Fragment {
     public ImageView shows_btn;
     public ImageView books_btn;
 
+
     DatabaseReference dbItemsByUser;
     public ArrayList<Item> movieslib;
     public ArrayList<Item> TVlib;
@@ -64,14 +76,14 @@ public class LibraryFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // this is the fragment equivalent of onCreate
-        items = new ArrayList<>();
+        //create reference to dbUsersByItem
+        dbItemsByUser= FirebaseDatabase.getInstance().getReference("itemsbyuser");
 
         // construct the adapter from this datasource
-        //libAdapter = new libAdapter(items);
         rv_libMovies = view.findViewById(R.id.rv_libMovies);
         rv_libTvShows = view.findViewById(R.id.rv_libTvShows);
         rv_libBooks = view.findViewById(R.id.rv_libBooks);
+
         final LinearLayoutManager movies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager shows = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager books = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -84,6 +96,7 @@ public class LibraryFragment extends Fragment {
         rv_libTvShows.setLayoutManager(shows);
         rv_libBooks.setLayoutManager(books);
         // set the adapter
+
         rv_libMovies.setAdapter(movieslibAdapter);
         rv_libTvShows.setAdapter(TVlibAdapter);
         rv_libBooks.setAdapter(bookslibAdapter);
@@ -91,6 +104,10 @@ public class LibraryFragment extends Fragment {
         rv_moviesexp = view.findViewById(R.id.rv_moviesexp);
         rv_showsexp = view.findViewById(R.id.rv_showsexp);
         rv_booksexp = view.findViewById(R.id.rv_booksexp);
+
+        /*//TODO - change this to get actual data
+        for (int i = 0; i < 10; i++) {
+=======
         //libexpadapter = new libexpadapter(items);
         rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
         rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
@@ -98,6 +115,7 @@ public class LibraryFragment extends Fragment {
 
         //TODO - change this to get actual data
         /*for (int i = 0; i < 10; i++) {
+>>>>>>> 69533d3b01b524b9e4cc233d7dbae4d1780fbbf1
             Item item = new Item();
             item.setTitle(String.format("%s",i));
             items.add(item);
@@ -219,4 +237,6 @@ public class LibraryFragment extends Fragment {
         // Adds the scroll listener to RecyclerView
         rv_libMovies.addOnScrollListener(scrollListener);*/
     }
+
+
 }

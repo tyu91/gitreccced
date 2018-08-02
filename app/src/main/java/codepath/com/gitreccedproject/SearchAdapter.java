@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
 
+    Config config;
+
     Context context;
     public List<Item> mItems;
     public Item mItem;
@@ -46,6 +49,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
 
@@ -67,6 +74,26 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         final Item item = mItems.get(position);
         // populate the views according to position
         holder.title_tv.setText(item.getTitle());
+        holder.genre_tv.setText(item.getGenre());
+        holder.details_tv.setText(item.getDetails());
+
+        if (item.getGenre().equals("Book")) {
+            //if item is a book, get poster image this way
+            GlideApp.with(context)
+                    .load(item.getImgUrl())
+                    .into(holder.poster_iv);
+        } else {
+
+            //TODO: getPosterPath: add field to movies and tv
+            String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+
+            //load image using glide
+            GlideApp.with(context)
+                    .load(imageUrl)
+                    .into(holder.poster_iv);
+        }
+
+
         // check if item is in user's library
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid());
         com.google.firebase.database.Query itemsquery = null;
@@ -96,11 +123,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title_tv;
+        public TextView genre_tv;
+        public TextView details_tv;
+        public ImageView poster_iv;
         public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title_tv = itemView.findViewById(R.id.title_tv);
+            title_tv = itemView.findViewById(R.id.tvTitle);
+            genre_tv = itemView.findViewById(R.id.tvGenre);
+
+            //TODO: populate details activity once receive call to library
+            details_tv = itemView.findViewById(R.id.tvOverview);
+            poster_iv = itemView.findViewById(R.id.ivPoster);
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
@@ -159,17 +194,36 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
+            //TODO: change title to book id
             dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        Log.i("SetIid", "iid: " + dataSnapshot.child(dataSnapshot.getKey()).child("iid"));
-                        //TODO: figure out why this is null
+                        for (DataSnapshot snapIid : dataSnapshot.getChildren()) {
+                            Item tempItem = snapIid.getValue(Item.class);
+                            iid = snapIid.child("iid").getValue().toString();
+                            item.setIid(iid);
+
+                            item.setAuthor(tempItem.getAuthor());
+                            item.setDetails(tempItem.getDetails());
+                            item.setBookId(tempItem.getBookId());
+                            item.setImgUrl(tempItem.getImgUrl());
+                            item.setSmallImgUrl(tempItem.getSmallImgUrl());
+                            item.setTitle(tempItem.getTitle());
+
+                            //weird way, pls fix later
+                            mItems.add(mPosition, item);
+                            mItems.remove(mPosition + 1);
+                        }
+
+                        //TODO: set item to existing item in db
                         Log.i("Books", "this book already exists in the DB");
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks
                         //create new item id
                         iid = item.getIid();
+
+                        Log.i("Books", "adding new book to db");
 
                         //weird way, pls fix later
                         mItems.add(mPosition, item);

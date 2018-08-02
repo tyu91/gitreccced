@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,8 +17,15 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
     Context context;
     public List<Item> mItems;
 
+    //config required for img urls
+    Config config;
+
     public libAdapter(List<Item> items) {
         mItems = items;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     @NonNull
@@ -35,10 +41,11 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull libAdapter.ViewHolder holder, int position) {
+        //TODO: populate movie/tv images based on config
         // get the data according to position
-        Item item = mItems.get(position % mItems.size());
+        //Item item = mItems.get(position % mItems.size());
         // populate the views according to position
-        holder.textview1.setText(item.title);
+        //holder.textview1.setText(item.title);
     }
 
     @Override
@@ -60,8 +67,8 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition() % mItems.size();
-            Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
+            //int position = getAdapterPosition() % mItems.size();
+            //Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
         }
     }
 }

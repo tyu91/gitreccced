@@ -56,13 +56,18 @@ public class AlgoliaActivity extends AppCompatActivity {
                             item.setDetails(postSnapshot.child("overview").getValue().toString());
                             item.setTitle(postSnapshot.child("title").getValue().toString());
 
+                            item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                            item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+
                             {
                                 try {
                                     client.getIndex("movies").addObjectAsync(new JSONObject()
                                             .put("Iid", postSnapshot.getKey())
                                             .put("genre", postSnapshot.child("genre").getValue().toString())
                                             .put("overview", postSnapshot.child("overview").getValue().toString())
-                                            .put("title", postSnapshot.child("title").getValue().toString()), null);
+                                            .put("title", postSnapshot.child("title").getValue().toString())
+                                            .put("posterPath", postSnapshot.child("posterPath").getValue().toString())
+                                            .put("backdropPath", postSnapshot.child("backdropPath").getValue().toString()) , null);
                                     //Log.i("algolia",postSnapshot.child("title").getValue().toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -105,13 +110,18 @@ public class AlgoliaActivity extends AppCompatActivity {
                             item.setDetails(postSnapshot.child("overview").getValue().toString());
                             item.setTitle(postSnapshot.child("title").getValue().toString());
 
+                            item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                            item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+
                             {
                                 try {
                                     client.getIndex("tv").addObjectAsync(new JSONObject()
                                             .put("Iid", postSnapshot.getKey())
                                             .put("genre", postSnapshot.child("genre").getValue().toString())
                                             .put("overview", postSnapshot.child("overview").getValue().toString())
-                                            .put("title", postSnapshot.child("title").getValue().toString()), null);
+                                            .put("title", postSnapshot.child("title").getValue().toString())
+                                            .put("posterPath", postSnapshot.child("posterPath").getValue().toString())
+                                            .put("backdropPath", postSnapshot.child("backdropPath").getValue().toString()), null);
                                     //Log.i("algolia",postSnapshot.child("title").getValue().toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();

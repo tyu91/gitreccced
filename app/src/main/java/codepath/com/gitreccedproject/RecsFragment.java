@@ -53,7 +53,6 @@ public class RecsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
         activity = (MyLibraryActivity) getActivity();
-        //activity.currentuser =
         return inflater.inflate(R.layout.recsfragment, parent, false);
     }
 
@@ -80,6 +79,7 @@ public class RecsFragment extends Fragment {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
                     //movieItems.add(item);
+
                     if (postSnapshot.child("count").getValue() != null) {
                         movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
                     }
