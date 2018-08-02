@@ -40,7 +40,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     Config config;
 
     Context context;
-    Config config;
+
     public List<Item> mItems;
     public Item mItem;
     public int mPosition;

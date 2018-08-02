@@ -1,7 +1,6 @@
 package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 public class LibraryFragment extends Fragment {
 
@@ -148,6 +149,7 @@ public class LibraryFragment extends Fragment {
                     Log.i("shottt",postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
                     if (item.getGenre().contains("Movie")) {
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         movieslib.add(item);
                     } else if (item.getGenre().contains("TV")) {
                         TVlib.add(item);
@@ -261,7 +263,7 @@ public class LibraryFragment extends Fragment {
         //execute a GET request that expects a response from JSON object
         RequestHandle requestHandle = client.get(url, params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.i("MovieDB", response.toString());
                 try {
                     config = new Config(response);
@@ -275,7 +277,7 @@ public class LibraryFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.i("MovieDB", response.toString());
 //                try {
 //                    config = new Config(response);
@@ -289,7 +291,7 @@ public class LibraryFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.i("MovieDB", responseString);
 //                try {
 //                    config = new Config(response);
@@ -303,17 +305,17 @@ public class LibraryFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(int statusCode, PreferenceActivity.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e("MovieDB", "could not generate new config");
             }
 
             @Override
-            public void onFailure(int statusCode, PreferenceActivity.Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.e("MovieDB", "could not generate new config");
             }
 
             @Override
-            public void onFailure(int statusCode, PreferenceActivity.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e("MovieDB", "could not generate new config");
             }
         });

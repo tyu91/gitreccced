@@ -39,6 +39,8 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
         View libView = inflater.inflate(R.layout.item, parent, false);
         libAdapter.ViewHolder viewHolder = new libAdapter.ViewHolder(libView);
 
+
+
         return viewHolder;
     }
 
@@ -48,7 +50,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 //        // get the data according to position
         Item item = mItems.get(position % mItems.size());
 
-        String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+        String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
 
         // populate the views according to position
         Glide.with(context)
