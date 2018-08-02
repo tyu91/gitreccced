@@ -3,12 +3,12 @@ package codepath.com.gitreccedproject;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +33,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     GoodreadsClient client = new GoodreadsClient();
 
     BookClient bClient = new BookClient();
+
+    boolean isAdded;
 
     String uid = "adapter: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "adapter: item id not set yet"; //item id (initialized to dummy string for testing)
@@ -106,6 +108,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     lib.add(postSnapshot.child("iid").getValue().toString());
                 }
                 if (lib.contains(item.getIid())) {
+                    //then set checkmark to checked
+                    holder.added_check.setChecked(true);
+                    isAdded = true;
                     holder.title_tv.setTextSize(20); // TODO - change this later
                 }
             }
@@ -126,6 +131,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         public TextView genre_tv;
         public TextView details_tv;
         public ImageView poster_iv;
+        public CheckBox added_check;
         public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -136,6 +142,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //TODO: populate details activity once receive call to library
             details_tv = itemView.findViewById(R.id.tvOverview);
             poster_iv = itemView.findViewById(R.id.ivPoster);
+            added_check = itemView.findViewById(R.id.checkAdded);
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
@@ -150,7 +157,35 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 mItem = mItems.get(position);
 
-                Log.i("size",String.format("%s",title_tv.getTextSize()));
+                //if item is already added, unadd and vice versa
+
+                if (isAdded) {
+                    Log.i("click", "already in lib");
+                    dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
+                    dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(InputRecsMoviesActivity.resultUser.getUid());
+                            dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    title_tv.setTextSize(18);
+                                }
+                            });
+                        }
+                    });
+                    isAdded = false;
+                    added_check.setChecked(false);
+
+                } else {
+                    getrecs(mItem);
+                    title_tv.setTextSize(20);
+                    addItem(position);
+                    isAdded = true;
+                    added_check.setChecked(true);
+                }
+
+                /*Log.i("size",String.format("%s",title_tv.getTextSize()));
                 if (title_tv.getTextSize() == 60.0) {
                     Log.i("click", "already in lib");
                     dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
@@ -170,14 +205,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     getrecs(mItem);
                     title_tv.setTextSize(20);
                     addItem(position);
-                }
+                }*/
 
                 Log.d("mItem", "Title: " + mItem.getTitle());
                 //set the overview + additional fields for item
                 new BookAsync().execute();
-
-                Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
-                Log.i("select", String.format("Got item at %s", position));
 
             }
         }
@@ -191,10 +223,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
-            //TODO: change title to book id
-            dbBooks.orderByChild("title").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
+            dbBooks.orderByChild("bookId").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //if book exists in dbBooks, set item in adapter to existing book in dbBooks
                     if (dataSnapshot.getValue() != null) {
                         for (DataSnapshot snapIid : dataSnapshot.getChildren()) {
                             Item tempItem = snapIid.getValue(Item.class);
