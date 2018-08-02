@@ -29,15 +29,15 @@
 
     <TextView
         android:id="@+id/tvFinish"
-        android:layout_width="98dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="48dp"
-        android:layout_marginStart="-36dp"
+        android:layout_marginBottom="57dp"
         android:layout_toEndOf="@+id/searchlist_rv"
         android:text="Finish"
+        android:textAlignment="textEnd"
         android:textColor="#e1e1e1"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="italic" />
 
     <SearchView
