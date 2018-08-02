@@ -1,6 +1,7 @@
 package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -25,8 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
 
 public class LibraryFragment extends Fragment {
 
@@ -259,24 +259,24 @@ public class LibraryFragment extends Fragment {
         RequestParams params = new RequestParams();
         params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
         //execute a GET request that expects a response from JSON object
-        client.get(url, params, new JsonHttpResponseHandler(){
+        RequestHandle requestHandle = client.get(url, params, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.i("MovieDB",response.toString());
+            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONObject response) {
+                Log.i("MovieDB", response.toString());
                 try {
                     config = new Config(response);
                     //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
                     Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
                     movieslibAdapter.setConfig(config);
 
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.i("MovieDB",response.toString());
+            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, JSONArray response) {
+                Log.i("MovieDB", response.toString());
 //                try {
 //                    config = new Config(response);
 //                    //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
@@ -289,8 +289,8 @@ public class LibraryFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.i("MovieDB",responseString);
+            public void onSuccess(int statusCode, PreferenceActivity.Header[] headers, String responseString) {
+                Log.i("MovieDB", responseString);
 //                try {
 //                    config = new Config(response);
 //                    //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
@@ -303,17 +303,17 @@ public class LibraryFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, PreferenceActivity.Header[] headers, String responseString, Throwable throwable) {
                 Log.e("MovieDB", "could not generate new config");
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            public void onFailure(int statusCode, PreferenceActivity.Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.e("MovieDB", "could not generate new config");
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onFailure(int statusCode, PreferenceActivity.Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e("MovieDB", "could not generate new config");
             }
         });

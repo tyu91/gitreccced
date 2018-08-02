@@ -11,16 +11,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 public class InputRecsBooksActivity extends AppCompatActivity {
 
@@ -33,6 +41,9 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     public TextView finish_btn;
 
     boolean testPrint = true;
+
+    ProgressBar pb;
+    boolean isStart;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -53,10 +64,22 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     String uid = "inputrecsbooksactivity: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "inputrecsbooksactivity: item id not set yet"; //user id (initialized to dummy string for testing)
 
+    //CONSTANTS
+    //base url of API
+    public final static String API_BASE_URL = "https://api.themoviedb.org/3";
+    //parameter name
+    public final static String API_KEY_PARAM = "api_key";
+
+    AsyncHttpClient mClient;
+
+    Config config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_books);
+
+        mClient = new AsyncHttpClient();
 
         mBooks = new ArrayList<>();
 
@@ -69,6 +92,10 @@ public class InputRecsBooksActivity extends AppCompatActivity {
         currentUser.setUid(uid);
 
         // find the views
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.bringToFront();
+        isStart = true;
+
         search_sv = findViewById(R.id.search_sv);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         finish_btn = findViewById(R.id.tvFinish);
@@ -110,6 +137,9 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        //get config for movie/tv posters
+        getConfiguration();
     }
 
     class BooksAsync extends AsyncTask<Void, Void, Void> {
@@ -117,7 +147,10 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            if (isStart) {
+                pb.setVisibility(ProgressBar.VISIBLE);
+                isStart = false;
+            }
         }
 
         @Override
@@ -129,7 +162,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
+            pb.setVisibility(ProgressBar.GONE);
             //clear book search adapter
             items.clear();
             searchAdapter.notifyDataSetChanged();
@@ -184,6 +217,34 @@ public class InputRecsBooksActivity extends AppCompatActivity {
                 super.onPostExecute(aVoid);
             }
         }
+    }
+
+    //get the config from API
+    private void getConfiguration() {
+        //create the url
+        String url = API_BASE_URL + "/configuration";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
+        //execute a GET request that expects a response from JSON object
+        mClient.get(url, params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                try {
+                    config = new Config(response);
+                    Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    searchAdapter.setConfig(config);
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("MovieDB", "could not generate new config");
+            }
+        });
     }
 
 }

@@ -7,6 +7,14 @@
     android:background="#424242"
     tools:context=".InputRecsBooksActivity">
 
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_sv"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/tvAddBooks"
         android:layout_width="wrap_content"

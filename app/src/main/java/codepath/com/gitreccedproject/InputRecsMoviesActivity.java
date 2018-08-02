@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +35,8 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class InputRecsMoviesActivity extends AppCompatActivity {
@@ -51,13 +57,27 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     public ArrayList<Item> items;
     public ArrayList<String> watched = new ArrayList<>();
 
+    ProgressBar pb;
+    boolean isStart;
+
     static User resultUser;
 
     String uid = "inputrecsmovieactivity: user id not set yet"; //user id (initialized to dummy string for testing)
 
+    //CONSTANTS
+    //base url of API
+    public final static String API_BASE_URL = "https://api.themoviedb.org/3";
+    //parameter name
+    public final static String API_KEY_PARAM = "api_key";
+
+    AsyncHttpClient mClient;
+
+    Config config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        mClient = new AsyncHttpClient();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs_movies);
@@ -80,6 +100,11 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         next = findViewById(R.id.tvNext);
+
+        // find the views
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.bringToFront();
+        isStart = true;
 
         search_et.setIconifiedByDefault(false);
 
@@ -166,6 +191,10 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
+                        if (isStart) {
+                            pb.setVisibility(ProgressBar.VISIBLE);
+                            isStart = false;
+                        }
                         if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
                             Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
@@ -175,6 +204,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
                                     try {
+                                        pb.setVisibility(ProgressBar.GONE);
                                         items.clear();
                                         searchAdapter.notifyDataSetChanged();
 
@@ -187,12 +217,15 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
 
                                                 // check iid is not in watched
                                                 if (!Arrays.asList(watched).contains(object.getString("Iid"))) {
+
                                                     Item item = new Item();
 
                                                     item.setIid(object.getString("Iid"));
                                                     item.setGenre(object.getString("genre"));
                                                     item.setDetails(object.getString("overview"));
                                                     item.setTitle(object.getString("title"));
+                                                    item.setPosterPath(object.getString("posterPath"));
+                                                    item.setBackdropPath(object.getString("backdropPath"));
 
                                                     items.add(item);
                                                     searchAdapter.notifyItemInserted(items.size() - 1);
@@ -256,6 +289,37 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 // show it
                 alertDialog.show();
 
+            }
+        });
+
+        //get config for movie/tv posters
+        getConfiguration();
+    }
+
+    //get the config from API
+    private void getConfiguration() {
+        //create the url
+        String url = API_BASE_URL + "/configuration";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
+        //execute a GET request that expects a response from JSON object
+        mClient.get(url, params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                try {
+                    config = new Config(response);
+                    Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    searchAdapter.setConfig(config);
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("MovieDB", "could not generate new config");
             }
         });
     }

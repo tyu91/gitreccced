@@ -9,6 +9,10 @@ public class JSONTv {
     public String title;
     public String overview;
 
+    public String posterPath;
+    public String backdropPath;
+    public int movieId;
+
     public JSONTv() {
         //empty constructor
     }
@@ -18,6 +22,10 @@ public class JSONTv {
         genre = "TV";
         title = object.getString("name");
         overview = object.getString("overview");
+
+        posterPath = object.getString("poster_path");
+        backdropPath = object.getString("backdrop_path");
+        movieId = object.getInt("id");
     }
 
     public String getIid() {
@@ -34,5 +42,45 @@ public class JSONTv {
 
     public String getOverview() {
         return overview;
+    }
+
+    public void setIid(String iid) {
+        this.iid = iid;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 }
