@@ -106,12 +106,27 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 lib = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     lib.add(postSnapshot.child("iid").getValue().toString());
+                    if (postSnapshot.child("genre").getValue().toString().equals("Book")) {
+                        //if snapshot is book, add bookid to lib
+                        lib.add(postSnapshot.child("bookId").getValue().toString());
+                    } else {
+                        //if snapshot is not book, add movieId (for movies and tv) to lib
+                        lib.add(postSnapshot.child("movieId").getValue().toString());
+                    }
                 }
-                if (lib.contains(item.getIid())) {
-                    //then set checkmark to checked
+                if (lib.contains(item.getMovieId())) {
+                    //if movie exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
                     holder.title_tv.setTextSize(20); // TODO - change this later
+                } else if (lib.contains(item.getBookId())) {
+                    //if book exists, then set checkmark to checked
+                    holder.added_check.setChecked(true);
+                    isAdded = true;
+                    holder.title_tv.setTextSize(20);
+                } else {
+                    holder.added_check.setChecked(false);
+                    isAdded = false;
                 }
             }
             @Override
@@ -157,9 +172,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 // get the item at the position
                 mItem = mItems.get(position);
 
-                //if item is already added, unadd and vice versa
-
+                //if item is already added, unadd
                 if (isAdded) {
+                    added_check.setChecked(false);
+                    isAdded = false;
                     Log.i("click", "already in lib");
                     dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
                     dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
@@ -174,15 +190,27 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             });
                         }
                     });
-                    isAdded = false;
-                    added_check.setChecked(false);
 
                 } else {
+                    //if item is not yet added, add
                     getrecs(mItem);
                     title_tv.setTextSize(20);
-                    addItem(position);
-                    isAdded = true;
+                    
+                    //if item is not a book
+                    if(!(mItems.get(position).getGenre().equals("Book"))) {
+                        addItem(position);
+                    }
+
+
                     added_check.setChecked(true);
+                    isAdded = true;
+
+                    Log.d("mItem", "Title: " + mItem.getTitle());
+                    //set the overview + additional fields for item
+                    new BookAsync().execute();
+
+
+
                 }
 
                 /*Log.i("size",String.format("%s",title_tv.getTextSize()));
@@ -207,10 +235,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     addItem(position);
                 }*/
 
-                Log.d("mItem", "Title: " + mItem.getTitle());
-                //set the overview + additional fields for item
-                new BookAsync().execute();
-
             }
         }
     }
@@ -223,7 +247,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //client.getBook(item.getBookId());
 
             //check if book title already exists in dbBooks
-            dbBooks.orderByChild("bookId").equalTo(item.getTitle()).addValueEventListener(new ValueEventListener() {
+            dbBooks.orderByChild("bookId").equalTo(item.getBookId()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //if book exists in dbBooks, set item in adapter to existing book in dbBooks
@@ -244,8 +268,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             mItems.add(mPosition, item);
                             mItems.remove(mPosition + 1);
                         }
-
-                        //TODO: set item to existing item in db
                         Log.i("Books", "this book already exists in the DB");
                     } else {
                         //the title does not exist in dbBooks, create new item id and add to dbBooks

@@ -58,6 +58,7 @@ public class AlgoliaActivity extends AppCompatActivity {
 
                             item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                             item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+                            item.setMovieId(postSnapshot.child("movieId").getValue().toString());
 
                             {
                                 try {
@@ -67,7 +68,8 @@ public class AlgoliaActivity extends AppCompatActivity {
                                             .put("overview", postSnapshot.child("overview").getValue().toString())
                                             .put("title", postSnapshot.child("title").getValue().toString())
                                             .put("posterPath", postSnapshot.child("posterPath").getValue().toString())
-                                            .put("backdropPath", postSnapshot.child("backdropPath").getValue().toString()) , null);
+                                            .put("backdropPath", postSnapshot.child("backdropPath").getValue().toString())
+                                            .put("movieId", postSnapshot.child("movieId").getValue().toString()), null);
                                     //Log.i("algolia",postSnapshot.child("title").getValue().toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -112,6 +114,7 @@ public class AlgoliaActivity extends AppCompatActivity {
 
                             item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                             item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+                            item.setMovieId(postSnapshot.child("movieId").getValue().toString());
 
                             {
                                 try {
@@ -121,7 +124,8 @@ public class AlgoliaActivity extends AppCompatActivity {
                                             .put("overview", postSnapshot.child("overview").getValue().toString())
                                             .put("title", postSnapshot.child("title").getValue().toString())
                                             .put("posterPath", postSnapshot.child("posterPath").getValue().toString())
-                                            .put("backdropPath", postSnapshot.child("backdropPath").getValue().toString()), null);
+                                            .put("backdropPath", postSnapshot.child("backdropPath").getValue().toString())
+                                            .put("movieId", postSnapshot.child("movieId").getValue().toString()), null);
                                     //Log.i("algolia",postSnapshot.child("title").getValue().toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();

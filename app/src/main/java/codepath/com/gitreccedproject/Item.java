@@ -14,7 +14,7 @@ public class Item {
     public String backdropSize;
     public String posterPath;
     public String backdropPath;
-    public String movieTvId;
+    public String movieId;
 
     public String bookId;
     public String author;
@@ -36,7 +36,7 @@ public class Item {
          backdropSize = "no associated backdropSize";
          posterPath = "no associated posterPath";
          backdropPath = "no associated backdropPath";
-         movieTvId = "no associated movieTvId";
+         movieId = "no associated movieTvId";
 
         bookId = "no associated book id";
         author = "no associated author";
@@ -146,5 +146,13 @@ public class Item {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
+    }
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
     }
 }

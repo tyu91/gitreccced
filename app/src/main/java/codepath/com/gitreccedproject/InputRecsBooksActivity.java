@@ -180,7 +180,8 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             String text = search_sv.getQuery().toString();
             if (TextUtils.getTrimmedLength(text) > 0) {
                 //for each entry in response array, add entry to searchAdapter.
-                int num_results = 10;
+                //todo: change back to 10 results later
+                int num_results = 1;
 
                 Log.i("Books", "num_results before = " + num_results);
 
