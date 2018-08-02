@@ -34,7 +34,7 @@ public class Item {
          imageBaseUrl = "no associated imageBaseUrl";
          posterSize = "no associated posterSize";
          backdropSize = "no associated backdropSize";
-         posterPath = "no associated posterPath";
+         posterPath = "";
          backdropPath = "no associated backdropPath";
          movieId = "no associated movieTvId";
 

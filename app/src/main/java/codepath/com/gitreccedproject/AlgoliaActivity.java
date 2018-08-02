@@ -36,7 +36,7 @@ public class AlgoliaActivity extends AppCompatActivity {
         movies_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                client.getIndex("movies").clearIndexAsync(null,null);
+                //client.getIndex("movies").clearIndexAsync(null,null);
 
                 DatabaseReference moviesRef;
                 moviesRef = FirebaseDatabase.getInstance().getReference("movies");
@@ -91,7 +91,7 @@ public class AlgoliaActivity extends AppCompatActivity {
         tv_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                client.getIndex("tv").clearIndexAsync(null,null);
+                //client.getIndex("tv").clearIndexAsync(null,null);
 
                 DatabaseReference tvRef;
                 tvRef = FirebaseDatabase.getInstance().getReference("tv");

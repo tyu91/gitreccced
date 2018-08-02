@@ -25,7 +25,7 @@ public class JSONMovie {
 
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
-        movieId = object.getInt("id"); //TODO: might not be "id", check JSON
+        movieId = object.getInt("movie_id"); //TODO: might not be "id", check JSON
 
     }
 
@@ -85,5 +85,3 @@ public class JSONMovie {
         this.movieId = movieId;
     }
 }
-
-
