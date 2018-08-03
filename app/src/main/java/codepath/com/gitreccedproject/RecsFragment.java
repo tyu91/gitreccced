@@ -78,6 +78,7 @@ public class RecsFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                    //item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                     //movieItems.add(item);
 
                     if (postSnapshot.child("count").getValue() != null) {

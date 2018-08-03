@@ -152,6 +152,7 @@ public class LibraryFragment extends Fragment {
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         movieslib.add(item);
                     } else if (item.getGenre().contains("TV")) {
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         TVlib.add(item);
                     } else {
                         booklib.add(item);
