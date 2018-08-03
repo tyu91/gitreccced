@@ -178,6 +178,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     added_check.setChecked(false);
                     isAdded = false;
                     Log.i("click", "already in lib");
+                    lib.remove(mItem.getIid());
                     dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
                     dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                         @Override
@@ -187,6 +188,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 @Override
                                 public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                     title_tv.setTextSize(18);
+                                    getrecs(lib);
                                 }
                             });
                         }
@@ -194,6 +196,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 } else {
                     //if item is not yet added, add
+                    lib.add(mItem.getIid());
                     getrecs(lib);
                     title_tv.setTextSize(20);
                     
@@ -234,8 +237,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     });
                 } else {
                     lib.add(mItem.getIid());
+                    addItem(position);
                     getrecs(lib);
                     title_tv.setTextSize(20);
+                }
+
+                Log.d("mItem", "Title: " + mItem.getTitle());
+                //set the overview + additional fields for item
+                new BookAsync().execute();
+
+                Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
+                Log.i("select", String.format("Got item at %s", position));
                     addItem(position);
                 }*/
 
@@ -359,7 +371,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public static void getrecs(final ArrayList<String> lib) {
         //get the node with the user's recs
         DatabaseReference dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
-
         //clear user's recs and then repopulate
         dbRecItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
             @Override
@@ -400,7 +411,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
-        itemsquery.addValueEventListener(new ValueEventListener() {
+        itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -423,7 +434,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         DatabaseReference dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(iid);
         com.google.firebase.database.Query usersquery = null;
         usersquery = dbUsersbyItem;
-        usersquery.addValueEventListener(new ValueEventListener() {
+        usersquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot userSnapshot) {
                 // for each user who likes that item
@@ -435,7 +446,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
                     com.google.firebase.database.Query itemsquery2 = null;
                     itemsquery2 = dbItemsByUser;
-                    itemsquery2.addValueEventListener(new ValueEventListener() {
+                    itemsquery2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             // for each item that that user likes

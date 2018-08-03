@@ -149,7 +149,7 @@ public class LibraryFragment extends Fragment {
                     Log.i("shottt",postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
                     if (item.getGenre().contains("Movie")) {
-                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        //item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         movieslib.add(item);
                     } else if (item.getGenre().contains("TV")) {
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());

@@ -1,6 +1,7 @@
 package codepath.com.gitreccedproject;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,8 @@ public class RecsFragment extends Fragment {
     public RecAdapter bookRecAdapter;
     public ArrayList<Item> movieItems;
     public ArrayList<Pair<Item,String>> movieItem;
+    public ArrayList<Pair<Item,String>> tvItem;
+    public ArrayList<Pair<Item,String>> bookItem;
     public ArrayList<Item> tvItems;
     public ArrayList<Item> bookItems;
 
@@ -66,139 +69,24 @@ public class RecsFragment extends Fragment {
         tvItems = dummyTVRecItems();
         bookItems = dummyBookRecItems();
 
-        movieItem = new ArrayList<>();
-
         // check if item is in user's library
         DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
-        itemsquery.addValueEventListener(new ValueEventListener() {
+        itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 lib = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     lib.add(postSnapshot.child("iid").getValue().toString());
                 }
-                SearchAdapter.getrecs(lib);
+                new populateasync().execute();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
-        Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid());
-        Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());
-
-        com.google.firebase.database.Query moviesquery = null;
-        moviesquery = Recs.child("Movie");
-        moviesquery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("shot",dataSnapshot.toString());
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Log.i("shott", postSnapshot.toString());
-                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
-                    //item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
-                    //movieItems.add(item);
-
-                    if (postSnapshot.child("count").getValue() != null) {
-                        movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
-                    }
-                    Log.i("item", item.getTitle());
-                }
-                Collections.sort(movieItem, new Comparator<Pair<Item,String>>() {
-                    @Override
-                    public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
-                        // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                        return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
-                    }
-                });
-                for (int i = 0; i < movieItem.size(); i++) {
-                    Log.i("sorted",movieItem.get(i).first.getTitle() + movieItem.get(i).second);
-                    movieItems.add(movieItem.get(i).first);
-                }
-                movieRecAdapter = new RecAdapter(movieItems);
-                rv_movies.setAdapter(movieRecAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
-            }
-        });
-
-        com.google.firebase.database.Query showsquery = null;
-        showsquery = Recs.child("TV");
-        showsquery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("shot",dataSnapshot.toString());
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Log.i("shott", postSnapshot.toString());
-                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "TV", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
-                    tvItems.add(item);
-                    Log.i("item", item.getTitle());
-                }
-                tvRecAdapter = new RecAdapter(tvItems);
-                rv_tvShows.setAdapter(tvRecAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
-            }
-        });
-
-        com.google.firebase.database.Query booksquery = null;
-        booksquery = Recs.child("Book");
-        booksquery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("shot",dataSnapshot.toString());
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Log.i("shott", postSnapshot.toString());
-                    Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
-                    bookItems.add(item);
-                    Log.i("item", item.getTitle());
-                }
-                bookRecAdapter = new RecAdapter(bookItems);
-                rv_books.setAdapter(bookRecAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
-            }
-        });
-
-        /*//setting movies to recommend
-        if(SearchAdapter.finalMovieRecs != null && SearchAdapter.finalMovieRecs.size() != 0) {
-            //if finalRecs was populated in InputRecActivities
-            //movieItems = (ArrayList<Item>) SearchAdapter.finalMovieRecs;
-        } else {
-            movieItems = dummyMovieRecItems();
-        }
-
-        //setting tv shows to recommend
-        if(SearchAdapter.finalTVRecs != null && SearchAdapter.finalTVRecs.size() != 0) {
-            //if finalRecs was populated in InputRecActivities
-            //tvItems = (ArrayList<Item>) SearchAdapter.finalTVRecs;
-        } else {
-            tvItems = dummyTVRecItems();
-        }
-
-        //setting books to recommend
-        if(SearchAdapter.finalBookRecs != null && SearchAdapter.finalBookRecs.size() != 0 ) {
-            //if finalRecs was populated in InputRecActivities
-            //bookItems = (ArrayList<Item>) SearchAdapter.finalBookRecs;
-        } else {
-            bookItems = dummyBookRecItems();
-        }
-*/
-
-        // construct the adapter from this datasource
-        //movieRecAdapter = new RecAdapter(movieItems);
 
         rv_movies = view.findViewById(R.id.rv_libMovies);
         rv_tvShows = view.findViewById(R.id.rv_tv);
@@ -211,22 +99,6 @@ public class RecsFragment extends Fragment {
         rv_movies.setLayoutManager(movies);
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
-
-        // set the adapter
-        //rv_movies.setAdapter(movieRecAdapter);
-
-        // TODO - comment these if-statements if we want to enable infinite scrolling only to the right
-        /*if (movieItems.size() > 0) {
-            movies.scrollToPosition(100 * movieItems.size());
-        }
-
-        if (tvItems.size() > 0) {
-            tvShows.scrollToPosition(100 * tvItems.size());
-        }
-
-        if (bookItems.size() > 0) {
-            books.scrollToPosition(100 * bookItems.size());
-        }*/
     }
 
     public ArrayList<Item> dummyMovieRecItems() {
@@ -277,5 +149,144 @@ public class RecsFragment extends Fragment {
         dummyItems.add(item1);
 
         return dummyItems;
+    }
+
+    class populateasync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SearchAdapter.getrecs(lib);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.i("postexecute", "postexecute");
+            Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
+            //Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());
+
+            com.google.firebase.database.Query moviesquery = null;
+            moviesquery = Recs.child("Movie");
+            moviesquery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    movieItem = new ArrayList<>();
+                    movieItems = dummyMovieRecItems();
+                    Log.i("shot",dataSnapshot.toString());
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Log.i("shott", postSnapshot.toString());
+                        Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                        //movieItems.add(item);
+                        Log.i("TAG1", item.getTitle());
+                        if (postSnapshot.child("count").getValue() != null) {
+                            movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+                            Log.i("TAG", item.getTitle());
+                        }
+                        Log.i("item", item.getTitle());
+                    }
+                    Log.i("movieItem",movieItem.toString());
+                    Collections.sort(movieItem, new Comparator<Pair<Item,String>>() {
+                        @Override
+                        public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
+                            // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                            return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
+                        }
+                    });
+                    for (int i = 0; i < movieItem.size(); i++) {
+                        Log.i("sorted",movieItem.get(i).first.getTitle() + movieItem.get(i).second);
+                        movieItems.add(movieItem.get(i).first);
+                    }
+                    movieRecAdapter = new RecAdapter(movieItems);
+                    rv_movies.setAdapter(movieRecAdapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    //
+                }
+            });
+
+            com.google.firebase.database.Query showsquery = null;
+            showsquery = Recs.child("TV");
+            showsquery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    tvItem = new ArrayList<>();
+                    tvItems = dummyTVRecItems();
+                    Log.i("shot",dataSnapshot.toString());
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Log.i("shott", postSnapshot.toString());
+                        Item item = new Item(postSnapshot.child("iid").getValue().toString(), "TV", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                        //movieItems.add(item);
+                        Log.i("TAG1", item.getTitle());
+                        if (postSnapshot.child("count").getValue() != null) {
+                            tvItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+                            Log.i("TAG", item.getTitle());
+                        }
+                        Log.i("item", item.getTitle());
+                    }
+                    Log.i("tvItem",tvItem.toString());
+                    Collections.sort(tvItem, new Comparator<Pair<Item,String>>() {
+                        @Override
+                        public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
+                            // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                            return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
+                        }
+                    });
+                    for (int i = 0; i < tvItem.size(); i++) {
+                        Log.i("sorted",tvItem.get(i).first.getTitle() + tvItem.get(i).second);
+                        tvItems.add(tvItem.get(i).first);
+                    }
+                    tvRecAdapter = new RecAdapter(tvItems);
+                    rv_tvShows.setAdapter(tvRecAdapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    //
+                }
+            });
+
+            com.google.firebase.database.Query booksquery = null;
+            booksquery = Recs.child("Book");
+            booksquery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    bookItem = new ArrayList<>();
+                    bookItems = dummyBookRecItems();
+                    Log.i("shot",dataSnapshot.toString());
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Log.i("shott", postSnapshot.toString());
+                        Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
+                        //movieItems.add(item);
+                        Log.i("TAG1", item.getTitle());
+                        if (postSnapshot.child("count").getValue() != null) {
+                            bookItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+                            Log.i("TAG", item.getTitle());
+                        }
+                        Log.i("item", item.getTitle());
+                    }
+                    Log.i("bookItem",bookItem.toString());
+                    Collections.sort(bookItem, new Comparator<Pair<Item,String>>() {
+                        @Override
+                        public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
+                            // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                            return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
+                        }
+                    });
+                    for (int i = 0; i < bookItem.size(); i++) {
+                        Log.i("sorted",bookItem.get(i).first.getTitle() + bookItem.get(i).second);
+                        bookItems.add(bookItem.get(i).first);
+                    }
+                    bookRecAdapter = new RecAdapter(bookItems);
+                    rv_books.setAdapter(bookRecAdapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    //
+                }
+            });
+        }
+
     }
 }
