@@ -11,6 +11,7 @@ public class JSONMovie {
 
     public String posterPath;
     public String backdropPath;
+    public String releaseDate;
     public int movieId;
 
     public JSONMovie() {
@@ -21,6 +22,7 @@ public class JSONMovie {
         this.iid = iid;
         genre = "Movie";
         title = object.getString("title");
+        releaseDate = object.getString("release_date");
         overview = object.getString("overview");
 
         posterPath = object.getString("poster_path");
@@ -83,5 +85,13 @@ public class JSONMovie {
 
     public void setMovieId(int movieId) {
         this.movieId = movieId;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

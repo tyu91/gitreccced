@@ -8,6 +8,8 @@ public class Item {
     public String genre;
     public String title;
     public String details;
+    public String releaseDate;
+    public String firstAirDate;
 
     public String imageBaseUrl;
     public String posterSize;
@@ -34,7 +36,7 @@ public class Item {
          imageBaseUrl = "no associated imageBaseUrl";
          posterSize = "no associated posterSize";
          backdropSize = "no associated backdropSize";
-         posterPath = "";
+         posterPath = "no associated posterPath";
          backdropPath = "no associated backdropPath";
          movieId = "no associated movieTvId";
 
@@ -154,5 +156,21 @@ public class Item {
 
     public void setMovieId(String movieId) {
         this.movieId = movieId;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getFirstAirDate() {
+        return firstAirDate;
+    }
+
+    public void setFirstAirDate(String firstAirDate) {
+        this.firstAirDate = firstAirDate;
     }
 }
