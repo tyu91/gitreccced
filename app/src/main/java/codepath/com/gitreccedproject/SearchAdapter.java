@@ -194,7 +194,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 } else {
                     //if item is not yet added, add
-                    getrecs(mItem);
+                    getrecs(lib);
                     title_tv.setTextSize(20);
                     
                     //if item is not a book
