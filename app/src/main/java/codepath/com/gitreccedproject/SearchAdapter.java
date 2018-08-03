@@ -178,6 +178,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     added_check.setChecked(false);
                     isAdded = false;
                     Log.i("click", "already in lib");
+                    lib.remove(mItem.getIid());
                     dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
                     dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                         @Override
@@ -187,6 +188,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 @Override
                                 public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                     title_tv.setTextSize(18);
+                                    getrecs(lib);
                                 }
                             });
                         }
@@ -194,7 +196,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 } else {
                     //if item is not yet added, add
-                    getrecs(mItem);
+                    lib.add(mItem.getIid());
+                    getrecs(lib);
                     title_tv.setTextSize(20);
                     
                     //if item is not a book
@@ -371,7 +374,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         //clear user's recs and then repopulate
         dbRecItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+            public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 // repopulate user's recs
                 repopulate(lib);
             }
