@@ -45,6 +45,8 @@ public class RecsFragment extends Fragment {
     public ArrayList<Item> tvItems;
     public ArrayList<Item> bookItems;
 
+    public ArrayList<String> lib;
+
     DatabaseReference Recs;
 
     public Activity activity;
@@ -65,6 +67,25 @@ public class RecsFragment extends Fragment {
         bookItems = dummyBookRecItems();
 
         movieItem = new ArrayList<>();
+
+        // check if item is in user's library
+        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        com.google.firebase.database.Query itemsquery = null;
+        itemsquery = dbItemsByUser;
+        itemsquery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lib = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    lib.add(postSnapshot.child("iid").getValue().toString());
+                }
+                SearchAdapter.getrecs(lib);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)this.getActivity()).mAuth.getUid());
         Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());

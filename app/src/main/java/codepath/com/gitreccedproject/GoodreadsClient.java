@@ -22,6 +22,7 @@ public class GoodreadsClient extends DefaultHandler {
     boolean boolWork = false;
     boolean boolTitle = false;
     boolean boolAuthor = false;
+    boolean boolAuthorName = false;
     boolean boolDetails = false;
     boolean boolSmallImgUrl = false;
     boolean boolImgUrl = false;
@@ -102,6 +103,8 @@ public class GoodreadsClient extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("author")) {
             boolAuthor = true;
             boolId = false;
+        } else if (qName.equalsIgnoreCase("name")) {
+            boolAuthorName = true;
         } else if (qName.equalsIgnoreCase("description")) {
             boolDetails = true;
         } else if (qName.equalsIgnoreCase("small_image_url")) {
@@ -132,9 +135,10 @@ public class GoodreadsClient extends DefaultHandler {
             Log.i("BookIdClient", "boolTitle is True: " + book.getDetails());
             book.setTitle(new String(ch, start, length));
             boolTitle = false;
-        } else if (boolAuthor) {
+        } else if (boolAuthor && boolAuthorName) {
             book.setAuthor(new String(ch, start, length));
             boolAuthor = false;
+            boolAuthorName = false;
         } else if (boolDetails) {
             book.setDetails(new String(ch, start, length));
             boolDetails = false;
@@ -167,6 +171,7 @@ public class GoodreadsClient extends DefaultHandler {
             boolWork = false;
             boolTitle = false;
             boolAuthor = false;
+            boolAuthorName = false;
             boolDetails = false;
             boolSmallImgUrl = false;
             boolImgUrl = false;
