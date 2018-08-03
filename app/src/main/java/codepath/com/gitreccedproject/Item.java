@@ -20,6 +20,9 @@ public class Item {
     public String author;
     public String smallImgUrl;
     public String imgUrl;
+    public String pubYear;
+    public String pubMonth;
+    public String pubDay;
 
     public Item() {
         //empty constructor
@@ -42,6 +45,9 @@ public class Item {
         author = "no associated author";
         smallImgUrl = "no associated smallImgUrl";
         imgUrl = "no associated imgUrl";
+        pubYear = "no associated pubYear";
+        pubMonth = "no associated pubMonth";
+        pubDay = "no associated pubDay";
     }
 
     public String getIid() {
@@ -154,5 +160,29 @@ public class Item {
 
     public void setMovieId(String movieId) {
         this.movieId = movieId;
+    }
+
+    public String getPubYear() {
+        return pubYear;
+    }
+
+    public void setPubYear(String pubYear) {
+        this.pubYear = pubYear;
+    }
+
+    public String getPubMonth() {
+        return pubMonth;
+    }
+
+    public void setPubMonth(String pubMonth) {
+        this.pubMonth = pubMonth;
+    }
+
+    public String getPubDay() {
+        return pubDay;
+    }
+
+    public void setPubDay(String pubDay) {
+        this.pubDay = pubDay;
     }
 }

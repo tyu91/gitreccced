@@ -49,6 +49,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
     ArrayList<String> lib;
+    ArrayList<String> libId;
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -78,22 +79,34 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         // populate the views according to position
         holder.title_tv.setText(item.getTitle());
         holder.genre_tv.setText(item.getGenre());
-        holder.details_tv.setText(item.getDetails());
 
-        if (item.getGenre().equals("Book")) {
-            //if item is a book, get poster image this way
-            GlideApp.with(context)
-                    .load(item.getImgUrl())
-                    .into(holder.poster_iv);
-        } else {
-
-            //TODO: getPosterPath: add field to movies and tv
+        if (item.getGenre().equals("Movie")) {
+            //if item is Movie
+            //load poster image
             String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
-
             //load image using glide
             GlideApp.with(context)
                     .load(imageUrl)
                     .into(holder.poster_iv);
+        } else if (item.getGenre().equals("TV")) {
+            //if item is TV
+
+            //load poster image
+            String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+            //load image using glide
+            GlideApp.with(context)
+                    .load(imageUrl)
+                    .into(holder.poster_iv);
+        } else {
+            //if item is a book, get poster image this way
+            GlideApp.with(context)
+                    .load(item.getImgUrl())
+                    .into(holder.poster_iv);
+
+            //set author
+            holder.item_1_tv.setText(item.getAuthor());
+            //set pub year
+            holder.item_2_tv.setText(item.getPubYear());
         }
 
 
@@ -104,23 +117,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         itemsquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                lib = new ArrayList<>();
+                libId = new ArrayList<>();
+
+                //generate lib of movieId and bookId's itemsbyuser
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    lib.add(postSnapshot.child("iid").getValue().toString());
                     if (postSnapshot.child("genre").getValue().toString().equals("Book")) {
                         //if snapshot is book, add bookid to lib
-                        lib.add(postSnapshot.child("bookId").getValue().toString());
+                        libId.add(postSnapshot.child("bookId").getValue().toString());
                     } else {
                         //if snapshot is not book, add movieId (for movies and tv) to lib
-                        lib.add(postSnapshot.child("movieId").getValue().toString());
+                        libId.add(postSnapshot.child("movieId").getValue().toString());
                     }
                 }
-                if (lib.contains(item.getMovieId())) {
+                if (libId.contains(item.getMovieId())) {
                     //if movie exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
                     holder.title_tv.setTextSize(20); // TODO - change this later
-                } else if (lib.contains(item.getBookId())) {
+                } else if (libId.contains(item.getBookId())) {
                     //if book exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
@@ -128,6 +142,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 } else {
                     holder.added_check.setChecked(false);
                     isAdded = false;
+                }
+
+                //generate lib of item ids for recommendations
+                lib = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    lib.add(postSnapshot.child("iid").getValue().toString());
                 }
             }
             @Override
@@ -145,20 +165,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title_tv;
         public TextView genre_tv;
-        public TextView details_tv;
         public ImageView poster_iv;
         public CheckBox added_check;
+        public TextView item_1_tv;
+        public TextView item_2_tv;
         public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title_tv = itemView.findViewById(R.id.tvTitle);
             genre_tv = itemView.findViewById(R.id.tvGenre);
-
-            //TODO: populate details activity once receive call to library
-            details_tv = itemView.findViewById(R.id.tvOverview);
             poster_iv = itemView.findViewById(R.id.ivPoster);
             added_check = itemView.findViewById(R.id.checkAdded);
+            item_1_tv = itemView.findViewById(R.id.tv_item_1);
+            item_2_tv = itemView.findViewById(R.id.tv_item_2);
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
@@ -194,7 +214,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 } else {
                     //if item is not yet added, add
-                    getrecs(mItem);
+                    getrecs(lib);
                     title_tv.setTextSize(20);
                     
                     //if item is not a book
@@ -267,6 +287,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             item.setImgUrl(tempItem.getImgUrl());
                             item.setSmallImgUrl(tempItem.getSmallImgUrl());
                             item.setTitle(tempItem.getTitle());
+                            item.setPubYear(tempItem.getPubYear());
 
                             //weird way, pls fix later
                             mItems.add(mPosition, item);
