@@ -11,6 +11,7 @@ public class JSONTv {
 
     public String posterPath;
     public String backdropPath;
+    public String firstAirDate;
     public int movieId;
 
     public JSONTv() {
@@ -21,6 +22,7 @@ public class JSONTv {
         this.iid = iid;
         genre = "TV";
         title = object.getString("name");
+        firstAirDate = object.getString("first_air_date");
         overview = object.getString("overview");
 
         posterPath = object.getString("poster_path");
@@ -82,5 +84,13 @@ public class JSONTv {
 
     public void setMovieId(int movieId) {
         this.movieId = movieId;
+    }
+
+    public String getFirstAirDate() {
+        return firstAirDate;
+    }
+
+    public void setFirstAirDate(String firstAirDate) {
+        this.firstAirDate = firstAirDate;
     }
 }

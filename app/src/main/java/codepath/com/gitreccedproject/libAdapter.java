@@ -47,8 +47,8 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull libAdapter.ViewHolder holder, int position) {
-//        //TODO: populate movie/tv images based on config
-//        // get the data according to position
+        //TODO: populate movie/tv images based on config
+        // get the data according to position
         Item item = mItems.get(position % mItems.size());
 
         String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
