@@ -363,7 +363,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         //clear user's recs and then repopulate
         dbRecItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+            public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 // repopulate user's recs
                 repopulate(lib);
             }
