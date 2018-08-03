@@ -228,7 +228,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                     Log.d("mItem", "Title: " + mItem.getTitle());
                     //set the overview + additional fields for item
-                    new BookAsync().execute();
+                    if(mItems.get(position).getGenre().equals("Book")) {
+                        new BookAsync().execute();
+                    }
+
 
 
 
