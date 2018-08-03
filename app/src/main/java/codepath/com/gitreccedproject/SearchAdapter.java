@@ -49,6 +49,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
     ArrayList<String> lib;
+    ArrayList<String> library;
 
     public SearchAdapter(List<Item> items) {
         mItems = items;
@@ -105,8 +106,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 lib = new ArrayList<>();
+                library = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    lib.add(postSnapshot.child("iid").getValue().toString());
+                    library.add(postSnapshot.child("iid").getValue().toString());
                     if (postSnapshot.child("genre").getValue().toString().equals("Book")) {
                         //if snapshot is book, add bookid to lib
                         lib.add(postSnapshot.child("bookId").getValue().toString());
@@ -119,12 +121,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     //if movie exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
-                    holder.title_tv.setTextSize(20); // TODO - change this later
                 } else if (lib.contains(item.getBookId())) {
                     //if book exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
-                    holder.title_tv.setTextSize(20);
                 } else {
                     holder.added_check.setChecked(false);
                     isAdded = false;
@@ -175,10 +175,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 //if item is already added, unadd
                 if (isAdded) {
+                    Log.i("isAdded", String.format("%s",isAdded));
                     added_check.setChecked(false);
                     isAdded = false;
                     Log.i("click", "already in lib");
-                    lib.remove(mItem.getIid());
+                    library.remove(mItem.getIid());
+                    if (mItem.getGenre().contains("Book")) {
+                        lib.remove(mItem.getBookId());
+                    } else {
+                        lib.remove(mItem.getMovieId());
+                    }
                     dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
                     dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                         @Override
@@ -187,18 +193,26 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                    title_tv.setTextSize(18);
-                                    getrecs(lib);
+                                    getrecs(library);
                                 }
                             });
                         }
                     });
 
                 } else {
+                    Log.i("isAdded", String.format("%s",isAdded));
+                    added_check.setChecked(true);
+                    isAdded = true;
+
+                    if (mItem.getGenre().contains("Book")) {
+                        lib.add(mItem.getBookId());
+                    } else {
+                        lib.add(mItem.getMovieId());
+                    }
+
                     //if item is not yet added, add
-                    lib.add(mItem.getIid());
-                    getrecs(lib);
-                    title_tv.setTextSize(20);
+                    library.add(mItem.getIid());
+                    getrecs(library);
                     
                     //if item is not a book
                     if(!(mItems.get(position).getGenre().equals("Book"))) {
@@ -206,14 +220,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     }
 
 
-                    added_check.setChecked(true);
-                    isAdded = true;
-
                     Log.d("mItem", "Title: " + mItem.getTitle());
                     //set the overview + additional fields for item
                     new BookAsync().execute();
-
-
 
                 }
 
