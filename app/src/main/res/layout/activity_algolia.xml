@@ -28,4 +28,13 @@
         tools:layout_editor_absoluteX="180dp"
         tools:layout_editor_absoluteY="245dp" />
 
+    <Button
+        android:id="@+id/movietv_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="215dp"
+        android:text="Movies and TV" />
+
 </RelativeLayout>

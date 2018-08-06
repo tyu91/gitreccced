@@ -93,6 +93,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         if (item.getGenre().equals("Movie")) {
             //if item is Movie
+
+            //set release year
+            holder.item_1_tv.setText("");
+            //set release year
+            holder.item_2_tv.setText("Released: " + item.getReleaseDate().substring(0, 4));
             //load poster image
             String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
             //load image using glide
@@ -112,6 +117,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     Log.i("SearchAdapter", "SUCCESS: received response");
                     try {
                         holder.item_1_tv.setText("Seasons: " + response.getString("number_of_seasons"));
+                        holder.item_2_tv.setText("First Aired: " + item.getFirstAirDate().substring(0, 4));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -149,7 +155,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
-        itemsquery.addValueEventListener(new ValueEventListener() {
+        itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -169,13 +175,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     //if movie exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
+                    Log.i("isAdded1", String.format("%s",isAdded));
                 } else if (lib.contains(item.getBookId())) {
                     //if book exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
+                    Log.i("isAdded1", String.format("%s",isAdded));
                 } else {
                     holder.added_check.setChecked(false);
                     isAdded = false;
+                    Log.i("isAdded1", String.format("%s",isAdded));
                 }
 
                 //generate lib of item ids for recommendations
@@ -239,11 +248,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     } else {
                         lib.remove(mItem.getMovieId());
                     }
-                    dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsMoviesActivity.resultUser.getUid()).child(mItem.getIid());
+                    dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(InputRecsActivity.resultUser.getUid()).child(mItem.getIid());
                     dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                            dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(InputRecsMoviesActivity.resultUser.getUid());
+                            dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(InputRecsActivity.resultUser.getUid());
                             dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {

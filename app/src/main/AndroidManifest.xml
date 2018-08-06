@@ -30,7 +30,8 @@
         <activity android:name=".AlgoliaActivity" />
         <activity android:name=".InputRecsTVActivity" />
         <activity android:name=".InputRecsBooksActivity" />
-        <activity android:name=".DetailsActivity"></activity>
+        <activity android:name=".DetailsActivity" />
+        <activity android:name=".InputRecsActivity"></activity>
     </application>
 
 </manifest>

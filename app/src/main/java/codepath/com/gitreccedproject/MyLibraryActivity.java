@@ -40,18 +40,21 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ImageView refresh;
     private CardView cardView;
 
-    // Instance of the progress action-view
-    MenuItem miActionProgressItem;
-
 
     public void showProgressBar() {
         // Show progress item
+        toolbar = findViewById(R.id.toolbar);
+        pbloading = toolbar.findViewById(R.id.pbLoading);
+        refresh = toolbar.findViewById(R.id.refresh);
         refresh.setVisibility(View.GONE);
         pbloading.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
         // Hide progress item
+        toolbar = findViewById(R.id.toolbar);
+        pbloading = toolbar.findViewById(R.id.pbLoading);
+        refresh = toolbar.findViewById(R.id.refresh);
         pbloading.setVisibility(View.GONE);
         refresh.setVisibility(View.VISIBLE);
     }
@@ -96,7 +99,7 @@ public class MyLibraryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("plus","clicked!");
-                Intent i = new Intent(MyLibraryActivity.this, InputRecsMoviesActivity.class);
+                Intent i = new Intent(MyLibraryActivity.this, InputRecsActivity.class);
                 i.putExtra("user", Parcels.wrap(currentuser));
                 startActivity(i);
             }

@@ -83,7 +83,7 @@ public class DBTestActivity extends AppCompatActivity {
                 //new MoviePopulateAsync().execute();
                 //add tv shows to db
                 //addTVShows();
-                Toast.makeText(getApplicationContext(), "Added movies", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Added TV", Toast.LENGTH_SHORT).show();
             }
         });
 

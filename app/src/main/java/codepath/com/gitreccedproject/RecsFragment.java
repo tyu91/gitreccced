@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,8 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RecsFragment extends Fragment {
-    // Store a member variable for the listener
-    private EndlessRecyclerViewScrollListener scrollListener;
+    private SwipeRefreshLayout swipeContainer;
 
     public static Fragment getInstance(int position) {
         Bundle bundle = new Bundle();
@@ -73,6 +73,7 @@ public class RecsFragment extends Fragment {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((MyLibraryActivity)getActivity()).showProgressBar();
                 refresh();
             }
         });
@@ -96,6 +97,22 @@ public class RecsFragment extends Fragment {
         rv_movies.setLayoutManager(movies);
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                ((MyLibraryActivity)getActivity()).showProgressBar();
+                new loadasync().execute();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     public ArrayList<Item> dummyMovieRecItems() {
@@ -148,10 +165,26 @@ public class RecsFragment extends Fragment {
         return dummyItems;
     }
 
+    class loadasync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            new populateasync().execute();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            ((MyLibraryActivity)getActivity()).hideProgressBar();
+            swipeContainer.setRefreshing(false);
+        }
+    }
+
     class populateasync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
+
             ((MyLibraryActivity)getActivity()).showProgressBar();
         }
 
@@ -171,6 +204,7 @@ public class RecsFragment extends Fragment {
             moviesquery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //((MyLibraryActivity)getActivity()).showProgressBar();
                     movieItem = new ArrayList<>();
                     movieItems = dummyMovieRecItems();
                     Log.i("shot",dataSnapshot.toString());
@@ -199,6 +233,7 @@ public class RecsFragment extends Fragment {
                     }
                     movieRecAdapter = new RecAdapter(movieItems);
                     rv_movies.setAdapter(movieRecAdapter);
+                    //((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -212,6 +247,7 @@ public class RecsFragment extends Fragment {
             showsquery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //((MyLibraryActivity)getActivity()).showProgressBar();
                     tvItem = new ArrayList<>();
                     tvItems = dummyTVRecItems();
                     Log.i("shot",dataSnapshot.toString());
@@ -240,6 +276,7 @@ public class RecsFragment extends Fragment {
                     }
                     tvRecAdapter = new RecAdapter(tvItems);
                     rv_tvShows.setAdapter(tvRecAdapter);
+                    //((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -253,6 +290,7 @@ public class RecsFragment extends Fragment {
             booksquery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //((MyLibraryActivity)getActivity()).showProgressBar();
                     bookItem = new ArrayList<>();
                     bookItems = dummyBookRecItems();
                     Log.i("shot",dataSnapshot.toString());
@@ -281,7 +319,7 @@ public class RecsFragment extends Fragment {
                     }
                     bookRecAdapter = new RecAdapter(bookItems);
                     rv_books.setAdapter(bookRecAdapter);
-                    ((MyLibraryActivity)getActivity()).hideProgressBar();
+                    //((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -305,7 +343,7 @@ public class RecsFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     lib.add(postSnapshot.child("iid").getValue().toString());
                 }
-                new populateasync().execute();
+                new loadasync().execute();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
