@@ -155,7 +155,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
-        itemsquery.addValueEventListener(new ValueEventListener() {
+        itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -175,13 +175,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     //if movie exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
+                    Log.i("isAdded1", String.format("%s",isAdded));
                 } else if (lib.contains(item.getBookId())) {
                     //if book exists, then set checkmark to checked
                     holder.added_check.setChecked(true);
                     isAdded = true;
+                    Log.i("isAdded1", String.format("%s",isAdded));
                 } else {
                     holder.added_check.setChecked(false);
                     isAdded = false;
+                    Log.i("isAdded1", String.format("%s",isAdded));
                 }
 
                 //generate lib of item ids for recommendations
