@@ -13,6 +13,7 @@ public class JSONTv {
     public String backdropPath;
     public String firstAirDate;
     public int movieId;
+    public int seasons;
 
     public JSONTv() {
         //empty constructor
@@ -27,7 +28,8 @@ public class JSONTv {
 
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
-        movieId = object.getInt("id");
+        movieId = object.getInt("show_id");
+        seasons = object.getInt("season_number");
     }
 
     public String getIid() {
@@ -92,5 +94,13 @@ public class JSONTv {
 
     public void setFirstAirDate(String firstAirDate) {
         this.firstAirDate = firstAirDate;
+    }
+
+    public int getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(int seasons) {
+        this.seasons = seasons;
     }
 }

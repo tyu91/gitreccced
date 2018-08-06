@@ -7,7 +7,7 @@ public class TVDetails {
     public String numSeasons;
 
     public TVDetails(JSONObject object) throws JSONException {
-        numSeasons = object.getString("number_of_seasons");
+        numSeasons = object.getString("season_number");
     }
 
     public String getNumSeasons() {
