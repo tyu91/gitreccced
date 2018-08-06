@@ -38,18 +38,21 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ProgressBar pbloading;
     private ImageView refresh;
 
-    // Instance of the progress action-view
-    MenuItem miActionProgressItem;
-
 
     public void showProgressBar() {
         // Show progress item
+        toolbar = findViewById(R.id.toolbar);
+        pbloading = toolbar.findViewById(R.id.pbLoading);
+        refresh = toolbar.findViewById(R.id.refresh);
         refresh.setVisibility(View.GONE);
         pbloading.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
         // Hide progress item
+        toolbar = findViewById(R.id.toolbar);
+        pbloading = toolbar.findViewById(R.id.pbLoading);
+        refresh = toolbar.findViewById(R.id.refresh);
         pbloading.setVisibility(View.GONE);
         refresh.setVisibility(View.VISIBLE);
     }

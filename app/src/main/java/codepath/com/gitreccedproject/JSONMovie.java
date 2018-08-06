@@ -8,7 +8,6 @@ public class JSONMovie {
     public String genre;
     public String title;
     public String overview;
-
     public String posterPath;
     public String backdropPath;
     public String releaseDate;
@@ -27,10 +26,9 @@ public class JSONMovie {
         title = object.getString("title");
         releaseDate = object.getString("release_date");
         overview = object.getString("overview");
-
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
-        movieId = object.getString("id");
+        movieId = object.getString("movie_id");
 
         director = "director unassigned";
         cast = "";
