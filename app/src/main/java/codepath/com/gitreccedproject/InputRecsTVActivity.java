@@ -86,8 +86,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
         dbUsers.child(uid).setValue(resultUser);
         resultUser.setUid(uid);
 
-        // find the views
-        // find the views
+        //set progress bar
         pb = (ProgressBar) findViewById(R.id.pbLoading);
         pb.bringToFront();
         isStart = true;

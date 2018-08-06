@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#424242"
+    tools:context=".InputRecsActivity">
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/searchlist_rv"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/searchlist_rv"
+        android:layout_width="253dp"
+        android:layout_height="353dp"
+        android:layout_below="@+id/search_et"
+        android:layout_centerHorizontal="true"
+        android:background="#424242" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="17dp"
+        android:text="Add Media!"
+        android:textColor="?attr/colorButtonNormal"
+        android:textSize="18sp" />
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_et"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="53dp"
+        android:background="#424242"
+        android:ems="10"
+        android:focusable="auto"
+        android:foregroundTint="#c8c6d0"
+        android:hint="Search"
+        android:inputType="textPersonName"
+        android:textColor="#c8c6d0"
+        android:theme="@style/searchbartheme"></android.support.v7.widget.SearchView>
+
+    <TextView
+        android:id="@+id/tvSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tvNext"
+        android:layout_alignTop="@+id/textView2"
+        android:text="Skip"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvNext"
+        android:layout_width="65dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="48dp"
+        android:layout_toEndOf="@+id/searchlist_rv"
+        android:text="Next"
+        android:textColor="#e1e1e1"
+        android:textSize="22sp"
+        android:textStyle="italic" />
+
+</RelativeLayout>

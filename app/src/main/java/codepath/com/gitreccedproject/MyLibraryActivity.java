@@ -85,7 +85,7 @@ public class MyLibraryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("plus","clicked!");
-                Intent i = new Intent(MyLibraryActivity.this, InputRecsMoviesActivity.class);
+                Intent i = new Intent(MyLibraryActivity.this, InputRecsActivity.class);
                 i.putExtra("user", Parcels.wrap(currentuser));
                 startActivity(i);
             }

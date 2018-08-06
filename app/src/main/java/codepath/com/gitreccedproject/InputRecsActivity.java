@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -38,10 +37,9 @@ import java.util.Arrays;
 
 import cz.msebera.android.httpclient.Header;
 
+public class InputRecsActivity extends AppCompatActivity {
 
-public class InputRecsMoviesActivity extends AppCompatActivity {
-
-    Client client = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
+    Client movieSearchClient = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
@@ -70,35 +68,29 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
     //parameter name
     public final static String API_KEY_PARAM = "api_key";
 
-    AsyncHttpClient mClient;
+    AsyncHttpClient movieClient;
 
     Config config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        mClient = new AsyncHttpClient();
+        movieClient = new AsyncHttpClient();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_input_recs_movies);
-
-        Toast toast = Toast.makeText(getApplicationContext(), "Recommending Movies.",
-                Toast.LENGTH_SHORT);
-        toast.show();
-
-        //dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        setContentView(R.layout.activity_input_recs);
 
         //add user id from sign up activity
         resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("uid",resultUser.getUid().toString());
 
 
-        // find the views
+        // find search views
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
         next = findViewById(R.id.tvNext);
 
-        // find the views
+        // find progress bar
         pb = (ProgressBar) findViewById(R.id.pbLoading);
         pb.bringToFront();
         isStart = true;
@@ -115,7 +107,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
 
-        next.setOnClickListener(new View.OnClickListener() {
+        /*next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //getrecs();
@@ -123,11 +115,50 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                 i.putExtra("user",Parcels.wrap(resultUser));
                 startActivity(i);
             }
+        });*/
+
+        //set skip button
+        skip = findViewById(R.id.tvSkip);
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InputRecsActivity.this);
+
+                final TextView tv = new TextView(InputRecsActivity.this);
+                tv.setText("Are you sure you want to skip this?");
+                // set prompts.xml to alertdialog builder
+                alertDialogBuilder.setView(tv);
+
+                // set dialog message
+                alertDialogBuilder.
+                        setCancelable(false).
+                        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                closeContextMenu();
+                            }
+                        }).
+                        setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(InputRecsActivity.this, MyLibraryActivity.class);
+                                i.putExtra("user", Parcels.wrap(resultUser));
+                                startActivity(i);
+                                finish();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+
+            }
         });
 
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(resultUser.getUid());
         com.google.firebase.database.Query query = null;
         query = dbItemsByUser;
+
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -144,7 +175,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                         if (query != null && TextUtils.getTrimmedLength(query) > 0) {
                             query = query.trim();
                             Log.i("content", query);
-                            client.getIndex("movies").searchAsync(new Query(query), null, new CompletionHandler() {
+                            movieSearchClient.getIndex("movies").searchAsync(new Query(query), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
@@ -199,7 +230,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
                             Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
                             Log.i("content", newText);
-                            client.getIndex("movies").searchAsync(new Query(newText), null, new CompletionHandler() {
+                            movieSearchClient.getIndex("movies").searchAsync(new Query(newText), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
@@ -256,43 +287,6 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
             }
         });
 
-        skip = findViewById(R.id.tvSkip);
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InputRecsMoviesActivity.this);
-
-                final TextView tv = new TextView(InputRecsMoviesActivity.this);
-                tv.setText("Are you sure you want to skip this?");
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(tv);
-
-                // set dialog message
-                alertDialogBuilder.
-                        setCancelable(false).
-                        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                closeContextMenu();
-                            }
-                        }).
-                        setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(InputRecsMoviesActivity.this, MyLibraryActivity.class);
-                                i.putExtra("user", Parcels.wrap(resultUser));
-                                startActivity(i);
-                                finish();
-                            }
-                        });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
-
-            }
-        });
-
         //get config for movie/tv posters
         getConfiguration();
     }
@@ -305,7 +299,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
         //execute a GET request that expects a response from JSON object
-        mClient.get(url, params, new JsonHttpResponseHandler(){
+        movieClient.get(url, params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 

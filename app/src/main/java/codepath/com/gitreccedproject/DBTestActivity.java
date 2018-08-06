@@ -79,11 +79,11 @@ public class DBTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //add movies to db
-                addMovies();
+                //addMovies();
                 //new MoviePopulateAsync().execute();
                 //add tv shows to db
-                //addTVShows();
-                Toast.makeText(getApplicationContext(), "Added movies", Toast.LENGTH_SHORT).show();
+                addTVShows();
+                Toast.makeText(getApplicationContext(), "Added TV", Toast.LENGTH_SHORT).show();
             }
         });
 
