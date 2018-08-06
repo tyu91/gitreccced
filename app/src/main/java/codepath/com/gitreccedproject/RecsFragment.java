@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,8 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class RecsFragment extends Fragment {
-    // Store a member variable for the listener
-    private EndlessRecyclerViewScrollListener scrollListener;
+    private SwipeRefreshLayout swipeContainer;
 
     public static Fragment getInstance(int position) {
         Bundle bundle = new Bundle();
@@ -97,6 +97,22 @@ public class RecsFragment extends Fragment {
         rv_movies.setLayoutManager(movies);
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                ((MyLibraryActivity)getActivity()).showProgressBar();
+                new loadasync().execute();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     public ArrayList<Item> dummyMovieRecItems() {
@@ -160,6 +176,7 @@ public class RecsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             ((MyLibraryActivity)getActivity()).hideProgressBar();
+            swipeContainer.setRefreshing(false);
         }
     }
 

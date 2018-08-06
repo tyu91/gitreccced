@@ -38,9 +38,6 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ProgressBar pbloading;
     private ImageView refresh;
 
-    // Instance of the progress action-view
-    MenuItem miActionProgressItem;
-
 
     public void showProgressBar() {
         // Show progress item
