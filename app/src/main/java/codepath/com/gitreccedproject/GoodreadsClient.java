@@ -27,6 +27,9 @@ public class GoodreadsClient extends DefaultHandler {
     boolean boolSmallImgUrl = false;
     boolean boolImgUrl = false;
     boolean boolId = false;
+    boolean boolPubYear = false;
+    boolean boolPubMonth = false;
+    boolean boolPubDay = false;
     boolean inBook = false;
 
     private AsyncHttpClient client;
@@ -117,6 +120,12 @@ public class GoodreadsClient extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("id")) {
             Log.i("BookIdClient", "best_book id" + "==true");
             boolId = true;
+        } else if (qName.equalsIgnoreCase("original_publication_year")) {
+            boolPubYear = true;
+        } else if (qName.equalsIgnoreCase("original_publication_month")) {
+            boolPubMonth = true;
+        } else if (qName.equalsIgnoreCase("original_publication_day")) {
+            boolPubDay = true;
         } else {
             Log.i("XMLBook", "skipped tag");
         }
@@ -148,6 +157,15 @@ public class GoodreadsClient extends DefaultHandler {
         } else if (boolImgUrl) {
             book.setImgUrl(new String(ch, start, length));
             boolImgUrl = false;
+        } else if (boolPubYear) {
+            book.setPubYear(new String(ch, start, length));
+            boolPubYear = false;
+        } else if (boolPubMonth) {
+            book.setPubMonth(new String(ch, start, length));
+            boolPubMonth = false;
+        } else if (boolPubDay) {
+            book.setPubDay(new String(ch, start, length));
+            boolPubDay = false;
         } else if (inBook && boolId) {
             book.setBookId(new String(ch, start, length));
             Log.i("BookIdClient", "Book Id: " + new String(ch, start, length) + " || Book Title: " + book.getTitle());
@@ -176,6 +194,9 @@ public class GoodreadsClient extends DefaultHandler {
             boolSmallImgUrl = false;
             boolImgUrl = false;
             boolId = false;
+            boolPubYear = false;
+            boolPubMonth = false;
+            boolPubDay = false;
             inBook = false;
         } else if (localName.equalsIgnoreCase("best_book")) {
             Log.i("BookIdClient", "best_book" + "==false");

@@ -19,20 +19,30 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     DatabaseReference dbItemsByUser;
     DatabaseReference dbUsersbyItem;
     DatabaseReference dbBooks;
 
-    DatabaseReference dbRecItemsByUser;
+    //DatabaseReference dbRecItemsByUser;
 
-    GoodreadsClient client = new GoodreadsClient();
+    //GoodreadsClient client = new GoodreadsClient();
 
-    BookClient bClient = new BookClient();
+    //BookClient bClient = new BookClient();
+
+    AsyncHttpClient tvDetailsClient;
 
     boolean isAdded;
 
@@ -49,6 +59,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> userItems = new ArrayList<>();
     public List<Item> mRecs = new ArrayList<>();
     ArrayList<String> lib;
+
     ArrayList<String> library;
 
     public SearchAdapter(List<Item> items) {
@@ -79,22 +90,58 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         // populate the views according to position
         holder.title_tv.setText(item.getTitle());
         holder.genre_tv.setText(item.getGenre());
-        holder.details_tv.setText(item.getDetails());
 
-        if (item.getGenre().equals("Book")) {
-            //if item is a book, get poster image this way
-            GlideApp.with(context)
-                    .load(item.getImgUrl())
-                    .into(holder.poster_iv);
-        } else {
-
-            //TODO: getPosterPath: add field to movies and tv
+        if (item.getGenre().equals("Movie")) {
+            //if item is Movie
+            //load poster image
             String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
-
             //load image using glide
             GlideApp.with(context)
                     .load(imageUrl)
                     .into(holder.poster_iv);
+        } else if (item.getGenre().equals("TV")) {
+            //if item is TV
+            tvDetailsClient = new AsyncHttpClient();
+            String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + item.getMovieId();
+            RequestParams tvDetailsParams = new RequestParams();
+            tvDetailsParams.put("api_key", context.getString(R.string.movieApiKey));
+
+            tvDetailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Log.i("SearchAdapter", "SUCCESS: received response");
+                    try {
+                        holder.item_1_tv.setText("Seasons: " + response.getString("number_of_seasons"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+                }
+            });
+
+
+            //load poster image
+            String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+            //load image using glide
+            GlideApp.with(context)
+                    .load(imageUrl)
+                    .into(holder.poster_iv);
+        } else {
+            //if item is a book, get poster image this way
+            GlideApp.with(context)
+                    .load(item.getImgUrl())
+                    .into(holder.poster_iv);
+
+            //set author
+            holder.item_1_tv.setText(item.getAuthor());
+            //set pub year
+            holder.item_2_tv.setText(item.getPubYear());
         }
 
 
@@ -105,6 +152,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         itemsquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 lib = new ArrayList<>();
                 library = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -129,6 +177,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     holder.added_check.setChecked(false);
                     isAdded = false;
                 }
+
+                //generate lib of item ids for recommendations
+                lib = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    lib.add(postSnapshot.child("iid").getValue().toString());
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -145,20 +199,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title_tv;
         public TextView genre_tv;
-        public TextView details_tv;
         public ImageView poster_iv;
         public CheckBox added_check;
+        public TextView item_1_tv;
+        public TextView item_2_tv;
         public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title_tv = itemView.findViewById(R.id.tvTitle);
             genre_tv = itemView.findViewById(R.id.tvGenre);
-
-            //TODO: populate details activity once receive call to library
-            details_tv = itemView.findViewById(R.id.tvOverview);
             poster_iv = itemView.findViewById(R.id.ivPoster);
             added_check = itemView.findViewById(R.id.checkAdded);
+            item_1_tv = itemView.findViewById(R.id.tv_item_1);
+            item_2_tv = itemView.findViewById(R.id.tv_item_2);
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
@@ -222,7 +276,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                     Log.d("mItem", "Title: " + mItem.getTitle());
                     //set the overview + additional fields for item
-                    new BookAsync().execute();
+                    if(mItems.get(position).getGenre().equals("Book")) {
+                        new BookAsync().execute();
+                    }
+
 
                 }
 
@@ -288,6 +345,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             item.setImgUrl(tempItem.getImgUrl());
                             item.setSmallImgUrl(tempItem.getSmallImgUrl());
                             item.setTitle(tempItem.getTitle());
+                            item.setPubYear(tempItem.getPubYear());
 
                             //weird way, pls fix later
                             mItems.add(mPosition, item);

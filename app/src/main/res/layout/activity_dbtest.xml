@@ -38,9 +38,9 @@
         android:id="@+id/btnAddItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/btnNext"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp"
+        android:layout_marginTop="-125dp"
         android:text="Add Items" />
 
     <SearchView
@@ -58,5 +58,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="125dp"
         android:text="Go To DBTestActivity2" />
+
+    <Button
+        android:id="@+id/btnAddToDb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAddItems"
+        android:layout_centerHorizontal="true"
+        android:text="add to db" />
 
 </RelativeLayout>

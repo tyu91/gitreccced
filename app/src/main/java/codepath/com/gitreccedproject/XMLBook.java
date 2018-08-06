@@ -9,6 +9,9 @@ public class XMLBook {
     public String details;
     public String smallImgUrl;
     public String imgUrl;
+    public String pubYear;
+    public String pubMonth;
+    public String pubDay;
 
     public String getIid() {
         return iid;
@@ -72,5 +75,29 @@ public class XMLBook {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getPubYear() {
+        return pubYear;
+    }
+
+    public void setPubYear(String pubYear) {
+        this.pubYear = pubYear;
+    }
+
+    public String getPubMonth() {
+        return pubMonth;
+    }
+
+    public void setPubMonth(String pubMonth) {
+        this.pubMonth = pubMonth;
+    }
+
+    public String getPubDay() {
+        return pubDay;
+    }
+
+    public void setPubDay(String pubDay) {
+        this.pubDay = pubDay;
     }
 }

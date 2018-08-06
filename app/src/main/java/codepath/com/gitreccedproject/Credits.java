@@ -25,6 +25,5 @@ public class Credits {
         if (job.equalsIgnoreCase("director")){
             director = crew.getString("name");
         }
-
     }
 }
