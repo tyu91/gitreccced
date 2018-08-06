@@ -2,6 +2,7 @@ package codepath.com.gitreccedproject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -46,7 +47,8 @@ public class InputRecsActivity extends AppCompatActivity {
     public RecyclerView searchlist_rv;
     public TextView skip, next;
 
-    //DatabaseReference dbUsers;
+    DatabaseReference dbUsers;
+    DatabaseReference dbBooks;
     DatabaseReference dbItemsByUser;
     DatabaseReference dbUsersbyItem;
 
@@ -59,9 +61,15 @@ public class InputRecsActivity extends AppCompatActivity {
     ProgressBar pb;
     boolean isStart;
 
+    boolean testPrint = true;
+
+    String mQuery = "no response";
+    String oldText = "";
+
     static User resultUser;
 
-    String uid = "inputrecsmovieactivity: user id not set yet"; //user id (initialized to dummy string for testing)
+    String uid = "inputrecsactivity: user id not set yet"; //user id (initialized to dummy string for testing)
+    String iid = "inputrecsactivity: item id not set yet"; //user id (initialized to dummy string for testing)
 
     //CONSTANTS
     //base url of API
@@ -80,6 +88,9 @@ public class InputRecsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
+
+        dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        dbBooks = FirebaseDatabase.getInstance().getReference("books");
 
         //add user id from sign up activity
         resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
@@ -107,16 +118,6 @@ public class InputRecsActivity extends AppCompatActivity {
         searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
-
-        /*next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //getrecs();
-                Intent i = new Intent(InputRecsMoviesActivity.this, InputRecsTVActivity.class);
-                i.putExtra("user",Parcels.wrap(resultUser));
-                startActivity(i);
-            }
-        });*/
 
         //set skip button
         skip = findViewById(R.id.tvSkip);
@@ -233,6 +234,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             pb.setVisibility(ProgressBar.VISIBLE);
                             isStart = false;
                         }
+
                         if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
                             Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
@@ -250,7 +252,13 @@ public class InputRecsActivity extends AppCompatActivity {
                                         if (text != null && TextUtils.getTrimmedLength(text) > 0)
                                         {
                                             JSONArray array = content.getJSONArray("hits");
-                                            for (int i = 0; i < array.length(); i++) {
+                                            int num_results = 10;
+
+                                            if (array.length() < num_results) {
+                                                num_results = array.length();
+                                            }
+
+                                            for (int i = 0; i < num_results; i++) {
                                                 JSONObject object = array.getJSONObject(i);
 
                                                 // check iid is not in watched
@@ -284,6 +292,9 @@ public class InputRecsActivity extends AppCompatActivity {
                                 }
                             });
 
+                            mQuery = newText;
+                            oldText = newText;
+                            new BooksAsync().execute();
 
                         } else {
                             Log.i("search", "empty!");
@@ -332,4 +343,84 @@ public class InputRecsActivity extends AppCompatActivity {
             }
         });
     }
+
+    class BooksAsync extends AsyncTask<Void, Void, Void> {
+        GoodreadsClient client;
+
+        @Override
+        protected void onPreExecute() {
+            if (isStart) {
+                pb.setVisibility(ProgressBar.VISIBLE);
+                isStart = false;
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            client = new GoodreadsClient();
+            client.searchBooks(mQuery);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            pb.setVisibility(ProgressBar.GONE);
+            //clear book search adapter
+            //items.clear();
+            //searchAdapter.notifyDataSetChanged();
+
+            //temp array for books in InputRecsActivity
+            ArrayList<Item> mBooks = GoodreadsClient.books;
+
+            Log.i("AsyncTag", "Success!");
+
+            // BEGIN TRANSPLANTED CODE
+            //clear items array, the array that loads into searchAdapter
+            //items.clear();
+            Log.i("XMLBookBook", "Items cleared");
+            //searchAdapter.notifyDataSetChanged();
+
+            //if text hasn't been deleted
+            String text = search_et.getQuery().toString();
+            if (TextUtils.getTrimmedLength(text) > 0) {
+                //for each entry in response array, add entry to searchAdapter.
+                int num_results = 10;
+
+                Log.i("Books", "num_results before = " + num_results);
+
+                if (mBooks.size() < num_results) {
+                    num_results = mBooks.size();
+                }
+
+                Log.i("Books", "books.size = " + mBooks.size());
+                Log.i("Books", "num_results after = " + num_results);
+
+                for (int i = 0; i < num_results; i++) {
+                    String title = mBooks.get(i).getTitle().toString();
+                    Log.i("Books", "Title: " + title);
+
+                    Item bookItem = mBooks.get(i);
+
+                    //create new item id
+                    iid = dbBooks.push().getKey();
+
+                    bookItem.setIid(iid);
+                    bookItem.setBookId(mBooks.get(i).getBookId());
+                    Log.i("XMLBookBook", "Item Added to Adapter: " + bookItem.getTitle());
+
+                    if (testPrint) {
+                        Log.i("IidItem", "BookId Before bookItem added to adapter: " + bookItem.getIid());
+                        testPrint = false;
+                    }
+                    items.add(bookItem);
+                }
+
+                searchAdapter.notifyDataSetChanged();
+
+                //END TRANSPLANTED CODE
+                super.onPostExecute(aVoid);
+            }
+        }
+    }
+
 }
