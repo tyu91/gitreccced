@@ -93,6 +93,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         if (item.getGenre().equals("Movie")) {
             //if item is Movie
+
+            //set release year
+            holder.item_1_tv.setText("");
+            //set release year
+            holder.item_2_tv.setText("Released: " + item.getReleaseDate().substring(0, 4));
             //load poster image
             String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
             //load image using glide
@@ -112,6 +117,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     Log.i("SearchAdapter", "SUCCESS: received response");
                     try {
                         holder.item_1_tv.setText("Seasons: " + response.getString("number_of_seasons"));
+                        holder.item_2_tv.setText("First Aired: " + item.getFirstAirDate().substring(0, 4));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

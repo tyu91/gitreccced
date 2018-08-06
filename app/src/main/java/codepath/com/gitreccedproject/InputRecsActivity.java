@@ -40,6 +40,7 @@ import cz.msebera.android.httpclient.Header;
 public class InputRecsActivity extends AppCompatActivity {
 
     Client movieSearchClient = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
+    Client tvSearchClient = new Client("IF4OZJWJDV", "08b9cd4c085bb021ef94d0781fd000fe");
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
@@ -68,14 +69,14 @@ public class InputRecsActivity extends AppCompatActivity {
     //parameter name
     public final static String API_KEY_PARAM = "api_key";
 
-    AsyncHttpClient movieClient;
+    AsyncHttpClient configClient;
 
     Config config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        movieClient = new AsyncHttpClient();
+        configClient = new AsyncHttpClient();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
@@ -175,7 +176,7 @@ public class InputRecsActivity extends AppCompatActivity {
                         if (query != null && TextUtils.getTrimmedLength(query) > 0) {
                             query = query.trim();
                             Log.i("content", query);
-                            movieSearchClient.getIndex("movies").searchAsync(new Query(query), null, new CompletionHandler() {
+                            movieSearchClient.getIndex("movietv").searchAsync(new Query(query), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
@@ -199,6 +200,11 @@ public class InputRecsActivity extends AppCompatActivity {
                                                 item.setPosterPath(object.getString("posterPath"));
                                                 item.setBackdropPath(object.getString("backdropPath"));
                                                 item.setMovieId(object.getString("movieId"));
+                                                if(item.getGenre().equalsIgnoreCase("Movie")) {
+                                                    item.setReleaseDate(object.getString("releaseDate"));
+                                                } else {
+                                                    item.setFirstAirDate(object.getString("firstAirDate"));
+                                                }
 
                                                 items.add(item);
                                                 searchAdapter.notifyItemInserted(items.size() - 1);
@@ -212,6 +218,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+
                         } else {
                             Log.i("search", "empty!");
                             items.clear();
@@ -230,7 +237,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
                             Log.i("content", newText);
-                            movieSearchClient.getIndex("movies").searchAsync(new Query(newText), null, new CompletionHandler() {
+                            movieSearchClient.getIndex("movietv").searchAsync(new Query(newText), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
@@ -258,6 +265,11 @@ public class InputRecsActivity extends AppCompatActivity {
                                                     item.setPosterPath(object.getString("posterPath"));
                                                     item.setBackdropPath(object.getString("backdropPath"));
                                                     item.setMovieId(object.getString("movieId"));
+                                                    if(item.getGenre().equalsIgnoreCase("Movie")) {
+                                                        item.setReleaseDate(object.getString("releaseDate"));
+                                                    } else {
+                                                        item.setFirstAirDate(object.getString("firstAirDate"));
+                                                    }
 
                                                     items.add(item);
                                                     searchAdapter.notifyItemInserted(items.size() - 1);
@@ -271,6 +283,8 @@ public class InputRecsActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+
+
                         } else {
                             Log.i("search", "empty!");
                             items.clear();
@@ -299,7 +313,7 @@ public class InputRecsActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
         //execute a GET request that expects a response from JSON object
-        movieClient.get(url, params, new JsonHttpResponseHandler(){
+        configClient.get(url, params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 

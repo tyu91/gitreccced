@@ -142,6 +142,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
                                     item.setPosterPath(object.getString("posterPath"));
                                     item.setBackdropPath(object.getString("backdropPath"));
                                     item.setMovieId(object.getString("movieId"));
+                                    item.setFirstAirDate(object.getString("firstAirDate"));
 
                                     items.add(item);
                                     searchAdapter.notifyItemInserted(items.size() - 1);
@@ -194,6 +195,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
                                         item.setPosterPath(object.getString("posterPath"));
                                         item.setBackdropPath(object.getString("backdropPath"));
                                         item.setMovieId(object.getString("movieId"));
+                                        item.setFirstAirDate(object.getString("firstAirDate"));
 
                                         items.add(item);
                                         searchAdapter.notifyItemInserted(items.size() - 1);
