@@ -55,8 +55,9 @@ public class InputRecsTVActivity extends AppCompatActivity {
     String uid = "inputrecstvactivity: user id not set yet"; //user id (initialized to dummy string for testing)
 
     //CONSTANTS
-    //base url of API
     public final static String API_BASE_URL = "https://api.themoviedb.org/3";
+    //base url of API
+    public final static String API_BASE_URL_TV = "https://api.themoviedb.org/3/tv";
     //parameter name
     public final static String API_KEY_PARAM = "api_key";
 
@@ -141,6 +142,7 @@ public class InputRecsTVActivity extends AppCompatActivity {
                                     item.setTitle(object.getString("title"));
                                     item.setPosterPath(object.getString("posterPath"));
                                     item.setBackdropPath(object.getString("backdropPath"));
+                                    item.setMovieId(object.getString("movieId"));
 
                                     items.add(item);
                                     searchAdapter.notifyItemInserted(items.size() - 1);
@@ -214,12 +216,41 @@ public class InputRecsTVActivity extends AppCompatActivity {
 
         //get config for movie/tv posters
         getConfiguration();
+        //getNumSeasons();
     }
 
     //get the config from API
     private void getConfiguration() {
         //create the url
         String url = API_BASE_URL + "/configuration";
+        //set up request parameters
+        RequestParams params = new RequestParams();
+        params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
+        //execute a GET request that expects a response from JSON object
+        mClient.get(url, params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                try {
+                    config = new Config(response);
+                    Log.i("TVMovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    searchAdapter.setConfig(config);
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("TVMovieDB", "could not generate new config");
+            }
+        });
+    }
+
+    /*//get the config from API
+    private void getNumSeasons() {
+        //create the url
+        String url = API_BASE_URL_TV + "/configuration";
         //set up request parameters
         RequestParams params = new RequestParams();
         params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
@@ -242,5 +273,5 @@ public class InputRecsTVActivity extends AppCompatActivity {
                 Log.e("MovieDB", "could not generate new config");
             }
         });
-    }
+    }*/
 }

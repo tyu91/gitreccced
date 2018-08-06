@@ -8,8 +8,6 @@ public class Item {
     public String genre;
     public String title;
     public String details;
-    public String releaseDate;
-    public String firstAirDate;
 
     public String imageBaseUrl;
     public String posterSize;
@@ -17,11 +15,17 @@ public class Item {
     public String posterPath;
     public String backdropPath;
     public String movieId;
+    public String releaseDate;
+
+    public String firstAirDate;
 
     public String bookId;
     public String author;
     public String smallImgUrl;
     public String imgUrl;
+    public String pubYear;
+    public String pubMonth;
+    public String pubDay;
 
     public Item() {
         //empty constructor
@@ -39,11 +43,16 @@ public class Item {
          posterPath = "no associated posterPath";
          backdropPath = "no associated backdropPath";
          movieId = "no associated movieTvId";
+         releaseDate = "no associated release date";
+         firstAirDate = "no associated first air date";
 
         bookId = "no associated book id";
         author = "no associated author";
         smallImgUrl = "no associated smallImgUrl";
         imgUrl = "no associated imgUrl";
+        pubYear = "no associated pubYear";
+        pubMonth = "no associated pubMonth";
+        pubDay = "no associated pubDay";
     }
 
     public String getIid() {
@@ -158,6 +167,30 @@ public class Item {
         this.movieId = movieId;
     }
 
+    public String getPubYear() {
+        return pubYear;
+    }
+
+    public void setPubYear(String pubYear) {
+        this.pubYear = pubYear;
+    }
+
+    public String getPubMonth() {
+        return pubMonth;
+    }
+
+    public void setPubMonth(String pubMonth) {
+        this.pubMonth = pubMonth;
+    }
+
+    public String getPubDay() {
+        return pubDay;
+    }
+
+    public void setPubDay(String pubDay) {
+        this.pubDay = pubDay;
+    }
+
     public String getReleaseDate() {
         return releaseDate;
     }
@@ -172,5 +205,6 @@ public class Item {
 
     public void setFirstAirDate(String firstAirDate) {
         this.firstAirDate = firstAirDate;
+
     }
 }

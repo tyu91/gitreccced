@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="206dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/ivPoster"
@@ -34,19 +34,28 @@
         android:text="Genre"
         android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/tvOverview"
-        android:layout_width="324dp"
-        android:layout_height="55dp"
-        android:layout_alignStart="@+id/tvTitle"
-        android:layout_below="@+id/tvTitle"
-        android:text="Description" />
-
     <CheckBox
         android:id="@+id/checkAdded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:clickable="false"/>
+
+    <TextView
+        android:id="@+id/tv_item_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ivPoster"
+        android:text="item 1" />
+
+    <TextView
+        android:id="@+id/tv_item_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivPoster"
+        android:layout_toEndOf="@+id/ivPoster"
+        android:text="item 2" />
 
 </RelativeLayout>

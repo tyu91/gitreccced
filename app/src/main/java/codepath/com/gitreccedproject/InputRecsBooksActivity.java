@@ -58,6 +58,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
     Button btnSubmitItem;
 
     String mQuery = "no response";
+    String oldText = "";
 
     ArrayList<Item> mBooks;
 
@@ -123,8 +124,15 @@ public class InputRecsBooksActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mQuery = newText;
-                new BooksAsync().execute();
+                /*if (oldText.equals(newText)) {
+                    //if previous search query equals current search query, do nothing
+                } else {*/
+                    //if previous search query does not equal current search query, call BooksAsync().execute()
+                    mQuery = newText;
+                    oldText = newText;
+                    new BooksAsync().execute();
+                //}
+
                 return false;
             }
         });
@@ -180,8 +188,7 @@ public class InputRecsBooksActivity extends AppCompatActivity {
             String text = search_sv.getQuery().toString();
             if (TextUtils.getTrimmedLength(text) > 0) {
                 //for each entry in response array, add entry to searchAdapter.
-                //todo: change back to 10 results later
-                int num_results = 1;
+                int num_results = 10;
 
                 Log.i("Books", "num_results before = " + num_results);
 
