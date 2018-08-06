@@ -19,20 +19,30 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     DatabaseReference dbItemsByUser;
     DatabaseReference dbUsersbyItem;
     DatabaseReference dbBooks;
 
-    DatabaseReference dbRecItemsByUser;
+    //DatabaseReference dbRecItemsByUser;
 
-    GoodreadsClient client = new GoodreadsClient();
+    //GoodreadsClient client = new GoodreadsClient();
 
-    BookClient bClient = new BookClient();
+    //BookClient bClient = new BookClient();
+
+    AsyncHttpClient tvDetailsClient;
 
     boolean isAdded;
 
@@ -90,6 +100,30 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     .into(holder.poster_iv);
         } else if (item.getGenre().equals("TV")) {
             //if item is TV
+            tvDetailsClient = new AsyncHttpClient();
+            String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + item.getMovieId();
+            RequestParams tvDetailsParams = new RequestParams();
+            tvDetailsParams.put("api_key", context.getString(R.string.movieApiKey));
+
+            tvDetailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Log.i("SearchAdapter", "SUCCESS: received response");
+                    try {
+                        holder.item_1_tv.setText("Seasons: " + response.getString("number_of_seasons"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+                }
+            });
+
 
             //load poster image
             String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());

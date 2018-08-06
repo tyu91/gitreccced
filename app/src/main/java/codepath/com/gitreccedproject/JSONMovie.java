@@ -12,7 +12,10 @@ public class JSONMovie {
     public String posterPath;
     public String backdropPath;
     public String releaseDate;
-    public int movieId;
+    public String movieId;
+
+    public String director;
+    public String cast;
 
     public JSONMovie() {
         //empty constructor
@@ -27,7 +30,10 @@ public class JSONMovie {
 
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
-        movieId = object.getInt("movie_id"); //TODO: might not be "id", check JSON
+        movieId = object.getString("id");
+
+        director = "director unassigned";
+        cast = "";
 
     }
 
@@ -79,11 +85,11 @@ public class JSONMovie {
         this.backdropPath = backdropPath;
     }
 
-    public int getMovieId() {
+    public String getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(int movieId) {
+    public void setMovieId(String movieId) {
         this.movieId = movieId;
     }
 
@@ -93,5 +99,21 @@ public class JSONMovie {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getCast() {
+        return cast;
+    }
+
+    public void setCast(String cast) {
+        this.cast = cast;
     }
 }
