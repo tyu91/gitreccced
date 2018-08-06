@@ -73,6 +73,7 @@ public class RecsFragment extends Fragment {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((MyLibraryActivity)getActivity()).showProgressBar();
                 refresh();
             }
         });
@@ -148,10 +149,25 @@ public class RecsFragment extends Fragment {
         return dummyItems;
     }
 
+    class loadasync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            new populateasync().execute();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            ((MyLibraryActivity)getActivity()).hideProgressBar();
+        }
+    }
+
     class populateasync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
+
             ((MyLibraryActivity)getActivity()).showProgressBar();
         }
 
@@ -171,6 +187,7 @@ public class RecsFragment extends Fragment {
             moviesquery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //((MyLibraryActivity)getActivity()).showProgressBar();
                     movieItem = new ArrayList<>();
                     movieItems = dummyMovieRecItems();
                     Log.i("shot",dataSnapshot.toString());
@@ -199,6 +216,7 @@ public class RecsFragment extends Fragment {
                     }
                     movieRecAdapter = new RecAdapter(movieItems);
                     rv_movies.setAdapter(movieRecAdapter);
+                    //((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -212,6 +230,7 @@ public class RecsFragment extends Fragment {
             showsquery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //((MyLibraryActivity)getActivity()).showProgressBar();
                     tvItem = new ArrayList<>();
                     tvItems = dummyTVRecItems();
                     Log.i("shot",dataSnapshot.toString());
@@ -240,6 +259,7 @@ public class RecsFragment extends Fragment {
                     }
                     tvRecAdapter = new RecAdapter(tvItems);
                     rv_tvShows.setAdapter(tvRecAdapter);
+                    //((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -253,6 +273,7 @@ public class RecsFragment extends Fragment {
             booksquery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //((MyLibraryActivity)getActivity()).showProgressBar();
                     bookItem = new ArrayList<>();
                     bookItems = dummyBookRecItems();
                     Log.i("shot",dataSnapshot.toString());
@@ -281,7 +302,7 @@ public class RecsFragment extends Fragment {
                     }
                     bookRecAdapter = new RecAdapter(bookItems);
                     rv_books.setAdapter(bookRecAdapter);
-                    ((MyLibraryActivity)getActivity()).hideProgressBar();
+                    //((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -305,7 +326,7 @@ public class RecsFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     lib.add(postSnapshot.child("iid").getValue().toString());
                 }
-                new populateasync().execute();
+                new loadasync().execute();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
