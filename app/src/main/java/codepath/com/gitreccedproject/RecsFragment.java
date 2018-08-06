@@ -7,11 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,28 +67,23 @@ public class RecsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // this is the fragment equivalent of onCreate
 
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        final ImageView refresh = toolbar.findViewById(R.id.refresh);
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refresh();
+            }
+        });
+
         movieItems = dummyMovieRecItems();
         tvItems = dummyTVRecItems();
         bookItems = dummyBookRecItems();
 
-        // check if item is in user's library
-        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
-        com.google.firebase.database.Query itemsquery = null;
-        itemsquery = dbItemsByUser;
-        itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                lib = new ArrayList<>();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    lib.add(postSnapshot.child("iid").getValue().toString());
-                }
-                new populateasync().execute();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        ((MyLibraryActivity)getActivity()).showProgressBar();
 
-            }
-        });
+        refresh();
 
         rv_movies = view.findViewById(R.id.rv_libMovies);
         rv_tvShows = view.findViewById(R.id.rv_tv);
@@ -152,6 +149,11 @@ public class RecsFragment extends Fragment {
     }
 
     class populateasync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            ((MyLibraryActivity)getActivity()).showProgressBar();
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -279,6 +281,7 @@ public class RecsFragment extends Fragment {
                     }
                     bookRecAdapter = new RecAdapter(bookItems);
                     rv_books.setAdapter(bookRecAdapter);
+                    ((MyLibraryActivity)getActivity()).hideProgressBar();
                 }
 
                 @Override
@@ -288,5 +291,26 @@ public class RecsFragment extends Fragment {
             });
         }
 
+    }
+
+    public void refresh() {
+        // check if item is in user's library
+        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        com.google.firebase.database.Query itemsquery = null;
+        itemsquery = dbItemsByUser;
+        itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lib = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    lib.add(postSnapshot.child("iid").getValue().toString());
+                }
+                new populateasync().execute();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

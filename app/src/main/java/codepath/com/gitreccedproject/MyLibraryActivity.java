@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,25 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private DrawerLayout mDrawerLayout;
     private ImageView plus_btn;
+    private ProgressBar pbloading;
+    private ImageView refresh;
+
+    // Instance of the progress action-view
+    MenuItem miActionProgressItem;
+
+
+    public void showProgressBar() {
+        // Show progress item
+        refresh.setVisibility(View.GONE);
+        pbloading.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        pbloading.setVisibility(View.GONE);
+        refresh.setVisibility(View.VISIBLE);
+    }
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +76,9 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         final User currentuser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("libuser",currentuser.toString());
+
+        pbloading = toolbar.findViewById(R.id.pbLoading);
+        refresh = toolbar.findViewById(R.id.refresh);
 
         plus_btn = toolbar.findViewById(R.id.plus_btn);
         plus_btn.setOnClickListener(new View.OnClickListener() {
