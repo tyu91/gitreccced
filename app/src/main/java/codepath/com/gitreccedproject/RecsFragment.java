@@ -147,6 +147,7 @@ public class RecsFragment extends Fragment {
                 "war. All while a very ancient evil awakens in the farthest north. Amidst" +
                 " the war, a neglected military order of misfits, the Night's Watch, is" +
                 " all that stands between the realms of men and icy horrors beyond.");
+        item1.setPosterPath("/gwPSoYUHAKmdyVywgLpKKA4BjRr.jpg");
 
         ArrayList dummyItems = new ArrayList();
 
