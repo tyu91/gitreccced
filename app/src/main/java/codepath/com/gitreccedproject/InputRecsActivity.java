@@ -28,6 +28,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +91,7 @@ public class InputRecsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_recs);
 
         //testing
-        //new LevenshteinDistance();
+        LevenshteinDistance distance = new LevenshteinDistance();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
