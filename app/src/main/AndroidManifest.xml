@@ -31,7 +31,9 @@
         <activity android:name=".InputRecsTVActivity" />
         <activity android:name=".InputRecsBooksActivity" />
         <activity android:name=".DetailsActivity" />
-        <activity android:name=".InputRecsActivity"></activity>
+        <activity android:name=".InputRecsActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".UpdateInfoActivity"></activity>
     </application>
 
 </manifest>
