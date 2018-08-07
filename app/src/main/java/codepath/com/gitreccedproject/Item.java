@@ -37,22 +37,22 @@ public class Item {
         this.title = title;
         this.details = details;
 
-         imageBaseUrl = "no associated imageBaseUrl";
-         posterSize = "no associated posterSize";
-         backdropSize = "no associated backdropSize";
-         posterPath = "no associated posterPath";
-         backdropPath = "no associated backdropPath";
-         movieId = "no associated movieTvId";
-         releaseDate = "no associated release date";
-         firstAirDate = "no associated first air date";
+         imageBaseUrl = " no associated imageBaseUrl";
+         posterSize = " no associated posterSize";
+         backdropSize = " no associated backdropSize";
+         posterPath = " no associated posterPath";
+         backdropPath = " no associated backdropPath";
+         movieId = " no associated movieTvId";
+         releaseDate = " no associated release date";
+         firstAirDate = " no associated first air date";
 
-        bookId = "no associated book id";
-        author = "no associated author";
-        smallImgUrl = "no associated smallImgUrl";
-        imgUrl = "no associated imgUrl";
-        pubYear = "no associated pubYear";
-        pubMonth = "no associated pubMonth";
-        pubDay = "no associated pubDay";
+        bookId = " no associated book id";
+        author = " no associated author";
+        smallImgUrl = " no associated smallImgUrl";
+        imgUrl = " no associated imgUrl";
+        pubYear = " no associated pubYear";
+        pubMonth = " no associated pubMonth";
+        pubDay = " no associated pubDay";
     }
 
     public String getIid() {
