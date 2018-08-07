@@ -7,8 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -17,8 +20,15 @@ public class libexpadapter extends RecyclerView.Adapter<libexpadapter.ViewHolder
     Context context;
     public List<Item> mItems;
 
+    //config required for img urls
+    Config config;
+
     public libexpadapter(List<Item> items) {
         mItems = items;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     @NonNull
@@ -37,7 +47,25 @@ public class libexpadapter extends RecyclerView.Adapter<libexpadapter.ViewHolder
         // get the data according to position
         Item item = mItems.get(position);
         // populate the views according to position
-        holder.textview1.setText(item.title);
+        //holder.textview1.setText(item.title);
+
+
+        String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
+
+        if (item.getGenre().equalsIgnoreCase("Book")){
+            Glide.with(context)
+                    .load(item.getSmallImgUrl())
+                    .into(holder.posterImage);
+            holder.textview1.setText(item.getTitle());
+
+        } else {
+            // populate the views according to position
+            Glide.with(context)
+                    .load(imageUrl)
+                    .into(holder.posterImage);
+            holder.textview1.setText(item.title);
+        }
+
     }
 
     @Override
@@ -48,11 +76,13 @@ public class libexpadapter extends RecyclerView.Adapter<libexpadapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textview1;
         CardView cardview;
+        ImageView posterImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textview1 = itemView.findViewById(R.id.textview1);
             cardview = itemView.findViewById(R.id.cardview);
+            posterImage = itemView.findViewById(R.id.ivPosterImage);
             cardview.setOnClickListener(this);
         }
 

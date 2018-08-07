@@ -42,12 +42,19 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
         String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
 
-        // populate the views according to position
-        Glide.with(context)
-                .load(imageUrl)
-                //.transform(new RoundedCornersTransformation(15, 0))
-                .into(holder.posterImage);
-        holder.textview1.setText(item.title);
+        if (item.getGenre().equalsIgnoreCase("Book")){
+            Glide.with(context)
+                    .load(item.getSmallImgUrl())
+                    .into(holder.posterImage);
+            holder.textview1.setText(item.getTitle());
+
+        } else {
+            // populate the views according to position
+            Glide.with(context)
+                    .load(imageUrl)
+                    .into(holder.posterImage);
+            holder.textview1.setText(item.title);
+        }
     }
 
     @Override
@@ -73,6 +80,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition() % mItems.size();
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
+
+            //final Intent i = new Intent(MyLibraryActivity.this, DetailsActivity.class);
+            //context.startActivity(new Intent(context, DetailsActivity.class));
         }
     }
 }

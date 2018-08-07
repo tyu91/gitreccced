@@ -47,19 +47,24 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull libAdapter.ViewHolder holder, int position) {
-        //TODO: populate movie/tv images based on config
         // get the data according to position
         Item item = mItems.get(position % mItems.size());
 
         String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
 
-        // populate the views according to position
-        Glide.with(context)
-                .load(imageUrl)
-                //.transform(new RoundedCornersTransformation(15, 0))
-                .into(holder.posterImage);
+        if (item.getGenre().equalsIgnoreCase("Book")){
+            Glide.with(context)
+                    .load(item.getSmallImgUrl())
+                    .into(holder.posterImage);
+            holder.textview1.setText(item.getTitle());
 
-        holder.textview1.setText(item.title);
+        } else {
+            // populate the views according to position
+            Glide.with(context)
+                    .load(imageUrl)
+                    .into(holder.posterImage);
+            holder.textview1.setText(item.title);
+        }
     }
 
     @Override
