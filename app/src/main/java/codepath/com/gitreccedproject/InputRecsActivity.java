@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -64,7 +65,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
     boolean testPrint = true;
 
-    String mQuery = "no response";
+    static String mQuery = "no response";
     String oldText = "";
 
     static User resultUser;
@@ -91,7 +92,10 @@ public class InputRecsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_recs);
 
         //testing
-        LevenshteinDistance distance = new LevenshteinDistance();
+        LevenshteinDistance distance = new LevenshteinDistance(100);
+        CharSequence cs1 = "item";
+        CharSequence cs2 = "items";
+        Toast.makeText(this, "LevenshteinDistance: " + distance.apply(cs1, cs2).toString(), Toast.LENGTH_SHORT).show();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
