@@ -22,7 +22,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MyDialog extends DialogFragment{
+public class UpdateInfoDialog extends DialogFragment{
     EditText etEmail;
     EditText etPassword;
 
@@ -32,12 +32,12 @@ public class MyDialog extends DialogFragment{
     Button btnEnter;
     Activity mActivity;
 
-    public MyDialog () {
+    public UpdateInfoDialog () {
         //empty constructor
     }
 
     @SuppressLint("ValidFragment")
-    public MyDialog(Activity activity) {
+    public UpdateInfoDialog(Activity activity) {
         mActivity = activity;
     }
 
@@ -77,8 +77,10 @@ public class MyDialog extends DialogFragment{
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         dismiss();
+
                                         Intent intent = new Intent(mActivity, UpdateInfoActivity.class);
                                         startActivity(intent);
+
                                         //TODO: get username to welcome specific user to account
                                         Toast.makeText(getActivity(), "Welcome!", Toast.LENGTH_SHORT).show();
                                         Log.i("ReAuth", "Welcome, bitch!");

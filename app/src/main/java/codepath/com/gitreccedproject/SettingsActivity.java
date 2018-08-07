@@ -26,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         //inflate views
+        ivProfileImage = findViewById(R.id.ivProfile);
         tvUsername = findViewById(R.id.tvUsername);
         tvEmail = findViewById(R.id.tvEmail);
         btnUpdate = findViewById(R.id.btnUpdate);
@@ -37,8 +38,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO: getFragmentManager() is intended cmd but is deprecated
                 FragmentManager manager = getSupportFragmentManager();
-                MyDialog myDialog = new MyDialog(SettingsActivity.this);
-                myDialog.show(manager, "This is a test");
+                UpdateInfoDialog updateInfoDialog = new UpdateInfoDialog(SettingsActivity.this);
+                updateInfoDialog.show(manager, "This is a test");
 
 
             }
