@@ -78,9 +78,12 @@ public class RecsFragment extends Fragment {
             }
         });
 
-        movieItems = dummyMovieRecItems();
-        tvItems = dummyTVRecItems();
-        bookItems = dummyBookRecItems();
+        movieItems = new ArrayList<>();
+        tvItems = new ArrayList<>();
+        bookItems = new ArrayList<>();
+        //movieItems = dummyMovieRecItems();
+        //tvItems = dummyTVRecItems();
+        //bookItems = dummyBookRecItems();
 
         ((MyLibraryActivity)getActivity()).showProgressBar();
 
@@ -206,7 +209,7 @@ public class RecsFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     movieItem = new ArrayList<>();
-                    movieItems = dummyMovieRecItems();
+                    movieItems = new ArrayList<>();
                     Log.i("shot",dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
@@ -231,6 +234,9 @@ public class RecsFragment extends Fragment {
                         Log.i("sorted",movieItem.get(i).first.getTitle() + movieItem.get(i).second);
                         movieItems.add(movieItem.get(i).first);
                     }
+                    if (movieItems.size() == 0) {
+                        movieItems = dummyMovieRecItems();
+                    }
                     movieRecAdapter = new RecAdapter(movieItems);
                     rv_movies.setAdapter(movieRecAdapter);
                     //((MyLibraryActivity)getActivity()).hideProgressBar();
@@ -249,7 +255,7 @@ public class RecsFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     tvItem = new ArrayList<>();
-                    tvItems = dummyTVRecItems();
+                    tvItems = new ArrayList<>();
                     Log.i("shot",dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
@@ -274,6 +280,9 @@ public class RecsFragment extends Fragment {
                         Log.i("sorted",tvItem.get(i).first.getTitle() + tvItem.get(i).second);
                         tvItems.add(tvItem.get(i).first);
                     }
+                    if (tvItems.size() == 0) {
+                        tvItems = dummyTVRecItems();
+                    }
                     tvRecAdapter = new RecAdapter(tvItems);
                     rv_tvShows.setAdapter(tvRecAdapter);
                     //((MyLibraryActivity)getActivity()).hideProgressBar();
@@ -292,7 +301,7 @@ public class RecsFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     bookItem = new ArrayList<>();
-                    bookItems = dummyBookRecItems();
+                    bookItems = new ArrayList<>();
                     Log.i("shot",dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
@@ -316,6 +325,9 @@ public class RecsFragment extends Fragment {
                     for (int i = 0; i < bookItem.size(); i++) {
                         Log.i("sorted",bookItem.get(i).first.getTitle() + bookItem.get(i).second);
                         bookItems.add(bookItem.get(i).first);
+                    }
+                    if (bookItems.size() == 0) {
+                        bookItems = dummyBookRecItems();
                     }
                     bookRecAdapter = new RecAdapter(bookItems);
                     rv_books.setAdapter(bookRecAdapter);
