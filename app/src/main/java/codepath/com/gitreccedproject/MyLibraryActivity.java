@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -38,7 +37,6 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ImageView plus_btn;
     private ProgressBar pbloading;
     private ImageView refresh;
-    private CardView cardView;
 
 
     public void showProgressBar() {
@@ -66,15 +64,6 @@ public class MyLibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_library);
 
         mAuth = FirebaseAuth.getInstance();
-
-        cardView = findViewById(R.id.cardview);
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent i = new Intent(MyLibraryActivity.this, DetailsActivity.class);
-                startActivity(i);
-            }
-        });
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
