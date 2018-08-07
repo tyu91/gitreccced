@@ -56,14 +56,14 @@
         android:id="@+id/tvSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvNext"
+        android:layout_alignEnd="@+id/tvFin"
         android:layout_alignTop="@+id/textView2"
         android:text="Skip"
         android:textColor="@color/colorAccent"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tvNext"
+        android:id="@+id/tvFin"
         android:layout_width="65dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
