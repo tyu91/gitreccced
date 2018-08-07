@@ -46,7 +46,7 @@ public class InputRecsActivity extends AppCompatActivity {
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
-    public TextView skip, next;
+    public TextView skip, finish;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -104,7 +104,16 @@ public class InputRecsActivity extends AppCompatActivity {
         // find search views
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        next = findViewById(R.id.tvNext);
+        finish = findViewById(R.id.tvFin);
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent(InputRecsActivity.this, MyLibraryActivity.class);
+                i.putExtra("user", Parcels.wrap(resultUser));
+                startActivity(i);
+                finish();
+            }
+        });
 
         // find progress bar
         pb = (ProgressBar) findViewById(R.id.pbLoading);

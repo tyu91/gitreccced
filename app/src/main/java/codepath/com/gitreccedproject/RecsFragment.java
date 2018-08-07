@@ -78,9 +78,12 @@ public class RecsFragment extends Fragment {
             }
         });
 
-        movieItems = dummyMovieRecItems();
-        tvItems = dummyTVRecItems();
-        bookItems = dummyBookRecItems();
+        movieItems = new ArrayList<>();
+        tvItems = new ArrayList<>();
+        bookItems = new ArrayList<>();
+        //movieItems = dummyMovieRecItems();
+        //tvItems = dummyTVRecItems();
+        //bookItems = dummyBookRecItems();
 
         ((MyLibraryActivity)getActivity()).showProgressBar();
 
@@ -125,6 +128,7 @@ public class RecsFragment extends Fragment {
                 "to stop Ragnarok, the prophecy of destruction to his homeworld and the " +
                 "end of Asgardian civilization, at the hands of an all-powerful new threat, " +
                 "the ruthless Hela.");
+        item1.setPosterPath("/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg");
 
         ArrayList dummyItems = new ArrayList();
 
@@ -206,11 +210,15 @@ public class RecsFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     movieItem = new ArrayList<>();
-                    movieItems = dummyMovieRecItems();
+                    movieItems = new ArrayList<>();
                     Log.i("shot",dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                        //TODO: set posterPath, backdropPath, associated sizes, movieId
+                        item.setMovieId(postSnapshot.child("movieId").getValue().toString());
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
@@ -231,6 +239,9 @@ public class RecsFragment extends Fragment {
                         Log.i("sorted",movieItem.get(i).first.getTitle() + movieItem.get(i).second);
                         movieItems.add(movieItem.get(i).first);
                     }
+                    if (movieItems.size() == 0) {
+                        movieItems = dummyMovieRecItems();
+                    }
                     movieRecAdapter = new RecAdapter(movieItems);
                     rv_movies.setAdapter(movieRecAdapter);
                     //((MyLibraryActivity)getActivity()).hideProgressBar();
@@ -249,11 +260,14 @@ public class RecsFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     tvItem = new ArrayList<>();
-                    tvItems = dummyTVRecItems();
+                    tvItems = new ArrayList<>();
                     Log.i("shot",dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "TV", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                        item.setMovieId(postSnapshot.child("movieId").getValue().toString());
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
@@ -274,6 +288,9 @@ public class RecsFragment extends Fragment {
                         Log.i("sorted",tvItem.get(i).first.getTitle() + tvItem.get(i).second);
                         tvItems.add(tvItem.get(i).first);
                     }
+                    if (tvItems.size() == 0) {
+                        tvItems = dummyTVRecItems();
+                    }
                     tvRecAdapter = new RecAdapter(tvItems);
                     rv_tvShows.setAdapter(tvRecAdapter);
                     //((MyLibraryActivity)getActivity()).hideProgressBar();
@@ -292,11 +309,14 @@ public class RecsFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     bookItem = new ArrayList<>();
-                    bookItems = dummyBookRecItems();
+                    bookItems = new ArrayList<>();
                     Log.i("shot",dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
+                        item.setBookId(postSnapshot.child("bookId").getValue().toString());
+                        item.setSmallImgUrl(postSnapshot.child("smallImgUrl").getValue().toString());
+                        item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
@@ -316,6 +336,9 @@ public class RecsFragment extends Fragment {
                     for (int i = 0; i < bookItem.size(); i++) {
                         Log.i("sorted",bookItem.get(i).first.getTitle() + bookItem.get(i).second);
                         bookItems.add(bookItem.get(i).first);
+                    }
+                    if (bookItems.size() == 0) {
+                        bookItems = dummyBookRecItems();
                     }
                     bookRecAdapter = new RecAdapter(bookItems);
                     rv_books.setAdapter(bookRecAdapter);

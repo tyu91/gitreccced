@@ -1,7 +1,6 @@
 package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +24,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         final FragmentManager fragManager = getSupportFragmentManager();
 
-        final Fragment movieFrag = new MovieDetailsFragment();
-        final Fragment tvFrag = new TVDetailsFragment();
-        final Fragment bookFrag = new BookDetailsFragment();
+        final MovieDetailsFragment movieFrag = new MovieDetailsFragment();
+        final TVDetailsFragment tvFrag = new TVDetailsFragment();
+        final BookDetailsFragment bookFrag = new BookDetailsFragment();
 
         FragmentTransaction fragTrans = fragManager.beginTransaction();
 
