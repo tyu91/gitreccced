@@ -3,6 +3,7 @@ package codepath.com.gitreccedproject;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ViewHolder> {
 
     Context context;
+    AsyncHttpClient tvDetailsClient;
+    JSONTv tv;
 
     public List<Item> mItems;
 
@@ -36,11 +47,11 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DetailsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final DetailsAdapter.ViewHolder holder, int position) {
         Item item = mItems.get(position % mItems.size());
         DetailsActivity details = new DetailsActivity();
 
-        String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
+        String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getBackdropPath();
 
         if (item.getGenre().equalsIgnoreCase("Movie")){
             Glide.with(context)
@@ -52,16 +63,41 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ViewHold
             holder.releaseDate.setText(item.getReleaseDate());
             holder.movieOverview.setText(item.getDetails());
 
-
         } else if (item.getGenre().equalsIgnoreCase("TV")){
+            //if item is TV
+            tvDetailsClient = new AsyncHttpClient();
+            String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + item.getMovieId();
+            RequestParams tvDetailsParams = new RequestParams();
+            tvDetailsParams.put("api_key", context.getString(R.string.movieApiKey));
+
+            tvDetailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    Log.i("SearchAdapter", "SUCCESS: received response");
+                    try {
+                        holder.seasons.setText(String.format(" %s", response.getString("number_of_seasons")));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.i("DetailsAdapter", "FAILURE. Response String: " + responseString);
+                }
+            });
+
             Glide.with(context)
                     .load(imageUrl)
                     .into(holder.tvPoster);
 
             holder.tvShowName.setText(item.getTitle());
-            //holder.seasons.setText();
+//            holder.seasons.setText(tv.getSeasons());
             holder.firstAired.setText(item.getFirstAirDate());
             holder.tvShowOverview.setText(item.getDetails());
+
         } else {
             Glide.with(context)
                     .load(imageUrl)
