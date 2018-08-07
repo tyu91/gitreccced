@@ -128,6 +128,7 @@ public class RecsFragment extends Fragment {
                 "to stop Ragnarok, the prophecy of destruction to his homeworld and the " +
                 "end of Asgardian civilization, at the hands of an all-powerful new threat, " +
                 "the ruthless Hela.");
+        item1.setPosterPath("/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg");
 
         ArrayList dummyItems = new ArrayList();
 
@@ -214,6 +215,10 @@ public class RecsFragment extends Fragment {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Movie", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                        //TODO: set posterPath, backdropPath, associated sizes, movieId
+                        item.setMovieId(postSnapshot.child("movieId").getValue().toString());
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
@@ -260,6 +265,9 @@ public class RecsFragment extends Fragment {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "TV", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
+                        item.setMovieId(postSnapshot.child("movieId").getValue().toString());
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
@@ -306,6 +314,9 @@ public class RecsFragment extends Fragment {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
+                        item.setBookId(postSnapshot.child("bookId").getValue().toString());
+                        item.setSmallImgUrl(postSnapshot.child("smallImgUrl").getValue().toString());
+                        item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {

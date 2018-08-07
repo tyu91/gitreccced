@@ -221,9 +221,13 @@ public class InputRecsActivity extends AppCompatActivity {
                             });
 
                         } else {
+                            //if search is empty, do not see progress bar
                             Log.i("search", "empty!");
                             items.clear();
                             searchAdapter.notifyDataSetChanged();
+                            pb.setVisibility(ProgressBar.GONE);
+                            isStart = true;
+
                         }
                         return false;
                     }
@@ -244,13 +248,12 @@ public class InputRecsActivity extends AppCompatActivity {
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
                                     try {
-                                        pb.setVisibility(ProgressBar.GONE);
+                                        pb.setVisibility(ProgressBar.VISIBLE);
                                         items.clear();
                                         searchAdapter.notifyDataSetChanged();
 
                                         String text = search_et.getQuery().toString();
-                                        if (text != null && TextUtils.getTrimmedLength(text) > 0)
-                                        {
+                                        if (text != null && TextUtils.getTrimmedLength(text) > 0) {
                                             JSONArray array = content.getJSONArray("hits");
                                             int num_results = 10;
 
@@ -279,6 +282,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                                         item.setFirstAirDate(object.getString("firstAirDate"));
                                                     }
 
+                                                    pb.setVisibility(ProgressBar.GONE);
                                                     items.add(item);
                                                     searchAdapter.notifyItemInserted(items.size() - 1);
                                                 } else {
@@ -286,6 +290,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                                 }
                                             }
                                         } else {
+                                            pb.setVisibility(ProgressBar.GONE);
                                             isStart = true;
                                         }
                                     } catch (JSONException e) {

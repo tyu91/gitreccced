@@ -148,13 +148,23 @@ public class LibraryFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shottt",postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
+
                     if (item.getGenre().contains("Movie")) {
-                        //item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
-                        movieslib.add(item);
-                    } else if (item.getGenre().contains("TV")) {
+                        item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+                        movieslib.add(item);
+
+                    } else if (item.getGenre().contains("TV")) {
+                        item.setMovieId(postSnapshot.child("movieId").getValue().toString());
+                        item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
+                        item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
                         TVlib.add(item);
+
                     } else {
+                        item.setBookId(postSnapshot.child("bookId").getValue().toString());
+                        item.setSmallImgUrl(postSnapshot.child("smallImgUrl").getValue().toString());
+                        item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
                         booklib.add(item);
                     }
                 }

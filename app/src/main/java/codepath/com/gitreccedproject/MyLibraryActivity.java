@@ -169,6 +169,10 @@ public class MyLibraryActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), DBTestActivity.class);
                             startActivity(intent);
                         }
+                        if (menuItem.getItemId() == R.id.settings) {
+                            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                            startActivity(intent);
+                        }
                         return true;
                     }
                 });
