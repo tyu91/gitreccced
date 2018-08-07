@@ -285,6 +285,8 @@ public class InputRecsActivity extends AppCompatActivity {
                                                     Log.i("watched", object.getString("title"));
                                                 }
                                             }
+                                        } else {
+                                            isStart = true;
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
