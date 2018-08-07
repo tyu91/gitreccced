@@ -292,6 +292,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                 }
 
+                Log.i("library",library.toString());
+
                 /*Log.i("size",String.format("%s",title_tv.getTextSize()));
                 if (title_tv.getTextSize() == 60.0) {
                     Log.i("click", "already in lib");
@@ -540,6 +542,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                 if (inlib == false) {
                                     // add the item to the recommendations list
                                     addrec(postSnapshot);
+                                } else {
+                                    Log.i("inlib1", postSnapshot.child("iid").getValue().toString());
                                 }
                             }
                         }
