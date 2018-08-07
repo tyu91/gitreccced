@@ -236,7 +236,6 @@ public class InputRecsActivity extends AppCompatActivity {
                             searchAdapter.notifyDataSetChanged();
                             pb.setVisibility(ProgressBar.GONE);
                             isStart = true;
-
                         }
                         return false;
                     }

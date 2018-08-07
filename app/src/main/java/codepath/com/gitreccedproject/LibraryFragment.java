@@ -3,6 +3,7 @@ package codepath.com.gitreccedproject;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -116,6 +117,14 @@ public class LibraryFragment extends Fragment {
         rv_moviesexp = view.findViewById(R.id.rv_moviesexp);
         rv_showsexp = view.findViewById(R.id.rv_showsexp);
         rv_booksexp = view.findViewById(R.id.rv_booksexp);
+
+        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+
+        rv_moviesexp.setAdapter(movieslibexpadapter);
+        rv_showsexp.setAdapter(TVlibexpadapter);
+        rv_booksexp.setAdapter(bookslibexpadapter);
 
         /*//TODO - change this to get actual data
         for (int i = 0; i < 10; i++) {
@@ -281,6 +290,7 @@ public class LibraryFragment extends Fragment {
                     //TODO: set config fields, etc in Item class (and also <genre> classes as well?)
                     Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
                     movieslibAdapter.setConfig(config);
+                    movieslibexpadapter.setConfig(config);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
