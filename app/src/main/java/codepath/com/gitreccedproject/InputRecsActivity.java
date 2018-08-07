@@ -89,6 +89,9 @@ public class InputRecsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
 
+        //testing
+        //new LevenshteinDistance();
+
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
 
