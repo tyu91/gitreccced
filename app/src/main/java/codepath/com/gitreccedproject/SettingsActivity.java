@@ -33,15 +33,16 @@ public class SettingsActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        tvEmail.setText(user.getEmail());
+        tvUsername.setText(user.getDisplayName());
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: getFragmentManager() is intended cmd but is deprecated
                 FragmentManager manager = getSupportFragmentManager();
-                UpdateInfoDialog updateInfoDialog = new UpdateInfoDialog(SettingsActivity.this);
+                UpdateInfoDialog updateInfoDialog = new UpdateInfoDialog(SettingsActivity.this, 0);
                 updateInfoDialog.show(manager, "This is a test");
-
-
             }
         });
     }
