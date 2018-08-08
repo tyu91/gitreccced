@@ -5,8 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 
 
 public class TVDetailsFragment extends Fragment {
@@ -20,7 +22,8 @@ public class TVDetailsFragment extends Fragment {
     private String mParam2;
 
 
-    TextView tvTVTitle;
+    private TextView tvTVTitle, seasons, firstAired, overview;
+    private ImageView backdrop;
 
 
     //private OnFragmentInteractionListener mListener;
@@ -65,8 +68,22 @@ public class TVDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        String imageUrl = "https://image.tmdb.org/t/p/w342" + ((DetailsActivity)getActivity()).item.getBackdropPath();
+
         tvTVTitle = view.findViewById(R.id.tvShowTitle);
+        seasons = view.findViewById(R.id.tvSeasons);
+        firstAired = view.findViewById(R.id.tvFirstAired);
+        overview = view.findViewById(R.id.tvShowOverview);
+        backdrop = view.findViewById(R.id.ivTVBackdrop);
+
         tvTVTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        //seasons.setText(((DetailsActivity)getActivity()).item.getSeasons);
+        firstAired.setText(((DetailsActivity)getActivity()).item.getFirstAirDate());
+        overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+
+        Glide.with(getContext())
+                .load(imageUrl)
+                .into(backdrop);
     }
 
     /*// TODO: Rename method, update argument and hook method into UI event
