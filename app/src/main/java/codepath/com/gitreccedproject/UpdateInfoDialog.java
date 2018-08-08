@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +78,7 @@ public class UpdateInfoDialog extends DialogFragment{
 
                     if (email == null || email.equals("") || password == null || password.equals("")) {
                         //if email or password is empty, don't authenticate and toast error
-                        Toast.makeText(getActivity(), "Incorrect! Please try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Incorrect! Please try again.", Toast.LENGTH_LONG).show();
                     } else {
                         //if email and password are both not empty, reauthenticate
 
@@ -96,10 +98,10 @@ public class UpdateInfoDialog extends DialogFragment{
                                             startActivity(intent);
 
                                             //TODO: get username to welcome specific user to account
-                                            Toast.makeText(getActivity(), "Welcome!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Welcome!", Toast.LENGTH_LONG).show();
                                             Log.i("ReAuth", "Welcome, bitch!");
                                         } else {
-                                            Toast.makeText(getActivity(), "Incorrect! Please try again.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Incorrect! Please try again.", Toast.LENGTH_LONG).show();
                                             Log.i("ReAuth", "Denied, bitch!");
                                         }
                                     }
@@ -121,20 +123,27 @@ public class UpdateInfoDialog extends DialogFragment{
                             .setDisplayName(username)
                             .build();
 
-                    currentUser.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        dbUsers.child("username").setValue(username);
-                                        dismiss();
-                                        Log.d("update", "User profile updated.");
-                                        Toast.makeText(getContext(), "Successfully update username!", Toast.LENGTH_SHORT);
-                                    } else {
-                                        Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT);
+                    if (TextUtils.getTrimmedLength(username) > 0) {
+                        currentUser.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            dbUsers.child("username").setValue(username);
+                                            dismiss();
+                                            Intent i = new Intent(getContext(), UpdateInfoActivity.class);
+                                            getContext().startActivity(i);
+                                            Log.d("update", "User profile updated.");
+                                            Toast.makeText(getContext(), "Successfully updated username!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG).show();
+                                            Log.d("update", "failed.");
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    } else {
+                        Toast.makeText(getContext(), "Please enter a username!", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         } else if (mcode == 2) {
@@ -147,45 +156,64 @@ public class UpdateInfoDialog extends DialogFragment{
                 public void onClick(View view) {
                     email = etEmail.getText().toString();
 
-                    currentUser.updateEmail(email)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        dbUsers.child("email").setValue(email);
-                                        dismiss();
-                                        Log.d("update", "User email address updated.");
-                                        Toast.makeText(getContext(), "Successfully update email!", Toast.LENGTH_SHORT);
-                                    } else {
-                                        Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT);
+                    if (TextUtils.getTrimmedLength(email) > 0) {
+                        currentUser.updateEmail(email)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            dbUsers.child("email").setValue(email);
+                                            dismiss();
+                                            Intent i = new Intent(getContext(), UpdateInfoActivity.class);
+                                            getContext().startActivity(i);
+                                            Log.d("update", "User email address updated.");
+                                            Toast.makeText(getContext(), "Successfully updated email!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG).show();
+                                            Log.d("update", "failed.");
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    } else {
+                        Toast.makeText(getContext(), "Please enter a email!", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         } else if (mcode == 3) {
-            etEmail.setVisibility(View.GONE);
+            etEmail.setHint("Password");
+            etPassword.setHint("Confirm password");
+            etEmail.setTransformationMethod(PasswordTransformationMethod.getInstance());
             tvPrompt.setText("Enter a new password");
 
             btnEnter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    password = etPassword.getText().toString();
+                    password = etEmail.getText().toString();
+                    String confirmpassword = etPassword.getText().toString();
 
-                    currentUser.updatePassword(password)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        dbUsers.child("password").setValue(password);
-                                        dismiss();
-                                        Log.d("update", "User password updated.");
-                                        Toast.makeText(getContext(), "Successfully update password!", Toast.LENGTH_SHORT);
-                                    } else {
-                                        Toast.makeText(getContext(), "failed", Toast.LENGTH_SHORT);
+                    if (!password.equals(confirmpassword)) {
+                        Toast.makeText(getContext(), "Passwords don't match!", Toast.LENGTH_LONG).show();
+                        Log.i("password",password);
+                        Log.i("password1", confirmpassword);
+                    } else if (TextUtils.getTrimmedLength(password) > 0) {
+                        currentUser.updatePassword(password)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            dbUsers.child("password").setValue(password);
+                                            dismiss();
+                                            Log.d("update", "User password updated.");
+                                            Toast.makeText(getContext(), "Successfully updated password!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG).show();
+                                            Log.d("update", "failed.");
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    } else if (TextUtils.getTrimmedLength(password) == 0) {
+                        Toast.makeText(getContext(), "Please enter a password!", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
