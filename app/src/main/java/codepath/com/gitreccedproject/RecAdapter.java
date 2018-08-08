@@ -17,7 +17,8 @@ import java.util.List;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
-    Context context;
+    private Context context;
+    private Item item;
     public List<Item> mItems;
 
     public RecAdapter(List<Item> items) {
@@ -29,8 +30,8 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     public RecAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View searchView = inflater.inflate(R.layout.item, parent, false);
-        RecAdapter.ViewHolder viewHolder = new RecAdapter.ViewHolder(searchView);
+        View recView = inflater.inflate(R.layout.item, parent, false);
+        RecAdapter.ViewHolder viewHolder = new RecAdapter.ViewHolder(recView);
 
         return viewHolder;
     }
@@ -38,7 +39,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecAdapter.ViewHolder holder, int position) {
         // get the data according to position
-        Item item = mItems.get(position % mItems.size());
+        item = mItems.get(position % mItems.size());
 
         String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
 
@@ -80,6 +81,10 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition() % mItems.size();
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
+
+//            final Intent i = new Intent(context, DetailsActivity.class);
+//            i.putExtra("item", Parcels.wrap(item));
+//            context.startActivity(i);
 
             //final Intent i = new Intent(MyLibraryActivity.this, DetailsActivity.class);
             //context.startActivity(new Intent(context, DetailsActivity.class));
