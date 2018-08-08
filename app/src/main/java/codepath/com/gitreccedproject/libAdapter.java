@@ -87,6 +87,14 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
             posterImage = itemView.findViewById(R.id.ivPosterImage);
             cardview = itemView.findViewById(R.id.cardview);
             cardview.setOnClickListener(this);
+
+            cardview.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    
+                    return false;
+                }
+            });
         }
 
         @Override
