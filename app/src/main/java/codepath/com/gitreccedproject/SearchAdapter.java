@@ -104,7 +104,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //set release year
             holder.item_2_tv.setText("Released: " + item.getReleaseDate().substring(0, 4));
             //load poster image
-            String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+            String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
             //load image using glide
             GlideApp.with(context)
                     .load(imageUrl)
@@ -138,7 +138,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
 
             //load poster image
-            String imageUrl = config.getImageUrl(config.getPosterSize(), item.getPosterPath());
+            String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
             //load image using glide
             GlideApp.with(context)
                     .load(imageUrl)
@@ -154,7 +154,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             //set pub year
             holder.item_2_tv.setText(item.getPubYear());
         }
-
 
         // check if item is in user's library
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());

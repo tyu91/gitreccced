@@ -18,8 +18,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchlist_rv"
-        android:layout_width="253dp"
-        android:layout_height="353dp"
+        android:layout_width="match_parent"
+        android:layout_height="591dp"
         android:layout_below="@+id/search_et"
         android:layout_centerHorizontal="true"
         android:background="#424242" />
