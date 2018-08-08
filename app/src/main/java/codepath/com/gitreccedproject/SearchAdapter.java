@@ -1,6 +1,7 @@
 package codepath.com.gitreccedproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.loopj.android.http.RequestParams;
 import org.apache.commons.text.similarity.FuzzyScore;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -229,7 +231,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
+            rlayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    final int position = getAdapterPosition();
+                    mPosition = position;
+                    if (position != RecyclerView.NO_POSITION) {
+
+                        // get the item at the position
+                        mItem = mItems.get(position);
+                        final Intent i = new Intent(context, DetailsActivity.class);
+                        i.putExtra("item", Parcels.wrap(mItem));
+                        context.startActivity(i);
+                    }
+                    return false;
+                }
+            });
         }
+
 
         @Override
         public void onClick(View view) {
