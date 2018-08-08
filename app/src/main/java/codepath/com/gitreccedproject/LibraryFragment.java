@@ -126,24 +126,6 @@ public class LibraryFragment extends Fragment {
         rv_showsexp.setAdapter(TVlibexpadapter);
         rv_booksexp.setAdapter(bookslibexpadapter);
 
-        /*//TODO - change this to get actual data
-        for (int i = 0; i < 10; i++) {
-=======
-        //libexpadapter = new libexpadapter(items);
-        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-
-        //TODO - change this to get actual data
-        /*for (int i = 0; i < 10; i++) {
->>>>>>> 69533d3b01b524b9e4cc233d7dbae4d1780fbbf1
-            Item item = new Item();
-            item.setTitle(String.format("%s",i));
-            items.add(item);
-            libAdapter.notifyItemInserted(items.size() - 1);
-            libexpadapter.notifyItemInserted(items.size()-1);
-        }*/
-
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;

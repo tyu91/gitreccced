@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -58,6 +57,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
+    public ArrayList<String> itemIds;
     public ArrayList<String> watched = new ArrayList<>();
 
     ProgressBar pb;
@@ -92,10 +92,34 @@ public class InputRecsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_recs);
 
         //testing
-        LevenshteinDistance distance = new LevenshteinDistance(100);
-        CharSequence cs1 = "item";
-        CharSequence cs2 = "items";
-        Toast.makeText(this, "LevenshteinDistance: " + distance.apply(cs1, cs2).toString(), Toast.LENGTH_SHORT).show();
+        String OGString = "The Raven";
+        ArrayList<String> toCompare = new ArrayList<>(Arrays.asList("raven", "he raven", "theraven", "amazing race", "rave", "raven cycle", "the raven", "The Raven", "maven"));
+        ArrayList<String> toCompare1 = new ArrayList<>(Arrays.asList("The Revenant", "Good Witch", "M*A*S*H", "Jaws: The Revenge", "Resident Evil", "raven cycle", "the raven", "The Raven", "maven"));
+
+        //insertion sort by comparing Levenshtein distances
+        for (int i = 0; i < toCompare.size() - 1; i++) {
+            for (int j = i + 1; j < toCompare.size(); j++) {
+                LevenshteinDistance d1 = new LevenshteinDistance(100);
+                LevenshteinDistance d2 = new LevenshteinDistance(100);
+
+                int iDistance = d1.apply(OGString, toCompare.get(i));
+                int jDistance = d2.apply(OGString, toCompare.get(j));
+
+                if (jDistance < iDistance) {
+                    String tempString = toCompare.get(i);
+                    toCompare.set(i, toCompare.get(j));
+                    toCompare.set(j, tempString);
+                }
+            }
+        }
+
+        for (int i = 0; i < toCompare.size(); i++) {
+            LevenshteinDistance distance = new LevenshteinDistance(100);
+            Log.i("fLevenshtein", "Query: " + OGString + "|| Title: " + toCompare.get(i)
+                    + "   ||   LDistance: " + distance.apply(OGString, toCompare.get(i)));
+        }
+
+        Log.i("fLevenshtein", "********** F I N I S H E D **********");
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
@@ -118,6 +142,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
         // init the arraylist (data source)
         items = new ArrayList<>();
+        itemIds = new ArrayList<>();
         // construct the adapter from this datasource
         searchAdapter = new SearchAdapter(items);
         // RecyclerView setup (layout manager, use adapter)
@@ -184,13 +209,16 @@ public class InputRecsActivity extends AppCompatActivity {
                         if (query != null && TextUtils.getTrimmedLength(query) > 0) {
                             query = query.trim();
                             Log.i("content", query);
+                            final String finalQuery = query;
                             movieSearchClient.getIndex("movietv").searchAsync(new Query(query), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                                     Log.i("content", content.toString());
                                     try {
                                         items.clear();
+                                        itemIds.clear();
                                         searchAdapter.notifyDataSetChanged();
+                                        Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
                                         JSONArray array = content.getJSONArray("hits");
                                         for (int i = 0; i < array.length(); i++) {
                                             JSONObject object = array.getJSONObject(i);
@@ -214,8 +242,14 @@ public class InputRecsActivity extends AppCompatActivity {
                                                     item.setFirstAirDate(object.getString("firstAirDate"));
                                                 }
 
-                                                items.add(item);
-                                                searchAdapter.notifyItemInserted(items.size() - 1);
+                                                if (!(itemIds.contains(item.getMovieId()))) {
+                                                    //if movieId does not yet exist in items array list, add to items and notify adapter
+                                                    items.add(item);
+                                                    itemIds.add(item.getMovieId());
+                                                    searchAdapter.sortedNotifyItemInserted(finalQuery,items.size() - 1);
+                                                    Log.i("LevenshteinMovieTV", "ADAPTER ITEM INSERTED");
+                                                }
+
                                             } else {
                                                 Log.i("watched", object.getString("title"));
                                             }
@@ -227,11 +261,18 @@ public class InputRecsActivity extends AppCompatActivity {
                                 }
                             });
 
+                            oldText = mQuery;
+                            mQuery = query;
+
+                            new BooksAsync().execute();
+
                         } else {
                             //if search is empty, do not see progress bar
                             Log.i("search", "empty!");
                             items.clear();
+                            itemIds.clear();
                             searchAdapter.notifyDataSetChanged();
+                            Log.i("Levenshtein", "ADAPTER CLEARED");
                             pb.setVisibility(ProgressBar.GONE);
                             isStart = true;
                         }
@@ -249,6 +290,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
                             Log.i("content", newText);
+                            final String finalNewText = newText;
                             movieSearchClient.getIndex("movietv").searchAsync(new Query(newText), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
@@ -256,12 +298,14 @@ public class InputRecsActivity extends AppCompatActivity {
                                     try {
                                         pb.setVisibility(ProgressBar.VISIBLE);
                                         items.clear();
+                                        itemIds.clear();
                                         searchAdapter.notifyDataSetChanged();
+                                        Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
 
                                         String text = search_et.getQuery().toString();
                                         if (text != null && TextUtils.getTrimmedLength(text) > 0) {
                                             JSONArray array = content.getJSONArray("hits");
-                                            int num_results = 10;
+                                            int num_results = 15;
 
                                             if (array.length() < num_results) {
                                                 num_results = array.length();
@@ -289,8 +333,13 @@ public class InputRecsActivity extends AppCompatActivity {
                                                     }
 
                                                     pb.setVisibility(ProgressBar.GONE);
-                                                    items.add(item);
-                                                    searchAdapter.notifyItemInserted(items.size() - 1);
+                                                    if (!(itemIds.contains(item.getMovieId()))) {
+                                                        //if movieId does not yet exist in items array list, add to items and notify adapter
+                                                        items.add(item);
+                                                        itemIds.add(item.getMovieId());
+                                                        searchAdapter.sortedNotifyItemInserted(finalNewText,items.size() - 1);
+                                                        Log.i("LevenshteinMovieTV", "ADAPTER ITEM INSERTED");
+                                                    }
                                                 } else {
                                                     Log.i("watched", object.getString("title"));
                                                 }
@@ -305,14 +354,17 @@ public class InputRecsActivity extends AppCompatActivity {
                                 }
                             });
 
+                            oldText = mQuery;
                             mQuery = newText;
-                            oldText = newText;
+
                             new BooksAsync().execute();
 
                         } else {
                             Log.i("search", "empty!");
                             items.clear();
+                            itemIds.clear();
                             searchAdapter.notifyDataSetChanged();
+                            Log.i("Levenshtein", "ADAPTER CLEARED");
                         }
                         return false;
                     }
@@ -425,10 +477,15 @@ public class InputRecsActivity extends AppCompatActivity {
                         Log.i("IidItem", "BookId Before bookItem added to adapter: " + bookItem.getIid());
                         testPrint = false;
                     }
-                    items.add(bookItem);
-                }
 
-                searchAdapter.notifyDataSetChanged();
+                    if (!(itemIds.contains(bookItem.getBookId()))) {
+                        //if movieId does not yet exist in items array list, add to items and notify adapter
+                        items.add(bookItem);
+                        itemIds.add(bookItem.getBookId());
+                        searchAdapter.sortedNotifyItemInserted(text,items.size() - 1);
+                        Log.i("LevenshteinBook", "ADAPTER ITEM INSERTED");
+                    }
+                }
 
                 //END TRANSPLANTED CODE
                 super.onPostExecute(aVoid);
