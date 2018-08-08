@@ -85,9 +85,9 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
             int position = getAdapterPosition() % mItems.size();
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
 
-//            final Intent i = new Intent(context, DetailsActivity.class);
-//            i.putExtra("item", Parcels.wrap(item));
-//            context.startActivity(i);
+            final Intent i = new Intent(context, DetailsActivity.class);
+            i.putExtra("item", Parcels.wrap(mItems.get(position)));
+            context.startActivity(i);
 
             //final Intent i = new Intent(MyLibraryActivity.this, DetailsActivity.class);
             //context.startActivity(new Intent(context, DetailsActivity.class));
