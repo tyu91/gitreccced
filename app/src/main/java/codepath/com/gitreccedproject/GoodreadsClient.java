@@ -182,7 +182,8 @@ public class GoodreadsClient extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (localName.equalsIgnoreCase("work")) {
             //TODO: book added is correct
-            Log.i("BookIdClient", "BookId before added to books list: " + book.getBookId());
+            Log.i("BookIdClient", "BookId before added to books list: " + book.getBookId() +
+            "Book Title before added to books list: " + book.getTitle());
             books.add(book);
 
             //after add book, reset all variables

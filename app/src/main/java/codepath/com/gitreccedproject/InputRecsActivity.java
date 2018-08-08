@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -93,10 +92,34 @@ public class InputRecsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_recs);
 
         //testing
-        LevenshteinDistance distance = new LevenshteinDistance(100);
-        CharSequence cs1 = "item";
-        CharSequence cs2 = "items";
-        Toast.makeText(this, "LevenshteinDistance: " + distance.apply(cs1, cs2).toString(), Toast.LENGTH_SHORT).show();
+        String OGString = "The Raven";
+        ArrayList<String> toCompare = new ArrayList<>(Arrays.asList("raven", "he raven", "theraven", "amazing race", "rave", "raven cycle", "the raven", "The Raven", "maven"));
+        ArrayList<String> toCompare1 = new ArrayList<>(Arrays.asList("The Revenant", "Good Witch", "M*A*S*H", "Jaws: The Revenge", "Resident Evil", "raven cycle", "the raven", "The Raven", "maven"));
+
+        //insertion sort by comparing Levenshtein distances
+        for (int i = 0; i < toCompare.size() - 1; i++) {
+            for (int j = i + 1; j < toCompare.size(); j++) {
+                LevenshteinDistance d1 = new LevenshteinDistance(100);
+                LevenshteinDistance d2 = new LevenshteinDistance(100);
+
+                int iDistance = d1.apply(OGString, toCompare.get(i));
+                int jDistance = d2.apply(OGString, toCompare.get(j));
+
+                if (jDistance < iDistance) {
+                    String tempString = toCompare.get(i);
+                    toCompare.set(i, toCompare.get(j));
+                    toCompare.set(j, tempString);
+                }
+            }
+        }
+
+        for (int i = 0; i < toCompare.size(); i++) {
+            LevenshteinDistance distance = new LevenshteinDistance(100);
+            Log.i("Levenshtein", "Query: " + OGString + "|| Title: " + toCompare.get(i)
+                    + "   ||   LDistance: " + distance.apply(OGString, toCompare.get(i)));
+        }
+
+        Log.i("Levenshtein", "********** F I N I S H E D **********");
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
@@ -282,7 +305,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                         String text = search_et.getQuery().toString();
                                         if (text != null && TextUtils.getTrimmedLength(text) > 0) {
                                             JSONArray array = content.getJSONArray("hits");
-                                            int num_results = 10;
+                                            int num_results = 15;
 
                                             if (array.length() < num_results) {
                                                 num_results = array.length();
@@ -454,12 +477,13 @@ public class InputRecsActivity extends AppCompatActivity {
                         Log.i("IidItem", "BookId Before bookItem added to adapter: " + bookItem.getIid());
                         testPrint = false;
                     }
-                    if (!(itemIds.contains(bookItem.getMovieId()))) {
+
+                    if (!(itemIds.contains(bookItem.getBookId()))) {
                         //if movieId does not yet exist in items array list, add to items and notify adapter
                         items.add(bookItem);
-                        itemIds.add(bookItem.getMovieId());
+                        itemIds.add(bookItem.getBookId());
                         searchAdapter.sortedNotifyItemInserted(text,items.size() - 1);
-                        Log.i("LevenshteinMovieTV", "ADAPTER ITEM INSERTED");
+                        Log.i("LevenshteinBook", "ADAPTER ITEM INSERTED");
                     }
                 }
 
