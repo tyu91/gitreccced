@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -27,7 +28,11 @@ public class MovieDetailsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+
+    TextView tvMovieTitle;
+
+
+    //private OnFragmentInteractionListener mListener;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -67,7 +72,13 @@ public class MovieDetailsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_movie_details, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
+        tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+    }
+
+    /*// TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -89,7 +100,7 @@ public class MovieDetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -101,8 +112,8 @@ public class MovieDetailsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+    /*public interface OnFragmentInteractionListener {
+         //TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
+    }*/
 }
