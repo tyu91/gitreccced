@@ -119,8 +119,8 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ViewHold
         public ViewHolder(View itemView){
             super(itemView);
 
-            moviePoster = itemView.findViewById(R.id.ivMoviePoster);
-            tvPoster = itemView.findViewById(R.id.ivTVPoster);
+            moviePoster = itemView.findViewById(R.id.ivMovieBackdrop);
+            tvPoster = itemView.findViewById(R.id.ivTVBackdrop);
             bookCover = itemView.findViewById(R.id.ivBookCover);
 
             movieTitle = itemView.findViewById(R.id.tvMovieTitle);

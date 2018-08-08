@@ -42,13 +42,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivTVPoster"
+        android:layout_below="@+id/ivTVBackdrop"
         android:text="TextView"
         android:textColor="#c8c6d0"
         android:textSize="24sp" />
 
     <ImageView
-        android:id="@+id/ivTVPoster"
+        android:id="@+id/ivTVBackdrop"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentStart="true"

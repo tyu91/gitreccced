@@ -5,7 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 
 public class MovieDetailsFragment extends Fragment {
@@ -19,7 +22,8 @@ public class MovieDetailsFragment extends Fragment {
     private String mParam2;
 
 
-    TextView tvMovieTitle;
+    TextView tvMovieTitle, director, overview;
+    ImageView backdrop;
 
 
     //private OnFragmentInteractionListener mListener;
@@ -64,8 +68,20 @@ public class MovieDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        String imageUrl = "https://image.tmdb.org/t/p/w342" + ((DetailsActivity)getActivity()).item.getBackdropPath();
+
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
+        director = view.findViewById(R.id.tvDirector);
+        overview = view.findViewById(R.id.tvMovieOverview);
+        backdrop = view.findViewById(R.id.ivMovieBackdrop);
+
         tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        //director.setText(((DetailsActivity)getActivity()).item.getDirector());
+        overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+
+        Glide.with(getContext())
+                .load(imageUrl)
+                .into(backdrop);
     }
 
     /*// TODO: Rename method, update argument and hook method into UI event
