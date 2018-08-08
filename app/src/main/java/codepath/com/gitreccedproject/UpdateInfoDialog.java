@@ -54,7 +54,7 @@ public class UpdateInfoDialog extends DialogFragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.mydialog, null);
+        View view = inflater.inflate(R.layout.update_info_dialog, null);
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dbUsers = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());

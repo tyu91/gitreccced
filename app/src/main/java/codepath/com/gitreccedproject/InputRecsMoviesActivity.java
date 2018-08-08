@@ -96,7 +96,7 @@ public class InputRecsMoviesActivity extends AppCompatActivity {
         // find the views
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        next = findViewById(R.id.tvFin);
+        next = findViewById(R.id.tvFins);
 
         // find the views
         pb = (ProgressBar) findViewById(R.id.pbLoading);

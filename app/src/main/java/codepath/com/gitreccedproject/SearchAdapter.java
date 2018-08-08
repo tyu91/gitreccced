@@ -23,6 +23,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +53,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     Config config;
 
     Context context;
+
+    String mQuery;
 
     public List<Item> mItems;
     public Item mItem;
@@ -85,6 +88,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final SearchAdapter.ViewHolder holder, int position) {
+
         // get the data according to position
         final Item item = mItems.get(position);
         // populate the views according to position
@@ -562,5 +566,71 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
     }
+
+
+    //takes in search query, performs similarity sort, then calls super.notifyItemInserted()
+    public void sortedNotifyItemInserted(String queryText, int position) {
+
+        //insertion sort by comparing Levenshtein distances
+        for (int i = 0; i < mItems.size() - 1; i++) {
+            for (int j = i + 1; j < mItems.size(); j++) {
+                LevenshteinDistance d1 = new LevenshteinDistance(100);
+                LevenshteinDistance d2 = new LevenshteinDistance(100);
+
+                int iDistance = d1.apply(queryText, mItems.get(i).getTitle());
+                int jDistance = d2.apply(queryText, mItems.get(j).getTitle());
+
+                if (jDistance < iDistance) {
+                    Item tempItem = mItems.get(i);
+                    mItems.set(i, mItems.get(j));
+                    mItems.set(j, tempItem);
+                }
+            }
+        }
+
+        //printing resulting mItems with Levenshtein distances to check
+        for (int i = 0; i < mItems.size(); i++) {
+            LevenshteinDistance distance = new LevenshteinDistance(100);
+            Log.i("Levenshtein", "Query: " + queryText + "|| Title: " + mItems.get(i).getTitle()
+                    + "   ||   BookId: " + mItems.get(i).getBookId());
+        }
+
+        Log.i("Levenshtein", "********** F I N I S H E D **********");
+
+        super.notifyItemChanged(position);
+    }
+
+    //takes in search query, performs similarity sort, then calls super.notifyItemInserted()
+    public void sortedNotifyDataSetChanged(String queryText) {
+
+        //insertion sort by comparing Levenshtein distances
+        for (int i = 0; i < mItems.size() - 1; i++) {
+            for (int j = i + 1; j < mItems.size(); j++) {
+                LevenshteinDistance d1 = new LevenshteinDistance(100);
+                LevenshteinDistance d2 = new LevenshteinDistance(100);
+
+                int iDistance = d1.apply(queryText, mItems.get(i).getTitle());
+                int jDistance = d2.apply(queryText, mItems.get(j).getTitle());
+
+                if (jDistance < iDistance) {
+                    Item tempItem = mItems.get(i);
+                    mItems.set(i, mItems.get(j));
+                    mItems.set(j, tempItem);
+                }
+            }
+        }
+
+        //printing resulting mItems with Levenshtein distances to check
+        for (int i = 0; i < mItems.size(); i++) {
+            LevenshteinDistance distance = new LevenshteinDistance(100);
+            Log.i("Levenshtein1", "Query: " + queryText + "|| Title: " + mItems.get(i).getTitle()
+                    + "   ||   BookId: " + mItems.get(i).getBookId());
+        }
+
+        Log.i("Levenshtein1", "********** F I N I S H E D **********");
+
+        super.notifyDataSetChanged();
+    }
+
 
 }
