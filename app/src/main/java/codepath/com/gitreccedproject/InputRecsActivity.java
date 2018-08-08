@@ -115,11 +115,11 @@ public class InputRecsActivity extends AppCompatActivity {
 
         for (int i = 0; i < toCompare.size(); i++) {
             LevenshteinDistance distance = new LevenshteinDistance(100);
-            Log.i("Levenshtein", "Query: " + OGString + "|| Title: " + toCompare.get(i)
+            Log.i("fLevenshtein", "Query: " + OGString + "|| Title: " + toCompare.get(i)
                     + "   ||   LDistance: " + distance.apply(OGString, toCompare.get(i)));
         }
 
-        Log.i("Levenshtein", "********** F I N I S H E D **********");
+        Log.i("fLevenshtein", "********** F I N I S H E D **********");
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");

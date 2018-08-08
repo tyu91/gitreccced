@@ -23,12 +23,13 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.apache.commons.text.similarity.FuzzyScore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -570,16 +571,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     //takes in search query, performs common subsequence similarity sort, then calls super.notifyItemInserted()
     public void sortedNotifyItemInserted(String queryText, int position) {
 
-        //insertion sort by comparing Levenshtein distances
+        //insertion sort by comparing common subsequence similarity sort
         for (int i = 0; i < mItems.size() - 1; i++) {
             for (int j = i + 1; j < mItems.size(); j++) {
-                LevenshteinDistance d1 = new LevenshteinDistance(100);
-                LevenshteinDistance d2 = new LevenshteinDistance(100);
+                FuzzyScore d1 = new FuzzyScore(new Locale("en"));
+                FuzzyScore d2 = new FuzzyScore(new Locale("en"));
 
-                int iDistance = d1.apply(queryText, mItems.get(i).getTitle());
-                int jDistance = d2.apply(queryText, mItems.get(j).getTitle());
+                int iDistance = d1.fuzzyScore(queryText, mItems.get(i).getTitle());
+                int jDistance = d2.fuzzyScore(queryText, mItems.get(j).getTitle());
 
-                if (jDistance < iDistance) {
+                if (jDistance > iDistance) {
                     Item tempItem = mItems.get(i);
                     mItems.set(i, mItems.get(j));
                     mItems.set(j, tempItem);
@@ -589,9 +590,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         //printing resulting mItems with Levenshtein distances to check
         for (int i = 0; i < mItems.size(); i++) {
-            LevenshteinDistance distance = new LevenshteinDistance(100);
+            FuzzyScore distance = new FuzzyScore(new Locale("en"));
             Log.i("Levenshtein", "Query: " + queryText + "|| Title: " + mItems.get(i).getTitle()
-                    + "|| LDistance: " + distance.apply(queryText, mItems.get(i).getTitle()) + "   ||   BookId: " + mItems.get(i).getBookId());
+                    + "|| FuzzScore: " + distance.fuzzyScore(queryText, mItems.get(i).getTitle()) + "   ||   BookId: " + mItems.get(i).getBookId());
         }
 
         Log.i("Levenshtein", "********** F I N I S H E D **********");
