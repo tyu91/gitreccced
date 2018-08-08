@@ -22,8 +22,8 @@ public class MovieDetailsFragment extends Fragment {
     private String mParam2;
 
 
-    TextView tvMovieTitle, director, overview;
-    ImageView backdrop;
+    private TextView tvMovieTitle, director, overview, releaseDate;
+    private ImageView backdrop;
 
 
     //private OnFragmentInteractionListener mListener;
@@ -72,11 +72,13 @@ public class MovieDetailsFragment extends Fragment {
 
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         director = view.findViewById(R.id.tvDirector);
+        releaseDate = view.findViewById(R.id.tvReleaseDate);
         overview = view.findViewById(R.id.tvMovieOverview);
         backdrop = view.findViewById(R.id.ivMovieBackdrop);
 
         tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
         //director.setText(((DetailsActivity)getActivity()).item.getDirector());
+        releaseDate.setText(((DetailsActivity)getActivity()).item.getReleaseDate());
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
 
         Glide.with(getContext())
