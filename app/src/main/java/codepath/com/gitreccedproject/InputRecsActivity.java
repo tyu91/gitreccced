@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -28,6 +29,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +65,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
     boolean testPrint = true;
 
-    String mQuery = "no response";
+    static String mQuery = "no response";
     String oldText = "";
 
     static User resultUser;
@@ -88,6 +90,12 @@ public class InputRecsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
+
+        //testing
+        LevenshteinDistance distance = new LevenshteinDistance(100);
+        CharSequence cs1 = "item";
+        CharSequence cs2 = "items";
+        Toast.makeText(this, "LevenshteinDistance: " + distance.apply(cs1, cs2).toString(), Toast.LENGTH_SHORT).show();
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
@@ -226,7 +234,6 @@ public class InputRecsActivity extends AppCompatActivity {
                             searchAdapter.notifyDataSetChanged();
                             pb.setVisibility(ProgressBar.GONE);
                             isStart = true;
-
                         }
                         return false;
                     }

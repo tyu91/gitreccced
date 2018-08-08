@@ -23,6 +23,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +53,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     Config config;
 
     Context context;
+
+    String mQuery;
 
     public List<Item> mItems;
     public Item mItem;
@@ -85,6 +88,35 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final SearchAdapter.ViewHolder holder, int position) {
+        mQuery = InputRecsActivity.mQuery;
+
+        CharSequence csQuery = mQuery;
+
+        //insertion sort by comparing Levenshtein distances
+        for (int i = 0; i < mItems.size() - 1; i++) {
+            for (int j = i + 1; j < mItems.size(); j++) {
+                LevenshteinDistance d1 = new LevenshteinDistance(100);
+                LevenshteinDistance d2 = new LevenshteinDistance(100);
+
+                int iDistance = d1.apply(mQuery, mItems.get(i).getTitle());
+                int jDistance = d2.apply(mQuery, mItems.get(j).getTitle());
+
+                if (jDistance < iDistance) {
+                    Item tempItem = mItems.get(i);
+                    mItems.set(i, mItems.get(j));
+                    mItems.set(j, tempItem);
+                }
+            }
+        }
+
+        //printing resulting mItems with Levenshtein distances to check
+        for (int i = 0; i < mItems.size(); i++) {
+            LevenshteinDistance distance = new LevenshteinDistance(100);
+            Log.i("Levenshtein", "Query: " + mQuery + "|| Title: " + mItems.get(i).getTitle()
+                    + "   ||   LDistance: " + distance.apply(mQuery, mItems.get(i).getTitle()));
+        }
+
+        Log.i("Levenshtein", "********** F I N I S H E D **********");
         // get the data according to position
         final Item item = mItems.get(position);
         // populate the views according to position
@@ -562,5 +594,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
     }
+    public void sortedNotifyItemInserted() {
+
+    }
+    //TODO: create method that takes in search query, performs similarity sort, then call super.onNotifyDatasetChanged()
 
 }
