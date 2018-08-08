@@ -54,7 +54,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
         if (item.getGenre().equalsIgnoreCase("Book")){
             Glide.with(context)
-                    .load(item.getSmallImgUrl())
+                    .load(item.getImgUrl())
                     .into(holder.posterImage);
             holder.textview1.setText(item.getTitle());
 

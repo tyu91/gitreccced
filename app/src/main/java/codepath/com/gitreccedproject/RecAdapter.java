@@ -44,7 +44,7 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.ViewHolder> {
 
         if (item.getGenre().equalsIgnoreCase("Book")){
             Glide.with(context)
-                    .load(item.getSmallImgUrl())
+                    .load(item.getImgUrl())
                     .into(holder.posterImage);
             holder.textview1.setText(item.getTitle());
 

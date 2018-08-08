@@ -133,4 +133,12 @@ public class SignUpActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
 }

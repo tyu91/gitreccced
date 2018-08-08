@@ -45,7 +45,7 @@ public class InputRecsActivity extends AppCompatActivity {
     //Index index;
     public android.support.v7.widget.SearchView search_et;
     public RecyclerView searchlist_rv;
-    public TextView skip, finish;
+    public TextView finish;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -100,16 +100,6 @@ public class InputRecsActivity extends AppCompatActivity {
         // find search views
         search_et = findViewById(R.id.search_et);
         searchlist_rv = findViewById(R.id.searchlist_rv);
-        finish = findViewById(R.id.tvFin);
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent i = new Intent(InputRecsActivity.this, MyLibraryActivity.class);
-                i.putExtra("user", Parcels.wrap(resultUser));
-                startActivity(i);
-                finish();
-            }
-        });
 
         // find progress bar
         pb = (ProgressBar) findViewById(R.id.pbLoading);
@@ -129,14 +119,14 @@ public class InputRecsActivity extends AppCompatActivity {
         searchlist_rv.setAdapter(searchAdapter);
 
         //set skip button
-        skip = findViewById(R.id.tvSkip);
-        skip.setOnClickListener(new View.OnClickListener() {
+        finish = findViewById(R.id.tvFins);
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InputRecsActivity.this);
 
                 final TextView tv = new TextView(InputRecsActivity.this);
-                tv.setText("Are you sure you want to skip this?");
+                tv.setText("Are you sure you want to leave this page?");
                 // set prompts.xml to alertdialog builder
                 alertDialogBuilder.setView(tv);
 
