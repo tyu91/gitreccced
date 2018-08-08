@@ -1,6 +1,7 @@
 package codepath.com.gitreccedproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -90,6 +93,10 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition() % mItems.size();
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
+
+            final Intent i = new Intent(context, DetailsActivity.class);
+            i.putExtra("item", Parcels.wrap(mItems.get(position)));
+            context.startActivity(i);
         }
     }
 }
