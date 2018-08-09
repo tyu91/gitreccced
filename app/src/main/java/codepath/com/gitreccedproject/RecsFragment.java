@@ -74,7 +74,7 @@ public class RecsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ((MyLibraryActivity)getActivity()).showProgressBar();
-                refresh();
+                //refresh();
             }
         });
 
@@ -87,7 +87,7 @@ public class RecsFragment extends Fragment {
 
         ((MyLibraryActivity)getActivity()).showProgressBar();
 
-        refresh();
+        //refresh();
 
         rv_movies = view.findViewById(R.id.rv_libMovies);
         rv_tvShows = view.findViewById(R.id.rv_tv);
@@ -314,7 +314,7 @@ public class RecsFragment extends Fragment {
                     //((MyLibraryActivity)getActivity()).showProgressBar();
                     bookItem = new ArrayList<>();
                     bookItems = new ArrayList<>();
-                    Log.i("shot",dataSnapshot.toString());
+                    Log.i("shot", dataSnapshot.toString());
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Log.i("shott", postSnapshot.toString());
                         Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
@@ -324,21 +324,21 @@ public class RecsFragment extends Fragment {
                         //movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
-                            bookItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
+                            bookItem.add(Pair.create(item, postSnapshot.child("count").getValue().toString()));
                             Log.i("TAG", item.getTitle());
                         }
                         Log.i("item", item.getTitle());
                     }
-                    Log.i("bookItem",bookItem.toString());
-                    Collections.sort(bookItem, new Comparator<Pair<Item,String>>() {
+                    Log.i("bookItem", bookItem.toString());
+                    Collections.sort(bookItem, new Comparator<Pair<Item, String>>() {
                         @Override
-                        public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
+                        public int compare(Pair<Item, String> lhs, Pair<Item, String> rhs) {
                             // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
                             return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
                         }
                     });
                     for (int i = 0; i < bookItem.size(); i++) {
-                        Log.i("sorted",bookItem.get(i).first.getTitle() + bookItem.get(i).second);
+                        Log.i("sorted", bookItem.get(i).first.getTitle() + bookItem.get(i).second);
                         bookItems.add(bookItem.get(i).first);
                     }
                     if (bookItems.size() == 0) {
@@ -354,11 +354,12 @@ public class RecsFragment extends Fragment {
                     //Empty
                 }
 
-                getmovies(Recs);
+                //getmovies(Recs);
 
-            getshows(Recs);
+                //getshows(Recs);
 
-            getbooks(Recs);
+                //getbooks(Recs);
+            });
         }
 
     }
