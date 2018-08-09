@@ -430,8 +430,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         Log.i("Books", "adding new book to db");
 
                         //weird way, pls fix later
-                        mItems.add(mPosition, item);
-                        mItems.remove(mPosition + 1);
+                        mItems.set(mPosition, item);
+                        //mItems.remove(mPosition + 1);
 
                         Log.d("BookDecide", "iid: " + iid + " || title: " + item.getTitle());
                         dbBooks.child(iid).setValue(item);
