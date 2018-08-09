@@ -8,9 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 public class UpdateInfoActivity extends AppCompatActivity {
 
     ImageView ivProfileImage;
@@ -20,6 +17,8 @@ public class UpdateInfoActivity extends AppCompatActivity {
     Button btnUpdateUsername;
     Button btnUpdateEmail;
     Button btnUpdatePassword;
+
+    UpdateInfoDialog updateInfoDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +34,10 @@ public class UpdateInfoActivity extends AppCompatActivity {
         btnUpdateEmail = findViewById(R.id.btnUpdateEmail);
         btnUpdatePassword = findViewById(R.id.btnUpdatePassword);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        User user = LoginActivity.currentuser;
 
-        tvUsername.setText(user.getDisplayName());
+        tvUsername.setText(user.getUsername());
         tvEmail.setText(user.getEmail());
 
         btnUpdateUsername.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +46,12 @@ public class UpdateInfoActivity extends AppCompatActivity {
                 FragmentManager manager = getSupportFragmentManager();
                 UpdateInfoDialog updateInfoDialog = new UpdateInfoDialog(UpdateInfoActivity.this, 1);
                 updateInfoDialog.show(manager, "This is a test");
+
+                updateInfoDialog.setDialogResult(new UpdateInfoDialog.OnMyDialogResult(){
+                    public void finish(String result){
+                        tvUsername.setText(result);
+                    }
+                });
             }
         });
 
@@ -55,6 +61,12 @@ public class UpdateInfoActivity extends AppCompatActivity {
                 FragmentManager manager = getSupportFragmentManager();
                 UpdateInfoDialog updateInfoDialog = new UpdateInfoDialog(UpdateInfoActivity.this, 2);
                 updateInfoDialog.show(manager, "This is a test");
+
+                updateInfoDialog.setDialogResult(new UpdateInfoDialog.OnMyDialogResult(){
+                    public void finish(String result){
+                        tvEmail.setText(result);
+                    }
+                });
             }
         });
 

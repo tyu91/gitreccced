@@ -24,7 +24,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -119,30 +118,14 @@ public class UpdateInfoDialog extends DialogFragment{
                 public void onClick(View view) {
                     username = etEmail.getText().toString();
 
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(username)
-                            .build();
-
                     if (TextUtils.getTrimmedLength(username) > 0) {
-                        currentUser.updateProfile(profileUpdates)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            dbUsers.child("username").setValue(username);
-                                            dismiss();
-                                            Intent i = new Intent(getContext(), UpdateInfoActivity.class);
-                                            getContext().startActivity(i);
-                                            Log.d("update", "User profile updated.");
-                                            Toast.makeText(getContext(), "Successfully updated username!", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG).show();
-                                            Log.d("update", "failed.");
-                                        }
-                                    }
-                                });
+                        dismiss();
+                        dbUsers.child("username").setValue(username);
+                        mDialogResult.finish(String.valueOf(username));
+                        Log.d("update", "User profile updated.");
+                        Toast.makeText(mActivity, "Successfully updated username!", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getContext(), "Please enter a username!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mActivity, "Please enter a username!", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -163,9 +146,8 @@ public class UpdateInfoDialog extends DialogFragment{
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             dbUsers.child("email").setValue(email);
+                                            mDialogResult.finish(String.valueOf(email));
                                             dismiss();
-                                            Intent i = new Intent(getContext(), UpdateInfoActivity.class);
-                                            getContext().startActivity(i);
                                             Log.d("update", "User email address updated.");
                                             Toast.makeText(getContext(), "Successfully updated email!", Toast.LENGTH_LONG).show();
                                         } else {
@@ -219,5 +201,14 @@ public class UpdateInfoDialog extends DialogFragment{
         }
 
         return view;
+    }
+
+    OnMyDialogResult mDialogResult;
+    public void setDialogResult(OnMyDialogResult dialogResult){
+        mDialogResult = dialogResult;
+    }
+
+    public interface OnMyDialogResult{
+        void finish(String result);
     }
 }

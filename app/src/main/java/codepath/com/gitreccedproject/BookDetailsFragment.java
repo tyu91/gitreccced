@@ -5,8 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 
 
 public class BookDetailsFragment extends Fragment {
@@ -20,7 +22,8 @@ public class BookDetailsFragment extends Fragment {
     private String mParam2;
 
 
-    TextView tvBookTitle;
+    private TextView tvBookTitle, author, pub, overview;
+    private ImageView cover;
 
 
     //private OnFragmentInteractionListener mListener;
@@ -65,8 +68,22 @@ public class BookDetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        String imageUrl = ((DetailsActivity)getActivity()).item.getImgUrl();
+
         tvBookTitle = view.findViewById(R.id.tvBookTitle);
+        author = view.findViewById(R.id.tvAuthor);
+        pub = view.findViewById(R.id.tvPubDate);
+        overview = view.findViewById(R.id.tvBookOverview);
+        cover = view.findViewById(R.id.ivBookCover);
+
         tvBookTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        author.setText(((DetailsActivity)getActivity()).item.getAuthor());
+        pub.setText(((DetailsActivity)getActivity()).item.getPubYear());
+        overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+
+        Glide.with(getContext())
+                .load(imageUrl)
+                .into(cover);
     }
 
     /*// TODO: Rename method, update argument and hook method into UI event
