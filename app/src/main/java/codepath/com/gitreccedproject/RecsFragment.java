@@ -201,7 +201,7 @@ public class RecsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.i("postexecute", "postexecute");
-            Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
+            Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(((MyLibraryActivity)getActivity()).mAuth.getUid());
             //Log.i("user",((MyLibraryActivity)this.getActivity()).mAuth.getUid());
 
             getmovies(Recs);
@@ -215,7 +215,7 @@ public class RecsFragment extends Fragment {
 
     public void refresh() {
         // check if item is in user's library
-        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(((MyLibraryActivity)getActivity()).mAuth.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
         itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -172,6 +172,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition() % mItems.size();
+            Log.i("overview", mItems.get(position).getDetails());
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
 
             final Intent i = new Intent(context, DetailsActivity.class);

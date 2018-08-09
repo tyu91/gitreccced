@@ -126,7 +126,7 @@ public class LibraryFragment extends Fragment {
         rv_showsexp.setAdapter(TVlibexpadapter);
         rv_booksexp.setAdapter(bookslibexpadapter);
 
-        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(((MyLibraryActivity)getActivity()).mAuth.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
         itemsquery.addValueEventListener(new ValueEventListener() {
