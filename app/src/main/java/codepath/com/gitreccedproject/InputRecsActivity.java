@@ -1,13 +1,10 @@
 package codepath.com.gitreccedproject;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -126,7 +123,7 @@ public class InputRecsActivity extends AppCompatActivity {
 
         //add user id from sign up activity
         resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        Log.i("uid",resultUser.getUid().toString());
+        Log.i("uid", resultUser.getUid().toString());
 
 
         // find search views
@@ -146,7 +143,7 @@ public class InputRecsActivity extends AppCompatActivity {
         // construct the adapter from this datasource
         searchAdapter = new SearchAdapter(items);
         // RecyclerView setup (layout manager, use adapter)
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(this);
         searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
@@ -156,36 +153,10 @@ public class InputRecsActivity extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(InputRecsActivity.this);
-
-                final TextView tv = new TextView(InputRecsActivity.this);
-                tv.setText("Are you sure you want to leave this page?");
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(tv);
-
-                // set dialog message
-                alertDialogBuilder.
-                        setCancelable(false).
-                        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                closeContextMenu();
-                            }
-                        }).
-                        setPositiveButton("Go to Library", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(InputRecsActivity.this, MyLibraryActivity.class);
-                                i.putExtra("user", Parcels.wrap(resultUser));
-                                startActivity(i);
-                                finish();
-                            }
-                        });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
-
+                Intent i = new Intent(InputRecsActivity.this, MyLibraryActivity.class);
+                i.putExtra("user", Parcels.wrap(resultUser));
+                startActivity(i);
+                finish();
             }
         });
 
@@ -198,7 +169,7 @@ public class InputRecsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     String id = postSnapshot.child("iid").getValue().toString();
-                    Log.i("id",postSnapshot.child("title").getValue().toString());
+                    Log.i("id", postSnapshot.child("title").getValue().toString());
                     watched.add(id);
                 }
 
@@ -217,7 +188,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                     try {
                                         items.clear();
                                         itemIds.clear();
-                                        searchAdapter.notifyDataSetChanged();
+                                        searchAdapter.notifyItemRangeChanged(0, items.size());
                                         Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
                                         JSONArray array = content.getJSONArray("hits");
                                         for (int i = 0; i < array.length(); i++) {
@@ -236,7 +207,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                                 item.setPosterPath(object.getString("posterPath"));
                                                 item.setBackdropPath(object.getString("backdropPath"));
                                                 item.setMovieId(object.getString("movieId"));
-                                                if(item.getGenre().equalsIgnoreCase("Movie")) {
+                                                if (item.getGenre().equalsIgnoreCase("Movie")) {
                                                     item.setReleaseDate(object.getString("releaseDate"));
                                                 } else {
                                                     item.setFirstAirDate(object.getString("firstAirDate"));
@@ -246,7 +217,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                                     //if movieId does not yet exist in items array list, add to items and notify adapter
                                                     items.add(item);
                                                     itemIds.add(item.getMovieId());
-                                                    searchAdapter.sortedNotifyItemInserted(finalQuery,items.size() - 1);
+                                                    searchAdapter.sortedNotifyItemInserted(finalQuery, items.size() - 1);
                                                     Log.i("LevenshteinMovieTV", "ADAPTER ITEM INSERTED");
                                                 }
 
@@ -271,7 +242,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             Log.i("search", "empty!");
                             items.clear();
                             itemIds.clear();
-                            searchAdapter.notifyDataSetChanged();
+                            searchAdapter.notifyItemRangeChanged(0, items.size());
                             Log.i("Levenshtein", "ADAPTER CLEARED");
                             pb.setVisibility(ProgressBar.GONE);
                             isStart = true;
@@ -287,7 +258,7 @@ public class InputRecsActivity extends AppCompatActivity {
                         }
 
                         if (newText != null && TextUtils.getTrimmedLength(newText) > 0) {
-                            Log.i("text",String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
+                            Log.i("text", String.format("%s, %s", newText, TextUtils.getTrimmedLength(newText)));
                             newText = newText.trim();
                             Log.i("content", newText);
                             final String finalNewText = newText;
@@ -299,7 +270,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                         pb.setVisibility(ProgressBar.VISIBLE);
                                         items.clear();
                                         itemIds.clear();
-                                        searchAdapter.notifyDataSetChanged();
+                                        searchAdapter.notifyItemRangeChanged(0, items.size());
                                         Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
 
                                         String text = search_et.getQuery().toString();
@@ -326,7 +297,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                                     item.setPosterPath(object.getString("posterPath"));
                                                     item.setBackdropPath(object.getString("backdropPath"));
                                                     item.setMovieId(object.getString("movieId"));
-                                                    if(item.getGenre().equalsIgnoreCase("Movie")) {
+                                                    if (item.getGenre().equalsIgnoreCase("Movie")) {
                                                         item.setReleaseDate(object.getString("releaseDate"));
                                                     } else {
                                                         item.setFirstAirDate(object.getString("firstAirDate"));
@@ -337,7 +308,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                                         //if movieId does not yet exist in items array list, add to items and notify adapter
                                                         items.add(item);
                                                         itemIds.add(item.getMovieId());
-                                                        searchAdapter.sortedNotifyItemInserted(finalNewText,items.size() - 1);
+                                                        searchAdapter.sortedNotifyItemInserted(finalNewText, items.size() - 1);
                                                         Log.i("LevenshteinMovieTV", "ADAPTER ITEM INSERTED");
                                                     }
                                                 } else {
@@ -363,7 +334,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             Log.i("search", "empty!");
                             items.clear();
                             itemIds.clear();
-                            searchAdapter.notifyDataSetChanged();
+                            searchAdapter.notifyItemRangeChanged(0, items.size());
                             Log.i("Levenshtein", "ADAPTER CLEARED");
                         }
                         return false;
@@ -389,7 +360,7 @@ public class InputRecsActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put(API_KEY_PARAM, getString(R.string.movieApiKey)); //this is API key: always necessary!!!
         //execute a GET request that expects a response from JSON object
-        configClient.get(url, params, new JsonHttpResponseHandler(){
+        configClient.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
@@ -397,7 +368,7 @@ public class InputRecsActivity extends AppCompatActivity {
                     config = new Config(response);
                     Log.i("MovieDB", String.format("Loaded config w imageBaseUrl %s and posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
                     searchAdapter.setConfig(config);
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -430,9 +401,6 @@ public class InputRecsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             pb.setVisibility(ProgressBar.GONE);
-            //clear book search adapter
-            //items.clear();
-            //searchAdapter.notifyDataSetChanged();
 
             //temp array for books in InputRecsActivity
             ArrayList<Item> mBooks = GoodreadsClient.books;
@@ -443,7 +411,6 @@ public class InputRecsActivity extends AppCompatActivity {
             //clear items array, the array that loads into searchAdapter
             //items.clear();
             Log.i("XMLBookBook", "Items cleared");
-            //searchAdapter.notifyDataSetChanged();
 
             //if text hasn't been deleted
             String text = search_et.getQuery().toString();
@@ -482,7 +449,7 @@ public class InputRecsActivity extends AppCompatActivity {
                         //if movieId does not yet exist in items array list, add to items and notify adapter
                         items.add(bookItem);
                         itemIds.add(bookItem.getBookId());
-                        searchAdapter.sortedNotifyItemInserted(text,items.size() - 1);
+                        searchAdapter.sortedNotifyItemInserted(text, items.size() - 1);
                         Log.i("LevenshteinBook", "ADAPTER ITEM INSERTED");
                     }
                 }
