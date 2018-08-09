@@ -69,14 +69,6 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/shows_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignStart="@+id/movies_tv"
-            android:layout_below="@+id/clayout2"
-            app:srcCompat="@android:drawable/arrow_down_float" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_libTvShows"
             android:layout_width="match_parent"
@@ -84,6 +76,14 @@
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/shows_tv"
             android:layout_marginStart="-40dp" />
+
+        <ImageView
+            android:id="@+id/shows_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignStart="@+id/movies_tv"
+            android:layout_below="@+id/clayout2"
+            app:srcCompat="@android:drawable/arrow_down_float" />
 
 
         <android.support.constraint.ConstraintLayout

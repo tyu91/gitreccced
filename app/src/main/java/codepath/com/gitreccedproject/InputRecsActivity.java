@@ -25,7 +25,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,36 +86,6 @@ public class InputRecsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
-
-        //testing
-        String OGString = "The Raven";
-        ArrayList<String> toCompare = new ArrayList<>(Arrays.asList("raven", "he raven", "theraven", "amazing race", "rave", "raven cycle", "the raven", "The Raven", "maven"));
-        ArrayList<String> toCompare1 = new ArrayList<>(Arrays.asList("The Revenant", "Good Witch", "M*A*S*H", "Jaws: The Revenge", "Resident Evil", "raven cycle", "the raven", "The Raven", "maven"));
-
-        //insertion sort by comparing Levenshtein distances
-        for (int i = 0; i < toCompare.size() - 1; i++) {
-            for (int j = i + 1; j < toCompare.size(); j++) {
-                LevenshteinDistance d1 = new LevenshteinDistance(100);
-                LevenshteinDistance d2 = new LevenshteinDistance(100);
-
-                int iDistance = d1.apply(OGString, toCompare.get(i));
-                int jDistance = d2.apply(OGString, toCompare.get(j));
-
-                if (jDistance < iDistance) {
-                    String tempString = toCompare.get(i);
-                    toCompare.set(i, toCompare.get(j));
-                    toCompare.set(j, tempString);
-                }
-            }
-        }
-
-        for (int i = 0; i < toCompare.size(); i++) {
-            LevenshteinDistance distance = new LevenshteinDistance(100);
-            Log.i("fLevenshtein", "Query: " + OGString + "|| Title: " + toCompare.get(i)
-                    + "   ||   LDistance: " + distance.apply(OGString, toCompare.get(i)));
-        }
-
-        Log.i("fLevenshtein", "********** F I N I S H E D **********");
 
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
