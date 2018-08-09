@@ -29,8 +29,7 @@ public class JSONMovie {
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
         movieId = object.getString("movie_id");
-
-        director = "director unassigned";
+        director = object.getString("director");
         cast = "";
 
     }

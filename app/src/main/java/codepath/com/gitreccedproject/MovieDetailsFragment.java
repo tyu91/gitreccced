@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
 
 
 public class MovieDetailsFragment extends Fragment {
@@ -17,16 +19,11 @@ public class MovieDetailsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private String mParam1, mParam2;
 
     private TextView tvMovieTitle, director, overview, releaseDate;
     private ImageView backdrop;
-
-
-    //private OnFragmentInteractionListener mListener;
+    private AsyncHttpClient detailsClient;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -70,6 +67,11 @@ public class MovieDetailsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         String imageUrl = "https://image.tmdb.org/t/p/w342" + ((DetailsActivity)getActivity()).item.getBackdropPath();
 
+        detailsClient = new AsyncHttpClient();
+        String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + ((DetailsActivity)getActivity()).item.getMovieId();
+        RequestParams tvDetailsParams = new RequestParams();
+        tvDetailsParams.put("api_key", getContext().getString(R.string.movieApiKey));
+
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         director = view.findViewById(R.id.tvDirector);
         releaseDate = view.findViewById(R.id.tvReleaseDate);
@@ -84,6 +86,25 @@ public class MovieDetailsFragment extends Fragment {
         Glide.with(getContext())
                 .load(imageUrl)
                 .into(backdrop);
+
+//        detailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler(){
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                Log.i("SearchAdapter", "SUCCESS: received response");
+//                try {
+//                    releaseDate.setText(response.getString("release_date"));
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+//            }
+//        });
     }
 
     /*// TODO: Rename method, update argument and hook method into UI event

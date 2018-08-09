@@ -107,6 +107,9 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         //return mItems.size();
+        if (mItems.size() < 4) {
+            return mItems.size();
+        }
         return Integer.MAX_VALUE;
     }
 
@@ -172,6 +175,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition() % mItems.size();
+//            Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
             Log.i("overview", mItems.get(position).getDetails());
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
 

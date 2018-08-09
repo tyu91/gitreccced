@@ -144,12 +144,14 @@ public class LibraryFragment extends Fragment {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+                        //item.setDetails(postSnapshot.child("overview").getValue().toString());
                         movieslib.add(item);
 
                     } else if (item.getGenre().contains("TV")) {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+                        //item.setDetails(postSnapshot.child("overview").getValue().toString());
                         TVlib.add(item);
 
                     } else {
@@ -168,6 +170,15 @@ public class LibraryFragment extends Fragment {
                 if (booklib.size() == 0) {
                     booklib.add(new Item("","","",""));
                 }
+                if (movieslib.size() <= 4) {
+                    movies_btn.setVisibility(View.GONE);
+                }
+                if (TVlib.size() <= 4) {
+                    shows_btn.setVisibility(View.GONE);
+                }
+                if (booklib.size() <= 4) {
+                    books_btn.setVisibility(View.GONE);
+                }
                 movieslibAdapter = new libAdapter(movieslib);
                 rv_libMovies.setAdapter(movieslibAdapter);
                 TVlibAdapter = new libAdapter(TVlib);
@@ -182,6 +193,7 @@ public class LibraryFragment extends Fragment {
                 rv_showsexp.setAdapter(TVlibexpadapter);
                 rv_booksexp.setAdapter(bookslibexpadapter);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
