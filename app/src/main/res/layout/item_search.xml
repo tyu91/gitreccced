@@ -68,4 +68,18 @@
         android:text="item 2"
         android:textColor="#c8c6d0" />
 
+    <TextView
+        android:id="@+id/tvPosterTitle"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-condensed"
+        android:maxLines="3"
+        android:singleLine="true"
+        android:text="Title"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light" />
+
 </RelativeLayout>

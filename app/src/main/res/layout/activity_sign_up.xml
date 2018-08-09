@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPass"
         android:layout_centerHorizontal="true"
-        android:text="Password must be at least 6 chracters long"
+        android:text="Password must be at least 6 characters long"
         android:textColor="#FF4081"
         tools:layout_editor_absoluteX="57dp"
         tools:layout_editor_absoluteY="290dp" />
