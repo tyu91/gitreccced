@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         usersquery = usersRef.orderByChild("email").equalTo(email.toLowerCase());
         Log.i("e",email.toLowerCase());
 
-        usersquery.addValueEventListener(new ValueEventListener() {
+        usersquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {

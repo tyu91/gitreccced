@@ -32,9 +32,10 @@ public class SettingsActivity extends AppCompatActivity {
         btnUpdate = findViewById(R.id.btnUpdate);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        User dbuser = LoginActivity.currentuser;
 
-        tvEmail.setText(user.getEmail());
-        tvUsername.setText(user.getDisplayName());
+        tvEmail.setText(dbuser.getEmail());
+        tvUsername.setText(dbuser.getUsername());
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
