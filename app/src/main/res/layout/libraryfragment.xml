@@ -92,7 +92,7 @@
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/shows_tv"
             android:layout_marginStart="-40dp" />
-        
+
         <android.support.constraint.ConstraintLayout
             android:id="@+id/clayout2"
             android:layout_width="match_parent"
