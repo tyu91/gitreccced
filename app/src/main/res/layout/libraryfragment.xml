@@ -81,7 +81,7 @@
             android:layout_alignTop="@+id/shows_tv"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_toEndOf="@+id/movies_btn"
+            android:layout_toEndOf="@+id/shows_tv"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/arrow_down_float" />
 
@@ -89,9 +89,8 @@
             android:id="@+id/rv_libTvShows"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/movies_tv"
-            android:layout_below="@+id/shows_tv"
-            android:layout_marginStart="-40dp" />
+            android:layout_alignStart="@+id/rv_libMovies"
+            android:layout_below="@+id/shows_tv" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/clayout2"
@@ -128,9 +127,8 @@
             android:id="@+id/rv_libBooks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/shows_tv"
-            android:layout_below="@+id/tv_books"
-            android:layout_marginStart="-40dp" />
+            android:layout_alignStart="@+id/rv_libMovies"
+            android:layout_below="@+id/tv_books" />
 
         <ImageView
             android:id="@+id/books_btn"
