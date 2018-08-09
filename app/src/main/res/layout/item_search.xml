@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,13 +14,15 @@
         android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
         app:srcCompat="@android:color/background_dark" />
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="270dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/ivPoster"
         android:ellipsize="end"
         android:fontFamily="sans-serif-condensed"
@@ -55,7 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_item_2"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/ivPoster"
+        android:fontFamily="sans-serif-condensed"
         android:text="item 1"
         android:textColor="#c8c6d0" />
 
@@ -64,8 +69,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/ivPoster"
+        android:fontFamily="sans-serif-condensed"
         android:text="item 2"
         android:textColor="#c8c6d0" />
+
+    <TextView
+        android:id="@+id/tvPosterTitle"
+        android:layout_width="58dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-condensed"
+        android:maxLines="4"
+        android:text="Title"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light" />
 
 </RelativeLayout>

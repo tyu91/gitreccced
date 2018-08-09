@@ -118,15 +118,15 @@ public class LibraryFragment extends Fragment {
         rv_showsexp = view.findViewById(R.id.rv_showsexp);
         rv_booksexp = view.findViewById(R.id.rv_booksexp);
 
-        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),4));
+        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),4));
+        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),4));
 
         rv_moviesexp.setAdapter(movieslibexpadapter);
         rv_showsexp.setAdapter(TVlibexpadapter);
         rv_booksexp.setAdapter(bookslibexpadapter);
 
-        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(((MyLibraryActivity)getActivity()).mAuth.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
         itemsquery.addValueEventListener(new ValueEventListener() {
