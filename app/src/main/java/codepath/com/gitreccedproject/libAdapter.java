@@ -107,6 +107,9 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         //return mItems.size();
+        if (mItems.size() < 4) {
+            return mItems.size();
+        }
         return Integer.MAX_VALUE;
     }
 
