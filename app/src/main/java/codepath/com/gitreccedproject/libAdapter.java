@@ -3,6 +3,7 @@ package codepath.com.gitreccedproject;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -123,6 +124,8 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
                                             mItems.remove(position);
                                             Toast.makeText(context,"Deleted!",Toast.LENGTH_SHORT).show();
                                             // TODO - reload recs
+                                            RecsFragment.lib.remove(mItem.getIid());
+                                            new refreshasync().execute();
                                         }
                                     });
                                 }
@@ -150,6 +153,23 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
             final Intent i = new Intent(context, DetailsActivity.class);
             i.putExtra("item", Parcels.wrap(mItems.get(position)));
             context.startActivity(i);
+        }
+    }
+
+    class refreshasync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SearchAdapter.getrecs(RecsFragment.lib);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            DatabaseReference Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
+            RecsFragment.getmovies(Recs);
+            RecsFragment.getshows(Recs);
+            RecsFragment.getbooks(Recs);
         }
     }
 }
