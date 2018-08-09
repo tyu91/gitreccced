@@ -168,6 +168,15 @@ public class LibraryFragment extends Fragment {
                 if (booklib.size() == 0) {
                     booklib.add(new Item("","","",""));
                 }
+                if (movieslib.size() <= 4) {
+                    movies_btn.setVisibility(View.GONE);
+                }
+                if (TVlib.size() <= 4) {
+                    shows_btn.setVisibility(View.GONE);
+                }
+                if (booklib.size() <= 4) {
+                    books_btn.setVisibility(View.GONE);
+                }
                 movieslibAdapter = new libAdapter(movieslib);
                 rv_libMovies.setAdapter(movieslibAdapter);
                 TVlibAdapter = new libAdapter(TVlib);
