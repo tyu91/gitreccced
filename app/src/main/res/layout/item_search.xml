@@ -77,14 +77,15 @@
 
     <TextView
         android:id="@+id/tvPosterTitle"
-        android:layout_width="60dp"
+        android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-condensed"
-        android:maxLines="3"
-        android:singleLine="true"
+        android:maxLines="4"
         android:text="Title"
         android:textAlignment="center"
         android:textColor="@android:color/background_light" />

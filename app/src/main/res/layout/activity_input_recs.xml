@@ -32,6 +32,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="25dp"
         android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@id/tvFins"
         android:text="Add movies, tv shows, and books to your library!"
         android:textColor="?attr/colorButtonNormal"
         android:textSize="18sp"

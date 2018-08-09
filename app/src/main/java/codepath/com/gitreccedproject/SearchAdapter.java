@@ -181,6 +181,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     holder.poster_title_tv.setText(item.getTitle());
                     Log.i("PosterImageNoPoster", "Title: " + item.getTitle() + " || RV Position: " + String.format("%s", position));
                 } else {
+                    holder.poster_title_tv.setVisibility(View.INVISIBLE);
                     //if book has image, populate with associated photo
                     GlideApp.with(context)
                             .load(item.getImgUrl())
@@ -356,41 +357,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 }
 
                 Log.i("library",library.toString());
-
-                /*Log.i("size",String.format("%s",title_tv.getTextSize()));
-                if (title_tv.getTextSize() == 60.0) {
-                    Log.i("click", "already in lib");
-                    lib.remove(mItem.getIid());
-                    dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid()).child(mItem.getIid());
-                    dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                            dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(LoginActivity.currentuser.getUid());
-                            dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                    title_tv.setTextSize(18);
-                                    getrecs(lib);
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    lib.add(mItem.getIid());
-                    addItem(position);
-                    getrecs(lib);
-                    title_tv.setTextSize(20);
-                }
-
-                Log.d("mItem", "Title: " + mItem.getTitle());
-                //set the overview + additional fields for item
-                new BookAsync().execute();
-
-                Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
-                Log.i("select", String.format("Got item at %s", position));
-                    addItem(position);
-                }*/
-
             }
         }
     }
@@ -655,40 +621,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         Log.i("Levenshtein", "********** F I N I S H E D **********");
 
-        super.notifyItemChanged(position);
+        //super.notifyItemChanged(position);
+        super.notifyItemRangeChanged(0, mItems.size());
     }
-
-    /*//takes in search query, performs similarity sort, then calls super.notifyItemInserted()
-    public void sortedNotifyItemInserted(String queryText, int position) {
-
-        //insertion sort by comparing Levenshtein distances
-        for (int i = 0; i < mItems.size() - 1; i++) {
-            for (int j = i + 1; j < mItems.size(); j++) {
-                LevenshteinDistance d1 = new LevenshteinDistance(100);
-                LevenshteinDistance d2 = new LevenshteinDistance(100);
-
-                int iDistance = d1.apply(queryText, mItems.get(i).getTitle());
-                int jDistance = d2.apply(queryText, mItems.get(j).getTitle());
-
-                if (jDistance < iDistance) {
-                    Item tempItem = mItems.get(i);
-                    mItems.set(i, mItems.get(j));
-                    mItems.set(j, tempItem);
-                }
-            }
-        }
-
-        //printing resulting mItems with Levenshtein distances to check
-        for (int i = 0; i < mItems.size(); i++) {
-            LevenshteinDistance distance = new LevenshteinDistance(100);
-            Log.i("Levenshtein", "Query: " + queryText + "|| Title: " + mItems.get(i).getTitle()
-                    + "   ||   BookId: " + mItems.get(i).getBookId());
-        }
-
-        Log.i("Levenshtein", "********** F I N I S H E D **********");
-
-        super.notifyItemChanged(position);
-    }*/
-
 
 }

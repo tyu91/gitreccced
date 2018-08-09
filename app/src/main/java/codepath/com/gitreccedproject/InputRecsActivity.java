@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -146,7 +145,7 @@ public class InputRecsActivity extends AppCompatActivity {
         // construct the adapter from this datasource
         searchAdapter = new SearchAdapter(items);
         // RecyclerView setup (layout manager, use adapter)
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(this);
         searchlist_rv.setLayoutManager(linearLayoutManager);
         // set the adapter
         searchlist_rv.setAdapter(searchAdapter);
@@ -217,7 +216,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                     try {
                                         items.clear();
                                         itemIds.clear();
-                                        searchAdapter.notifyDataSetChanged();
+                                        searchAdapter.notifyItemRangeChanged(0, items.size());
                                         Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
                                         JSONArray array = content.getJSONArray("hits");
                                         for (int i = 0; i < array.length(); i++) {
@@ -271,7 +270,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             Log.i("search", "empty!");
                             items.clear();
                             itemIds.clear();
-                            searchAdapter.notifyDataSetChanged();
+                            searchAdapter.notifyItemRangeChanged(0, items.size());
                             Log.i("Levenshtein", "ADAPTER CLEARED");
                             pb.setVisibility(ProgressBar.GONE);
                             isStart = true;
@@ -299,7 +298,7 @@ public class InputRecsActivity extends AppCompatActivity {
                                         pb.setVisibility(ProgressBar.VISIBLE);
                                         items.clear();
                                         itemIds.clear();
-                                        searchAdapter.notifyDataSetChanged();
+                                        searchAdapter.notifyItemRangeChanged(0, items.size());
                                         Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
 
                                         String text = search_et.getQuery().toString();
@@ -363,7 +362,7 @@ public class InputRecsActivity extends AppCompatActivity {
                             Log.i("search", "empty!");
                             items.clear();
                             itemIds.clear();
-                            searchAdapter.notifyDataSetChanged();
+                            searchAdapter.notifyItemRangeChanged(0, items.size());
                             Log.i("Levenshtein", "ADAPTER CLEARED");
                         }
                         return false;
@@ -430,9 +429,6 @@ public class InputRecsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             pb.setVisibility(ProgressBar.GONE);
-            //clear book search adapter
-            //items.clear();
-            //searchAdapter.notifyDataSetChanged();
 
             //temp array for books in InputRecsActivity
             ArrayList<Item> mBooks = GoodreadsClient.books;
@@ -443,7 +439,6 @@ public class InputRecsActivity extends AppCompatActivity {
             //clear items array, the array that loads into searchAdapter
             //items.clear();
             Log.i("XMLBookBook", "Items cleared");
-            //searchAdapter.notifyDataSetChanged();
 
             //if text hasn't been deleted
             String text = search_et.getQuery().toString();
