@@ -1,6 +1,5 @@
 package codepath.com.gitreccedproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 public class UpdateInfoActivity extends AppCompatActivity {
 
@@ -88,19 +85,16 @@ public class UpdateInfoActivity extends AppCompatActivity {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(UpdateInfoActivity.this, RecsFragment.class);
-                i.putExtra("user", Parcels.wrap(user));
-                startActivity(i);
-                finish();
+                onBackPressed();
             }
         });
     }
 
-    @Override
+    /*@Override
     public void onBackPressed(){
         Intent i = new Intent(UpdateInfoActivity.this, RecsFragment.class);
         i.putExtra("user", Parcels.wrap(user));
         startActivity(i);
         finish();
-    }
+    }*/
 }
