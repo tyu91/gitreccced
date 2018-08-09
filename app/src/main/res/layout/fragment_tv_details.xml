@@ -21,18 +21,18 @@
         android:id="@+id/TextView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignStart="@+id/tvShowOverview"
         android:layout_below="@+id/textView3"
-        android:text="First Aired:"
+        android:text="First Aired: "
         android:textColor="#c8c6d0" />
 
     <TextView
         android:id="@+id/tvShowOverview"
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="287dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="289dp"
         android:text="TextView"
         android:textColor="#c8c6d0"
         android:textSize="18sp" />
@@ -41,7 +41,7 @@
         android:id="@+id/tvShowTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignStart="@+id/tvShowOverview"
         android:layout_below="@+id/ivTVBackdrop"
         android:text="TextView"
         android:textColor="#c8c6d0"
@@ -59,7 +59,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignStart="@+id/tvShowOverview"
         android:layout_below="@+id/tvShowTitle"
         android:text="Seasons: "
         android:textColor="#c8c6d0" />

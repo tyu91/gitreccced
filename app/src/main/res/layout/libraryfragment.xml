@@ -17,8 +17,8 @@
             android:layout_height="40dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-condensed"
             android:text="Movies"
             android:textColor="@android:color/white"
@@ -31,11 +31,12 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/clayout"
+            android:layout_marginBottom="9dp"
             app:srcCompat="@android:drawable/arrow_down_float" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/clayout"
-            android:layout_width="295dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/rv_libMovies">
@@ -76,11 +77,12 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/clayout2"
+            android:layout_marginBottom="20dp"
             app:srcCompat="@android:drawable/arrow_down_float" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/clayout2"
-            android:layout_width="295dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/shows_tv"
             android:layout_below="@+id/rv_libTvShows">
@@ -101,6 +103,7 @@
             android:layout_height="40dp"
             android:layout_alignStart="@+id/movies_tv"
             android:layout_below="@+id/rv_libTvShows"
+            android:layout_marginTop="19dp"
             android:fontFamily="sans-serif-condensed"
             android:text="Books"
             android:textColor="@android:color/white"
@@ -126,7 +129,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/clayout3"
-            android:layout_width="295dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/tv_books"
             android:layout_below="@+id/rv_libBooks">

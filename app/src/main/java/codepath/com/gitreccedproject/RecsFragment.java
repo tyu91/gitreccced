@@ -101,7 +101,7 @@ public class RecsFragment extends Fragment {
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
 
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer = view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -220,7 +220,7 @@ public class RecsFragment extends Fragment {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
-                        //movieItems.add(item);
+                        movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
                             movieItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
@@ -269,7 +269,7 @@ public class RecsFragment extends Fragment {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
-                        //movieItems.add(item);
+                        movieItems.add(item);
                         Log.i("TAG1", item.getTitle());
                         if (postSnapshot.child("count").getValue() != null) {
                             tvItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
