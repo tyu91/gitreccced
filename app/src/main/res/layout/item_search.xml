@@ -13,6 +13,7 @@
         android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
         app:srcCompat="@android:color/background_dark" />
 
     <TextView
@@ -56,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_item_2"
         android:layout_toEndOf="@+id/ivPoster"
+        android:fontFamily="sans-serif-condensed"
         android:text="item 1"
         android:textColor="#c8c6d0" />
 
@@ -65,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
         android:layout_toEndOf="@+id/ivPoster"
+        android:fontFamily="sans-serif-condensed"
         android:text="item 2"
         android:textColor="#c8c6d0" />
 
