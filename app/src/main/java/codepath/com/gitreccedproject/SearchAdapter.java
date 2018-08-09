@@ -2,6 +2,7 @@ package codepath.com.gitreccedproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -98,63 +99,100 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.title_tv.setText(item.getTitle());
         holder.genre_tv.setText(item.getGenre());
 
-        if (item.getGenre().equals("Movie")) {
-            //if item is Movie
+        switch (item.getGenre()) {
+            case "Movie":
+                //if item is a movie
+                //set poster title text view to invisible and poster image view to visible
+                holder.poster_title_tv.setVisibility(View.INVISIBLE);
+                holder.poster_iv.setVisibility(View.VISIBLE);
+                //set release year
+                holder.item_1_tv.setText("");
+                //set release year
+                if (item.getReleaseDate().equalsIgnoreCase("")) {
+                    //if release date is empty, write unknown
+                    holder.item_2_tv.setText("Released: " + "Unknown");
+                } else {
+                    //if release date is not empty, set release year
+                    holder.item_2_tv.setText("Released: " + item.getReleaseDate().substring(0, 4));
+                }
+                //load poster image
+                String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
+                //load image using glide
+                GlideApp.with(context)
+                        .load(imageUrl)
+                        .into(holder.poster_iv);
+                Log.i("PosterImageHasPoster", "Title: " + item.getTitle() + " || RV Position: " + String.format("%s", position));
+                break;
 
-            //set release year
-            holder.item_1_tv.setText("");
-            //set release year
-            holder.item_2_tv.setText("Released: " + item.getReleaseDate().substring(0, 4));
-            //load poster image
-            String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
-            //load image using glide
-            GlideApp.with(context)
-                    .load(imageUrl)
-                    .into(holder.poster_iv);
-        } else if (item.getGenre().equals("TV")) {
-            //if item is TV
-            tvDetailsClient = new AsyncHttpClient();
-            String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + item.getMovieId();
-            RequestParams tvDetailsParams = new RequestParams();
-            tvDetailsParams.put("api_key", context.getString(R.string.movieApiKey));
+            case "TV":
+                //if item is tv
+                //set poster title text view to invisible
+                holder.poster_title_tv.setVisibility(View.INVISIBLE);
+                holder.poster_iv.setVisibility(View.VISIBLE);
 
-            tvDetailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Log.i("SearchAdapter", "SUCCESS: received response");
-                    try {
-                        holder.item_1_tv.setText("Seasons: " + response.getString("number_of_seasons"));
-                        holder.item_2_tv.setText("First Aired: " + item.getFirstAirDate().substring(0, 4));
+                tvDetailsClient = new AsyncHttpClient();
+                String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + item.getMovieId();
+                RequestParams tvDetailsParams = new RequestParams();
+                tvDetailsParams.put("api_key", context.getString(R.string.movieApiKey));
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                //load poster image
+                imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
+                //load image using glide
+                GlideApp.with(context)
+                        .load(imageUrl)
+                        .into(holder.poster_iv);
+
+                Log.i("PosterImageHasPoster", "Title: " + item.getTitle() + " || RV Position: " + String.format("%s", position));
+
+                tvDetailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        Log.i("SearchAdapter", "SUCCESS: received response");
+                        try {
+                            if (holder.title_tv.getText().equals(item.getTitle())) {
+                                //if holder still has correct TV item onSuccess, set num seasons and air date
+                                holder.item_1_tv.setText("Seasons: " + response.getString("number_of_seasons"));
+                                holder.item_2_tv.setText("First Aired: " + item.getFirstAirDate().substring(0, 4));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+                    }
+                });
+
+                break;
+            case "Book":
+                //if item is book
+                if (item.getImgUrl().contains("nophoto")) {
+                    //if book does not have a photo associated with it, populate with card
+                    //set poster title text view to visible
+                    holder.poster_iv.setImageResource(0);
+                    holder.poster_iv.setBackgroundColor(Color.parseColor("#000000"));
+
+                    holder.poster_title_tv.setVisibility(View.VISIBLE);
+                    holder.poster_title_tv.bringToFront();
+                    holder.poster_title_tv.setText(item.getTitle());
+                    Log.i("PosterImageNoPoster", "Title: " + item.getTitle() + " || RV Position: " + String.format("%s", position));
+                } else {
+                    //if book has image, populate with associated photo
+                    GlideApp.with(context)
+                            .load(item.getImgUrl())
+                            .into(holder.poster_iv);
                 }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
-                }
-            });
+                //set author
+                holder.item_1_tv.setText("Author: " + item.getAuthor());
+                //set pub year
+                holder.item_2_tv.setText("Published: " + item.getPubYear());
+                break;
 
-
-            //load poster image
-            String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
-            //load image using glide
-            GlideApp.with(context)
-                    .load(imageUrl)
-                    .into(holder.poster_iv);
-        } else {
-            //if item is a book, get poster image this way
-            GlideApp.with(context)
-                    .load(item.getImgUrl())
-                    .into(holder.poster_iv);
-
-            //set author
-            holder.item_1_tv.setText(item.getAuthor());
-            //set pub year
-            holder.item_2_tv.setText(item.getPubYear());
         }
 
         // check if item is in user's library
@@ -218,6 +256,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         public CheckBox added_check;
         public TextView item_1_tv;
         public TextView item_2_tv;
+        public TextView poster_title_tv;
         public RelativeLayout rlayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -228,6 +267,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             added_check = itemView.findViewById(R.id.checkAdded);
             item_1_tv = itemView.findViewById(R.id.tv_item_1);
             item_2_tv = itemView.findViewById(R.id.tv_item_2);
+            poster_title_tv = itemView.findViewById(R.id.tvPosterTitle);
             rlayout = itemView.findViewById(R.id.rlayout);
 
             rlayout.setOnClickListener(this);
@@ -394,8 +434,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         Log.i("Books", "adding new book to db");
 
                         //weird way, pls fix later
-                        mItems.add(mPosition, item);
-                        mItems.remove(mPosition + 1);
+                        mItems.set(mPosition, item);
+                        //mItems.remove(mPosition + 1);
 
                         Log.d("BookDecide", "iid: " + iid + " || title: " + item.getTitle());
                         dbBooks.child(iid).setValue(item);

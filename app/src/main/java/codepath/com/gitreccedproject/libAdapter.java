@@ -3,6 +3,7 @@ package codepath.com.gitreccedproject;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,19 +67,41 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
         String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
 
-        if (item.getGenre().equalsIgnoreCase("Book")){
-            Glide.with(context)
-                    .load(item.getImgUrl())
-                    .into(holder.posterImage);
-            holder.textview1.setText(item.getTitle());
+        if (item.getGenre().equalsIgnoreCase("Book")) {
+            if (item.getImgUrl() != null && !(item.getImgUrl().equalsIgnoreCase(""))) {
+                if (item.getImgUrl().contains("nophoto")) {
+                    Log.i("BookImageLibNoPhoto", "Title: " + item.getTitle() + " || ImgUrl: " + item.getImgUrl());
+                    //if book does not have photo associated with it, put title instead
+                    holder.posterImage.setImageResource(0);
+                    holder.posterImage.setBackgroundColor(Color.parseColor("#000000"));
+                    holder.textview1.setVisibility(View.VISIBLE);
+                    holder.textview1.bringToFront();
+                    holder.textview1.setText(item.getTitle());
+                } else {
+                    Log.i("BookImageLibPhoto", "Title: " + item.getTitle() + " || ImgUrl: " + item.getImgUrl());
 
+                    holder.textview1.setVisibility(View.INVISIBLE);
+
+                    Glide.with(context)
+                            .load(item.getImgUrl())
+                            .into(holder.posterImage);
+                    holder.textview1.setText(item.getTitle());
+                }
+
+            } else {
+                Log.i("BookImageLib", "no image url");
+
+            }
         } else {
             // populate the views according to position
             Glide.with(context)
                     .load(imageUrl)
                     .into(holder.posterImage);
+            holder.textview1.setVisibility(View.INVISIBLE);
             holder.textview1.setText(item.title);
         }
+
+        Log.i("BookImageLib", "FINISHED");
     }
 
     @Override
