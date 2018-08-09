@@ -26,15 +26,16 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="17dp"
-        android:text="Add Media!"
+        android:layout_marginTop="5dp"
+        android:text="Add movies, tv shows, and books to your library!"
         android:textColor="?attr/colorButtonNormal"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
 
     <android.support.v7.widget.SearchView
         android:id="@+id/search_et"
@@ -61,6 +62,7 @@
         android:layout_marginEnd="25dp"
         android:text="Finish"
         android:textColor="@color/colorAccent"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
 
 </RelativeLayout>

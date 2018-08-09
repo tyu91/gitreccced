@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,9 +19,10 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="270dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/ivPoster"
         android:ellipsize="end"
         android:fontFamily="sans-serif-condensed"
@@ -56,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_item_2"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/ivPoster"
         android:fontFamily="sans-serif-condensed"
         android:text="item 1"
@@ -66,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
+        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/ivPoster"
         android:fontFamily="sans-serif-condensed"
         android:text="item 2"
