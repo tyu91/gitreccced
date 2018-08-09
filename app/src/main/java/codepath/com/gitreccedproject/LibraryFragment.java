@@ -117,10 +117,10 @@ public class LibraryFragment extends Fragment {
         rv_moviesexp = view.findViewById(R.id.rv_moviesexp);
         rv_showsexp = view.findViewById(R.id.rv_showsexp);
         rv_booksexp = view.findViewById(R.id.rv_booksexp);
-
-        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),3));
-        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),3));
+        
+        rv_moviesexp.setLayoutManager(new GridLayoutManager(getContext(),4));
+        rv_showsexp.setLayoutManager(new GridLayoutManager(getContext(),4));
+        rv_booksexp.setLayoutManager(new GridLayoutManager(getContext(),4));
 
         rv_moviesexp.setAdapter(movieslibexpadapter);
         rv_showsexp.setAdapter(TVlibexpadapter);
