@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +140,12 @@ public class LibraryFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shottt",postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
+
+                    if (postSnapshot.child("overview").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("overview").getValue().toString()) > 0) {
+                        item.setDetails(postSnapshot.child("overview").getValue().toString());
+                    } else if (postSnapshot.child("details").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("details").getValue().toString()) > 0) {
+                        item.setDetails(postSnapshot.child("details").getValue().toString());
+                    }
 
                     if (item.getGenre().contains("Movie")) {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
