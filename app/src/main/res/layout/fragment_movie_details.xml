@@ -15,8 +15,6 @@
         android:layout_height="200dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
         android:src="@android:color/black" />
 
     <TextView
@@ -25,53 +23,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/ivMovieBackdrop"
-        android:text="TextView"
         android:textColor="#c8c6d0"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvMovieTitle"
-        android:text="Directed by: "
-        android:textColor="#c8c6d0" />
-
-    <TextView
-        android:id="@+id/tvMovieOverview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvCast"
-        android:textColor="#c8c6d0"
-        android:textSize="18sp" />
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/tvDirector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvMovieTitle"
-        android:layout_marginLeft="2dp"
-        android:layout_toEndOf="@+id/textView5"
-        android:textColor="#c8c6d0" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView5"
-        android:text="Release Date:"
-        android:textColor="#c8c6d0" />
-
-    <TextView
-        android:id="@+id/tvReleaseDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView5"
-        android:layout_marginLeft="2dp"
-        android:layout_toEndOf="@+id/textView6"
         android:textColor="#c8c6d0" />
 
     <TextView
@@ -79,7 +39,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView6"
-        android:text="TextView"
+        android:layout_below="@id/tvDirector"
         android:textColor="#c8c6d0" />
+
+    <TextView
+        android:id="@+id/tvReleaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/tvCast"
+        android:textColor="#c8c6d0" />
+
+    <TextView
+        android:id="@+id/tvMovieOverview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvReleaseDate"
+        android:textColor="#c8c6d0"
+        android:textSize="18sp" />
+
 </RelativeLayout>

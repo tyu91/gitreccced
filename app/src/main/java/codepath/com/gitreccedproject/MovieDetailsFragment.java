@@ -79,7 +79,7 @@ public class MovieDetailsFragment extends Fragment {
         tvCast = view.findViewById(R.id.tvCast);
 
         tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
-        releaseDate.setText(((DetailsActivity)getActivity()).item.getReleaseDate());
+        releaseDate.setText(((DetailsActivity)getActivity()).item.getReleaseDate().substring(0, 4));
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
 
         Glide.with(getContext())
