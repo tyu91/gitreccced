@@ -1,77 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/svBookScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#424242"
-    tools:context=".BookDetailsFragment">
+    android:background="#424242">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
-        android:id="@+id/tvPubDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
-        android:layout_toEndOf="@+id/textView9"
-        android:text="TextView"
-        android:textColor="#c8c6d0" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView4"
-        android:text="Publication Date:"
-        android:textColor="#c8c6d0" />
-
-    <TextView
-        android:id="@+id/tvBookOverview"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:text="TextView"
-        android:textColor="#c8c6d0"
-        android:textSize="18sp" />
+        android:background="#424242"
+        tools:context=".BookDetailsFragment">
 
-    <ImageView
-        android:id="@+id/ivBookCover"
-        android:layout_width="161dp"
-        android:layout_height="230dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:src="@android:color/black" />
+        <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/tvBookTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ivBookCover"
-        android:text="TextView"
-        android:textColor="#c8c6d0"
-        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/tvPubDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView4"
+            android:layout_toEndOf="@+id/textView9"
+            android:text="    "
+            android:textColor="#c8c6d0" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvBookTitle"
-        android:text="Written by: "
-        android:textColor="#c8c6d0" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView4"
+            android:layout_marginBottom="15dp"
+            android:text="Publication Date:"
+            android:textColor="#c8c6d0" />
 
-    <TextView
-        android:id="@+id/tvAuthor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBookTitle"
-        android:layout_toEndOf="@+id/textView4"
-        android:text="TextView"
-        android:textColor="#c8c6d0" />
+        <TextView
+            android:id="@+id/tvBookOverview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/textView9"
+            android:layout_centerVertical="true"
+            android:text="    "
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/ivBookCover"
+            android:layout_width="161dp"
+            android:layout_height="230dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:src="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tvBookTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ivBookCover"
+            android:text="TextView"
+            android:textColor="#c8c6d0"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvBookTitle"
+            android:text="Written by: "
+            android:textColor="#c8c6d0" />
+
+        <TextView
+            android:id="@+id/tvAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvBookTitle"
+            android:layout_toEndOf="@+id/textView4"
+            android:text="    "
+            android:textColor="#c8c6d0" />
+
+    </RelativeLayout>
+</ScrollView>
