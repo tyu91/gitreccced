@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#424242"
     android:backgroundTint="#424242">
 
     <TextView
@@ -14,6 +15,7 @@
         android:layout_margin="5dp"
         android:fontFamily="sans-serif-condensed"
         android:text="TextView"
+        android:textColor="#c8c6d0"
         android:textSize="18sp" />
 
     <Button
@@ -23,5 +25,7 @@
         android:layout_below="@+id/tvDescription"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:text="OK" />
+        android:background="#383838"
+        android:text="OK"
+        android:textColor="@color/colorAccent" />
 </RelativeLayout>

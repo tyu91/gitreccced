@@ -14,6 +14,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +32,7 @@ public class TVDetailsFragment extends Fragment {
     private String mParam2;
 
 
-    private TextView tvTVTitle, seasons, firstAired, overview;
+    private TextView tvTVTitle, seasons, firstAired, overview, tvCast;
     private ImageView backdrop;
     AsyncHttpClient detailsClient;
 
@@ -42,14 +43,6 @@ public class TVDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MovieDetailsFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static TVDetailsFragment newInstance(String param1, String param2) {
         TVDetailsFragment fragment = new TVDetailsFragment();
@@ -90,22 +83,25 @@ public class TVDetailsFragment extends Fragment {
         firstAired = view.findViewById(R.id.tvFirstAired);
         overview = view.findViewById(R.id.tvShowOverview);
         backdrop = view.findViewById(R.id.ivTVBackdrop);
+        tvCast = view.findViewById(R.id.tvCast);
 
         tvTVTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
         firstAired.setText(((DetailsActivity)getActivity()).item.getFirstAirDate());
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
 
+
         Glide.with(getContext())
                 .load(imageUrl)
                 .into(backdrop);
 
+        //get number of seasons and first air date
         detailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.i("SearchAdapter", "SUCCESS: received response");
                 try {
-                    seasons.setText(response.getString("number_of_seasons"));
-                    firstAired.setText(response.getString("first_air_date"));
+                    seasons.setText("Seasons: " + response.getString("number_of_seasons"));
+                    firstAired.setText("First Aired: " + response.getString("first_air_date").substring(0, 4));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -118,44 +114,48 @@ public class TVDetailsFragment extends Fragment {
                 Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
             }
         });
+
+        //get cast
+        detailsClient = new AsyncHttpClient();
+        tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + ((DetailsActivity)getActivity()).item.getMovieId() + "/credits";
+        tvDetailsParams = new RequestParams();
+        tvDetailsParams.put("api_key", getContext().getString(R.string.movieApiKey));
+
+        detailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.i("SearchAdapter", "SUCCESS: received response");
+                try {
+                    //get cast
+                    String finalCast = "Cast: ";
+                    JSONArray cast = response.getJSONArray("cast");
+                    int num_cast = 5;
+                    if (num_cast > cast.length()) {
+                        num_cast = cast.length();
+                    }
+
+                    for (int i = 0; i < num_cast; i++) {
+                        if (i != 0) {
+                            finalCast += ", ";
+                        }
+                        String name = cast.getJSONObject(i).get("name").toString();
+                        finalCast += name;
+                    }
+
+                    tvCast.setText(finalCast);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+            }
+        });
+
     }
 
-    /*// TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }*/
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    /*public interface OnFragmentInteractionListener {
-         //TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
 }

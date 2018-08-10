@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#424242">
 
     <TextView
         android:id="@+id/tvPrompt"
@@ -12,6 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="Please enter your username and password."
+        android:textColor="#c8c6d0"
         android:textSize="18sp" />
 
     <EditText
@@ -23,7 +24,8 @@
         android:layout_marginTop="45dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="#c8c6d0" />
 
     <Button
         android:id="@+id/btnEnter"
@@ -31,8 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etPassword"
-        android:layout_marginStart="70dp"
-        android:text="Enter" />
+        android:layout_marginStart="102dp"
+        android:background="#383838"
+        android:text="Enter"
+        android:textColor="@color/colorAccent" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -41,6 +45,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etEmail"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="#c8c6d0"
         tools:hint="Password" />
 </RelativeLayout>
