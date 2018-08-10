@@ -2,6 +2,7 @@ package codepath.com.gitreccedproject;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class MovieDetailsFragment extends Fragment {
@@ -59,9 +67,9 @@ public class MovieDetailsFragment extends Fragment {
         String imageUrl = "https://image.tmdb.org/t/p/w342" + ((DetailsActivity)getActivity()).item.getBackdropPath();
 
         detailsClient = new AsyncHttpClient();
-        String tvDetailsUrl = "https://api.themoviedb.org/3/tv/" + ((DetailsActivity)getActivity()).item.getMovieId();
-        RequestParams tvDetailsParams = new RequestParams();
-        tvDetailsParams.put("api_key", getContext().getString(R.string.movieApiKey));
+        String movieDetailsUrl = "https://api.themoviedb.org/3/movie/" + ((DetailsActivity)getActivity()).item.getMovieId() + "/credits";
+        RequestParams movieDetailsParams = new RequestParams();
+        movieDetailsParams.put("api_key", getContext().getString(R.string.movieApiKey));
 
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         director = view.findViewById(R.id.tvDirector);
@@ -77,24 +85,29 @@ public class MovieDetailsFragment extends Fragment {
         Glide.with(getContext())
                 .load(imageUrl)
                 .into(backdrop);
+        detailsClient.get(movieDetailsUrl, movieDetailsParams, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.i("SearchAdapter", "SUCCESS: received response");
+                try {
+                    JSONArray crew = response.getJSONArray("crew");
+                    for (int i = 0; i < crew.length(); i++) {
+                        String job = crew.getJSONObject(i).get("job").toString();
+                        if (job.equalsIgnoreCase("Director")) {
+                            director.setText(crew.getJSONObject(i).get("name").toString());
+                        }
+                    }
 
-//        detailsClient.get(tvDetailsUrl, tvDetailsParams, new JsonHttpResponseHandler(){
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                Log.i("SearchAdapter", "SUCCESS: received response");
-//                try {
-//                    releaseDate.setText(response.getString("release_date"));
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
-//            }
-//        });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+            }
+        });
     }
 }

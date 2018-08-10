@@ -161,6 +161,7 @@ public class LibraryFragment extends Fragment {
                         item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
                         item.setAuthor(postSnapshot.child("author").getValue().toString());
                         item.setPubYear(postSnapshot.child("pubYear").getValue().toString());
+                        item.setDetails(postSnapshot.child("details").getValue().toString());
                         booklib.add(item);
                     }
                 }
