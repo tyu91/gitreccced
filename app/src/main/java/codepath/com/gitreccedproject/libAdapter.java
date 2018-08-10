@@ -67,7 +67,11 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
         String imageUrl = "https://image.tmdb.org/t/p/w342" + item.getPosterPath();
 
-        if (item.getGenre().equalsIgnoreCase("Book")) {
+        if (item.getIid().equals("")) {
+            holder.textview1.setVisibility(View.VISIBLE);
+            holder.textview1.bringToFront();
+            holder.textview1.setText(item.getTitle());
+        } else if (item.getGenre().equalsIgnoreCase("Book")) {
             if (item.getImgUrl() != null && !(item.getImgUrl().equalsIgnoreCase(""))) {
                 if (item.getImgUrl().contains("nophoto")) {
                     Log.i("BookImageLibNoPhoto", "Title: " + item.getTitle() + " || ImgUrl: " + item.getImgUrl());
@@ -130,43 +134,46 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
                 public boolean onLongClick(View view) {
                     final int position = getAdapterPosition() % mItems.size();
                     final Item mItem = mItems.get(position);
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-                    alert.setTitle("Are you sure you want to delete " + mItem.getTitle() + " from your library?");
-                    //alert.setMessage("Message");
+                    if (!mItem.getIid().equals("")) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-                    // Set an EditText view to get user input
-                    alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // remove from db
-                            dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid()).child(mItem.getIid());
-                            dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                    dbUsersbyItem = FirebaseDatabase.getInstance().getReference("userbyitem").child(mItem.getIid()).child(LoginActivity.currentuser.getUid());
-                                    dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                            // remove from lib
-                                            mItems.remove(position);
-                                            Toast.makeText(context,"Deleted!",Toast.LENGTH_SHORT).show();
-                                            // TODO - reload recs
-                                            RecsFragment.lib.remove(mItem.getIid());
-                                            new refreshasync().execute();
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                        alert.setTitle("Are you sure you want to delete " + mItem.getTitle() + " from your library?");
+                        //alert.setMessage("Message");
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            Toast.makeText(context,"Cancelled!",Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        // Set an EditText view to get user input
+                        alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // remove from db
+                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid()).child(mItem.getIid());
+                                dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("userbyitem").child(mItem.getIid()).child(LoginActivity.currentuser.getUid());
+                                        dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                                // remove from lib
+                                                mItems.remove(position);
+                                                Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
+                                                // TODO - reload recs
+                                                RecsFragment.lib.remove(mItem.getIid());
+                                                new refreshasync().execute();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
 
-                    alert.show();
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(context, "Cancelled!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        alert.show();
+                    }
                     return false;
                 }
             });
@@ -179,9 +186,15 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
             Log.i("overview", mItems.get(position).getDetails());
             Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
 
-            final Intent i = new Intent(context, DetailsActivity.class);
-            i.putExtra("item", Parcels.wrap(mItems.get(position)));
-            context.startActivity(i);
+            if (mItems.get(position).getIid().equals("")) {
+                final Intent i = new Intent(context, InputRecsActivity.class);
+                i.putExtra("user", Parcels.wrap(LoginActivity.currentuser));
+                context.startActivity(i);
+            } else {
+                final Intent i = new Intent(context, DetailsActivity.class);
+                i.putExtra("item", Parcels.wrap(mItems.get(position)));
+                context.startActivity(i);
+            }
         }
     }
 

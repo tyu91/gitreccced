@@ -162,13 +162,13 @@ public class LibraryFragment extends Fragment {
                     }
                 }
                 if (movieslib.size() == 0) {
-                    movieslib.add(new Item("","","",""));
+                    movieslib.add(new Item("","","No movies in library",""));
                 }
                 if (TVlib.size() == 0) {
-                    TVlib.add(new Item("","","",""));
+                    TVlib.add(new Item("","","No TV shows in library",""));
                 }
                 if (booklib.size() == 0) {
-                    booklib.add(new Item("","","",""));
+                    booklib.add(new Item("","","No books in library",""));
                 }
                 if (movieslib.size() <= 4) {
                     movies_btn.setVisibility(View.GONE);
