@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import static codepath.com.gitreccedproject.LibraryFragment.html2text;
 
 public class RecsFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
@@ -368,6 +371,11 @@ public class RecsFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
+
+                    if (postSnapshot.child("details").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("details").getValue().toString()) > 0) {
+                        item.setDetails(html2text(postSnapshot.child("details").getValue().toString()));
+                    }
+
                     item.setBookId(postSnapshot.child("bookId").getValue().toString());
                     item.setSmallImgUrl(postSnapshot.child("smallImgUrl").getValue().toString());
                     item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
