@@ -201,7 +201,7 @@ public class RecsFragment extends Fragment {
                     bar.dismiss();
                     swipeContainer.setRefreshing(false);
                 }
-            }, 5000);
+            }, 3000);
         }
     }
 
