@@ -14,59 +14,64 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#424242">
 
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
-        tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="67dp" />
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="75dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@android:drawable/sym_def_app_icon"
+                tools:layout_editor_absoluteX="92dp"
+                tools:layout_editor_absoluteY="67dp" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="187dp"
-        android:text="Username"
-        android:textSize="18sp"
-        android:textStyle="bold|italic"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="317dp" />
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="187dp"
+                android:text="Username"
+                android:textColor="#c8c6d0"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                tools:layout_editor_absoluteX="152dp"
+                tools:layout_editor_absoluteY="317dp" />
 
-    <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsername"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="-187dp"
-        android:text="Email"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteX="171dp"
-        tools:layout_editor_absoluteY="342dp" />
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvUsername"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-187dp"
+                android:text="Email"
+                android:textColor="#c8c6d0"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                tools:layout_editor_absoluteX="171dp"
+                tools:layout_editor_absoluteY="342dp" />
 
-    <Button
-        android:id="@+id/btnUpdate"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
-        android:text="Update Information" />
-</RelativeLayout>
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="75dp"
+                android:background="#383838"
+                android:text="Update Information"
+                android:textColor="#c8c6d0" />
+        </RelativeLayout>
     </FrameLayout>
 
     <android.support.design.widget.NavigationView

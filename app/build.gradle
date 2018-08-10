@@ -43,6 +43,7 @@ dependencies {
     implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'org.apache.commons:commons-text:1.4'
+    implementation 'org.jsoup:jsoup:1.11.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

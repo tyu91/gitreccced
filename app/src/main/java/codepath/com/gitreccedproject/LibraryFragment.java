@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 
@@ -140,6 +142,12 @@ public class LibraryFragment extends Fragment {
                     Log.i("shottt",postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
 
+                    if (postSnapshot.child("overview").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("overview").getValue().toString()) > 0) {
+                        item.setDetails(postSnapshot.child("overview").getValue().toString());
+                    } else if (postSnapshot.child("details").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("details").getValue().toString()) > 0) {
+                        item.setDetails(html2text(postSnapshot.child("details").getValue().toString()));
+                    }
+
                     if (item.getGenre().contains("Movie")) {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
@@ -166,13 +174,13 @@ public class LibraryFragment extends Fragment {
                     }
                 }
                 if (movieslib.size() == 0) {
-                    movieslib.add(new Item("","","",""));
+                    movieslib.add(new Item("","","No movies in library",""));
                 }
                 if (TVlib.size() == 0) {
-                    TVlib.add(new Item("","","",""));
+                    TVlib.add(new Item("","","No TV shows in library",""));
                 }
                 if (booklib.size() == 0) {
-                    booklib.add(new Item("","","",""));
+                    booklib.add(new Item("","","No books in library",""));
                 }
                 if (movieslib.size() <= 4) {
                     movies_btn.setVisibility(View.GONE);
@@ -338,5 +346,9 @@ public class LibraryFragment extends Fragment {
                 Log.e("MovieDB", "could not generate new config");
             }
         });
+    }
+
+    public static String html2text(String html) {
+        return Jsoup.parse(html).text();
     }
 }
