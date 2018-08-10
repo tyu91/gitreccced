@@ -59,7 +59,7 @@ public class RecsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
-        activity = (MyLibraryActivity) getActivity();
+        activity = getActivity();
         return inflater.inflate(R.layout.recsfragment, parent, false);
     }
 
@@ -101,7 +101,7 @@ public class RecsFragment extends Fragment {
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
 
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer = view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -201,6 +201,7 @@ public class RecsFragment extends Fragment {
             SearchAdapter.getrecs(lib);
             return null;
         }
+
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.i("postexecute", "postexecute");
@@ -221,6 +222,7 @@ public class RecsFragment extends Fragment {
         DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(((MyLibraryActivity)getActivity()).mAuth.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
+
         itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -232,7 +234,7 @@ public class RecsFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                //empty
             }
         });
     }
@@ -240,6 +242,7 @@ public class RecsFragment extends Fragment {
     public static void getmovies(DatabaseReference Recs) {
         com.google.firebase.database.Query moviesquery = null;
         moviesquery = Recs.child("Movie");
+
         moviesquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -284,7 +287,7 @@ public class RecsFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
+                //empty
             }
         });
     }
@@ -292,6 +295,7 @@ public class RecsFragment extends Fragment {
     public static void getshows(DatabaseReference Recs) {
         com.google.firebase.database.Query showsquery = null;
         showsquery = Recs.child("TV");
+
         showsquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -299,6 +303,7 @@ public class RecsFragment extends Fragment {
                 tvItem = new ArrayList<>();
                 tvItems = new ArrayList<>();
                 Log.i("shot",dataSnapshot.toString());
+
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "TV", postSnapshot.child("title").getValue().toString(), postSnapshot.child("details").getValue().toString());
@@ -307,13 +312,17 @@ public class RecsFragment extends Fragment {
                     item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
                     //movieItems.add(item);
                     Log.i("TAG1", item.getTitle());
+
                     if (postSnapshot.child("count").getValue() != null) {
                         tvItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
                         Log.i("TAG", item.getTitle());
                     }
+
                     Log.i("item", item.getTitle());
                 }
+
                 Log.i("tvItem",tvItem.toString());
+
                 Collections.sort(tvItem, new Comparator<Pair<Item,String>>() {
                     @Override
                     public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
@@ -321,13 +330,16 @@ public class RecsFragment extends Fragment {
                         return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
                     }
                 });
+
                 for (int i = 0; i < tvItem.size(); i++) {
                     Log.i("sorted",tvItem.get(i).first.getTitle() + tvItem.get(i).second);
                     tvItems.add(tvItem.get(i).first);
                 }
+
                 if (tvItems.size() == 0) {
                     tvItems = dummyTVRecItems();
                 }
+
                 tvRecAdapter = new RecAdapter(tvItems);
                 rv_tvShows.setAdapter(tvRecAdapter);
                 //((MyLibraryActivity)getActivity()).hideProgressBar();
@@ -335,7 +347,7 @@ public class RecsFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
+                //empty
             }
         });
     }
@@ -343,13 +355,16 @@ public class RecsFragment extends Fragment {
     public static void getbooks(DatabaseReference Recs) {
         com.google.firebase.database.Query booksquery = null;
         booksquery = Recs.child("Book");
+
         booksquery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //((MyLibraryActivity)getActivity()).showProgressBar();
                 bookItem = new ArrayList<>();
                 bookItems = new ArrayList<>();
+
                 Log.i("shot",dataSnapshot.toString());
+
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.i("shott", postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(), "Book", postSnapshot.child("title").getValue().toString(), "");
@@ -357,14 +372,19 @@ public class RecsFragment extends Fragment {
                     item.setSmallImgUrl(postSnapshot.child("smallImgUrl").getValue().toString());
                     item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
                     //movieItems.add(item);
+
                     Log.i("TAG1", item.getTitle());
+
                     if (postSnapshot.child("count").getValue() != null) {
                         bookItem.add(Pair.create(item,postSnapshot.child("count").getValue().toString()));
                         Log.i("TAG", item.getTitle());
                     }
+
                     Log.i("item", item.getTitle());
                 }
+
                 Log.i("bookItem",bookItem.toString());
+
                 Collections.sort(bookItem, new Comparator<Pair<Item,String>>() {
                     @Override
                     public int compare(Pair<Item,String> lhs, Pair<Item,String> rhs) {
@@ -372,13 +392,16 @@ public class RecsFragment extends Fragment {
                         return Long.parseLong(lhs.second) > Long.parseLong(rhs.second) ? -1 : (Long.parseLong(lhs.second) < Long.parseLong(rhs.second)) ? 1 : 0;
                     }
                 });
+
                 for (int i = 0; i < bookItem.size(); i++) {
                     Log.i("sorted",bookItem.get(i).first.getTitle() + bookItem.get(i).second);
                     bookItems.add(bookItem.get(i).first);
                 }
+
                 if (bookItems.size() == 0) {
                     bookItems = dummyBookRecItems();
                 }
+
                 bookRecAdapter = new RecAdapter(bookItems);
                 rv_books.setAdapter(bookRecAdapter);
                 //((MyLibraryActivity)getActivity()).hideProgressBar();
@@ -386,7 +409,7 @@ public class RecsFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
+                //empty
             }
         });
     }
