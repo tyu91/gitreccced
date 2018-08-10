@@ -3,7 +3,9 @@ package codepath.com.gitreccedproject;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,6 +57,8 @@ public class RecsFragment extends Fragment {
     public static ArrayList<Item> bookItems;
 
     public static ArrayList<String> lib;
+
+    Snackbar bar;
 
     DatabaseReference Recs;
 
@@ -188,6 +193,14 @@ public class RecsFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             ((MyLibraryActivity)getActivity()).hideProgressBar();
             swipeContainer.setRefreshing(false);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    bar.dismiss();
+                }
+            }, 5000);
         }
     }
 
@@ -197,6 +210,12 @@ public class RecsFragment extends Fragment {
         protected void onPreExecute() {
 
             ((MyLibraryActivity)getActivity()).showProgressBar();
+
+            bar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
+            ViewGroup contentLay = (ViewGroup) bar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
+            ProgressBar item = new ProgressBar(getContext());
+            contentLay.addView(item);
+            bar.show();
         }
 
         @Override
