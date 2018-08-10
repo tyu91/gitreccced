@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -38,6 +39,10 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ProgressBar pbloading;
     private ImageView refresh;
 
+    static boolean isVisitedRecs = false;
+    static boolean isVisitedLib = false;
+
+    final int RECS_FRAGMENT = 2;
 
     public void showProgressBar() {
         // Show progress item
@@ -95,6 +100,13 @@ public class MyLibraryActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        if (isNewUser && !(isVisitedRecs)) {
+            //create dialog
+            final FragmentManager manager = getSupportFragmentManager();
+            final DescriptionDialog descriptionDialog = new DescriptionDialog(MyLibraryActivity.this, RECS_FRAGMENT);
+            descriptionDialog.show(manager, "This is a test");
+        }
 
         viewPager = findViewById(R.id.viewpager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -178,6 +190,7 @@ public class MyLibraryActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
     }
 
     @Override

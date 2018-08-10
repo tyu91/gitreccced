@@ -25,7 +25,8 @@ public class DescriptionDialog extends DialogFragment {
     final String inputRecsActivityDescription = "On this screen, search up any movies, TV shows, and books to add to your library. \n\nPress and hold on " +
             "each item in order to view more information. Our recommendation algorithm will use this media in order to suggest new media for you. \n\nHappy adding!";
     final String inputRecsActivitySelectDescription = "Once you search up items, you can tap to add and remove them from your library. Press and hold on each item to view more information. Click \"OK\" to begin adding media!";
-    final String recsFragmentDescription = "This screen will display your recommendations, based on your library preferences. You can pull to refresh your recommendations, and click on the item cards to learn more about each one.";
+    final String recsFragmentDescription = "This screen will display your recommendations, based on your library preferences. \n\nIf you swipe to the left, you can see your library of added media. Long click to delete items " +
+            "from your library. \n\n If you want to learn more about each item, simply click on the item card. \n\n Happy exploring and get ready to GetRecced!";
     final String libFragmentDescription = "This screen will display movies, TV shows, and books that you have added. When you click on the \"+\" button in the top right corner, you can add media that will then show up in your library.";
     final String libFragmentSelectDescription = "To learn more about each item, click on the item cards. To delete items from your library, just press and hold on the item you want to delete.";
     final String menuFragmentDescription = "Finally, to log out or access your settings, click on the menu icon at the top left corner on the screen. \n Enjoy Getting Recced!";
@@ -81,7 +82,8 @@ public class DescriptionDialog extends DialogFragment {
                 break;
             case RECS_FRAGMENT:
                 tvDescription.setText(recsFragmentDescription);
-                btnOk.setText("Next");
+                tvDescription.getLayoutParams().height = (int) getResources().getDimension(R.dimen.tv_height);
+                btnOk.setText("Ok");
                 btnOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

@@ -329,13 +329,12 @@ public class InputRecsActivity extends AppCompatActivity {
         //get config for movie/tv posters
         getConfiguration();
 
-        //if (isNewUser) {
+        if (isNewUser) {
             //create dialog
-            isNext = false;
             final FragmentManager manager = getSupportFragmentManager();
             final DescriptionDialog descriptionDialog = new DescriptionDialog(InputRecsActivity.this, INPUT_RECS_ACTIVITY);
             descriptionDialog.show(manager, "This is a test");
-        //}
+        }
     }
 
     //get the config from API
