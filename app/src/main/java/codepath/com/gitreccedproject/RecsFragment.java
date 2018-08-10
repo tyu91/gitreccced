@@ -17,7 +17,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
@@ -76,15 +75,17 @@ public class RecsFragment extends Fragment {
         // this is the fragment equivalent of onCreate
 
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        final ImageView refresh = toolbar.findViewById(R.id.refresh);
+        //final ImageView refresh = toolbar.findViewById(R.id.refresh);
 
-        refresh.setOnClickListener(new View.OnClickListener() {
+        //refresh.setVisibility(View.GONE);
+
+        /*refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((MyLibraryActivity)getActivity()).showProgressBar();
                 refresh();
             }
-        });
+        });*/
 
         movieItems = new ArrayList<>();
         tvItems = new ArrayList<>();
@@ -93,7 +94,7 @@ public class RecsFragment extends Fragment {
         //tvItems = dummyTVRecItems();
         //bookItems = dummyBookRecItems();
 
-        ((MyLibraryActivity)getActivity()).showProgressBar();
+        //((MyLibraryActivity)getActivity()).showProgressBar();
 
         refresh();
 
@@ -115,7 +116,7 @@ public class RecsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 // Your code to refresh the list here.
-                ((MyLibraryActivity)getActivity()).showProgressBar();
+                //((MyLibraryActivity)getActivity()).showProgressBar();
                 new loadasync().execute();
             }
         });
@@ -191,14 +192,14 @@ public class RecsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            ((MyLibraryActivity)getActivity()).hideProgressBar();
-            swipeContainer.setRefreshing(false);
+            //((MyLibraryActivity)getActivity()).hideProgressBar();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     // Do something after 5s = 5000ms
                     bar.dismiss();
+                    swipeContainer.setRefreshing(false);
                 }
             }, 5000);
         }
@@ -209,13 +210,15 @@ public class RecsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
 
-            ((MyLibraryActivity)getActivity()).showProgressBar();
+            //((MyLibraryActivity)getActivity()).showProgressBar();
 
-            bar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
-            ViewGroup contentLay = (ViewGroup) bar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
-            ProgressBar item = new ProgressBar(getContext());
-            contentLay.addView(item);
-            bar.show();
+            if (!swipeContainer.isRefreshing()) {
+                bar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
+                ViewGroup contentLay = (ViewGroup) bar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
+                ProgressBar item = new ProgressBar(getContext());
+                contentLay.addView(item);
+                bar.show();
+            }
         }
 
         @Override
