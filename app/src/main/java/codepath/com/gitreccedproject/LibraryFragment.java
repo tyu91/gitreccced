@@ -26,6 +26,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 
@@ -144,7 +145,7 @@ public class LibraryFragment extends Fragment {
                     if (postSnapshot.child("overview").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("overview").getValue().toString()) > 0) {
                         item.setDetails(postSnapshot.child("overview").getValue().toString());
                     } else if (postSnapshot.child("details").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("details").getValue().toString()) > 0) {
-                        item.setDetails(postSnapshot.child("details").getValue().toString());
+                        item.setDetails(html2text(postSnapshot.child("details").getValue().toString()));
                     }
 
                     if (item.getGenre().contains("Movie")) {
@@ -341,5 +342,9 @@ public class LibraryFragment extends Fragment {
                 Log.e("MovieDB", "could not generate new config");
             }
         });
+    }
+
+    public static String html2text(String html) {
+        return Jsoup.parse(html).text();
     }
 }
