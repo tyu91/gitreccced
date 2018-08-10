@@ -29,7 +29,7 @@ public class MovieDetailsFragment extends Fragment {
 
     private String mParam1, mParam2;
 
-    private TextView tvMovieTitle, director, overview, releaseDate;
+    private TextView tvMovieTitle, director, overview, releaseDate, tvCast;
     private ImageView backdrop;
     private AsyncHttpClient detailsClient;
 
@@ -76,9 +76,9 @@ public class MovieDetailsFragment extends Fragment {
         releaseDate = view.findViewById(R.id.tvReleaseDate);
         overview = view.findViewById(R.id.tvMovieOverview);
         backdrop = view.findViewById(R.id.ivMovieBackdrop);
+        tvCast = view.findViewById(R.id.tvCast);
 
         tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
-        //director.setText(((DetailsActivity)getActivity()).item.getDirector());
         releaseDate.setText(((DetailsActivity)getActivity()).item.getReleaseDate());
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
 
@@ -90,6 +90,7 @@ public class MovieDetailsFragment extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.i("SearchAdapter", "SUCCESS: received response");
                 try {
+                    //get director
                     JSONArray crew = response.getJSONArray("crew");
                     for (int i = 0; i < crew.length(); i++) {
                         String job = crew.getJSONObject(i).get("job").toString();
@@ -97,6 +98,24 @@ public class MovieDetailsFragment extends Fragment {
                             director.setText(crew.getJSONObject(i).get("name").toString());
                         }
                     }
+
+                    //get cast
+                    String finalCast = "Cast: ";
+                    JSONArray cast = response.getJSONArray("cast");
+                    int num_cast = 5;
+                    if (num_cast > cast.length()) {
+                        num_cast = cast.length();
+                    }
+
+                    for (int i = 0; i < num_cast; i++) {
+                        if (i != 0) {
+                            finalCast += ", ";
+                        }
+                        String name = cast.getJSONObject(i).get("name").toString();
+                        finalCast += name;
+                    }
+
+                    tvCast.setText(finalCast);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
