@@ -1,81 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/svTVScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#424242"
-    tools:context=".TVDetailsFragment">
+    android:background="#424242">
 
-    <TextView
-        android:id="@+id/tvShowTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivTVBackdrop"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="@android:color/background_light"
-        android:textSize="40sp"
-        android:textStyle="bold|italic" />
 
-    <ImageView
-        android:id="@+id/ivTVBackdrop"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:src="@android:color/black" />
-
-    <TextView
-        android:id="@+id/tvCast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvShowTitle"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="#c8c6d0"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tvSeasons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/tvCast"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="#c8c6d0"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tvFirstAired"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/tvSeasons"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="#c8c6d0"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tvShowOverview"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/tvFirstAired"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textAlignment="textStart"
-        android:textColor="#c8c6d0"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-</RelativeLayout>
+        android:background="#424242"
+        tools:context=".TVDetailsFragment">
+
+        <ImageView
+            android:id="@+id/ivTVBackdrop"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:src="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tvShowTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivTVBackdrop"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/background_light"
+            android:textSize="40sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/tvCast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvShowTitle"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvSeasons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tvCast"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvFirstAired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tvSeasons"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvShowOverview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tvFirstAired"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textAlignment="textStart"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</ScrollView>

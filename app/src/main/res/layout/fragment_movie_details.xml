@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/svMovieScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#424242"
-    tools:context=".MovieDetailsFragment">
+    android:background="#424242">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <ImageView
-        android:id="@+id/ivMovieBackdrop"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:src="@android:color/black" />
+        android:layout_height="wrap_content"
+        android:background="#424242"
+        tools:context=".MovieDetailsFragment">
+
+        <ImageView
+            android:id="@+id/ivMovieBackdrop"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:src="@android:color/black" />
 
     <TextView
         android:id="@+id/tvMovieTitle"
@@ -59,4 +65,5 @@
         android:textColor="#c8c6d0"
         android:textSize="18sp" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
