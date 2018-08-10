@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private Button login, signUp;
 
+    boolean isNewUser = false;
+
     static User currentuser;
 
     @Override
@@ -123,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), String.format("Welcome, %s!", postSnapshot.child("username").getValue()), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);
                     intent.putExtra("user", Parcels.wrap(currentuser));
+                    intent.putExtra("isNewUser", isNewUser);
                     startActivity(intent);
                     finish();
                 }

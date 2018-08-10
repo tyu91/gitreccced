@@ -30,6 +30,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     DatabaseReference dbUsers;
 
+    boolean isNewUser = true;
+
     static User newUser;
 
     String value;
@@ -129,6 +131,7 @@ public class SignUpActivity extends AppCompatActivity {
             //pass userid to test recommendations page
             Intent intent = new Intent(SignUpActivity.this, InputRecsActivity.class);
             intent.putExtra("user", Parcels.wrap(newUser));
+            intent.putExtra("isNewUser", isNewUser);
             startActivity(intent);
             finish();
         }

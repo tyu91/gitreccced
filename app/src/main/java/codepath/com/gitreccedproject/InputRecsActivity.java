@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -69,6 +70,11 @@ public class InputRecsActivity extends AppCompatActivity {
     String uid = "inputrecsactivity: user id not set yet"; //user id (initialized to dummy string for testing)
     String iid = "inputrecsactivity: item id not set yet"; //user id (initialized to dummy string for testing)
 
+    final int INPUT_RECS_ACTIVITY = 0;
+    final int INPUT_RECS_ACTIVITY_SELECT = 1;
+
+    static boolean isNext = false;
+
     //CONSTANTS
     //base url of API
     public final static String API_BASE_URL = "https://api.themoviedb.org/3";
@@ -93,6 +99,8 @@ public class InputRecsActivity extends AppCompatActivity {
         //add user id from sign up activity
         resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("uid", resultUser.getUid().toString());
+
+        final boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
 
 
         // find search views
@@ -124,6 +132,7 @@ public class InputRecsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(InputRecsActivity.this, MyLibraryActivity.class);
                 i.putExtra("user", Parcels.wrap(resultUser));
+                i.putExtra("isNewUser", isNewUser);
                 startActivity(i);
                 finish();
             }
@@ -319,6 +328,14 @@ public class InputRecsActivity extends AppCompatActivity {
 
         //get config for movie/tv posters
         getConfiguration();
+
+        //if (isNewUser) {
+            //create dialog
+            isNext = false;
+            final FragmentManager manager = getSupportFragmentManager();
+            final DescriptionDialog descriptionDialog = new DescriptionDialog(InputRecsActivity.this, INPUT_RECS_ACTIVITY);
+            descriptionDialog.show(manager, "This is a test");
+        //}
     }
 
     //get the config from API

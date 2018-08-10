@@ -79,6 +79,8 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         final User currentuser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         Log.i("libuser",currentuser.toString());
+        Log.i("isNewUser", "isNewUser: " + String.valueOf(getIntent().getBooleanExtra("isNewUser", false)));
+        boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
 
         pbloading = toolbar.findViewById(R.id.pbLoading);
         refresh = toolbar.findViewById(R.id.refresh);
