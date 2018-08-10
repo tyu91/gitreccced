@@ -15,94 +15,104 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#424242">
 
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
-        tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="67dp" />
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="75dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@android:drawable/sym_def_app_icon"
+                tools:layout_editor_absoluteX="92dp"
+                tools:layout_editor_absoluteY="67dp" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/ivProfile"
-        android:layout_marginBottom="183dp"
-        android:text="Username"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="317dp" />
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/ivProfile"
+                android:layout_centerVertical="true"
+                android:text="Username"
+                android:textColor="#c8c6d0"
+                android:textSize="24sp"
+                android:textStyle="bold|italic"
+                tools:layout_editor_absoluteX="152dp"
+                tools:layout_editor_absoluteY="317dp" />
 
-    <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnUpdateEmail"
-        android:layout_alignStart="@+id/ivProfile"
-        android:text="Email"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        tools:layout_editor_absoluteX="171dp"
-        tools:layout_editor_absoluteY="342dp" />
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnUpdateEmail"
+                android:layout_alignStart="@+id/ivProfile"
+                android:text="Email"
+                android:textColor="#c8c6d0"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                tools:layout_editor_absoluteX="171dp"
+                tools:layout_editor_absoluteY="342dp" />
 
-    <Button
-        android:id="@+id/btnUpdateEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignEnd="@+id/ivProfile"
-        android:layout_below="@+id/tvUsername"
-        android:layout_marginTop="-183dp"
-        android:text="update" />
+            <Button
+                android:id="@+id/btnUpdateEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/ivProfile"
+                android:layout_below="@+id/tvUsername"
+                android:background="#424242"
+                android:text="update"
+                android:textColor="@color/colorAccent" />
 
-    <Button
-        android:id="@+id/btnUpdatePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignEnd="@+id/ivProfile"
-        android:layout_below="@+id/tvEmail"
-        android:text="@string/common_google_play_services_update_button" />
+            <Button
+                android:id="@+id/btnUpdatePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/ivProfile"
+                android:layout_below="@+id/btnUpdateEmail"
+                android:background="#424242"
+                android:text="@string/common_google_play_services_update_button"
+                android:textColor="@color/colorAccent" />
 
-    <Button
-        android:id="@+id/btnUpdateUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignBottom="@+id/tvUsername"
-        android:layout_alignEnd="@+id/ivProfile"
-        android:text="@string/common_google_play_services_update_button" />
+            <Button
+                android:id="@+id/btnUpdateUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/ivProfile"
+                android:layout_centerVertical="true"
+                android:background="#424242"
+                android:text="@string/common_google_play_services_update_button"
+                android:textColor="@color/colorAccent" />
 
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnUpdatePassword"
-        android:layout_alignStart="@+id/ivProfile"
-        android:text="Password Hidden"
-        android:textSize="14sp"
-        android:textStyle="italic" />
+            <TextView
+                android:id="@+id/tvPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnUpdatePassword"
+                android:layout_alignStart="@+id/ivProfile"
+                android:text="Password Hidden"
+                android:textColor="#c8c6d0"
+                android:textSize="14sp"
+                android:textStyle="italic" />
 
-    <Button
-        android:id="@+id/btn_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="27dp"
-        android:text="Done" />
+            <Button
+                android:id="@+id/btn_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="108dp"
+                android:background="#383838"
+                android:text="Done"
+                android:textColor="#c8c6d0" />
 
-</RelativeLayout>
+        </RelativeLayout>
 
     </FrameLayout>
 
