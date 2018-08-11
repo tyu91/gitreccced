@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null){
             Log.i("signin", mAuth.getCurrentUser().getEmail());
-            getUserfromdb(mAuth.getCurrentUser().getEmail());
+            getUserfromdb(mAuth.getCurrentUser().getEmail().trim());
         }
 
         email = findViewById(R.id.etEmail);
