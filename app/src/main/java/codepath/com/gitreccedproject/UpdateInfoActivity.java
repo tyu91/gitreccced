@@ -70,7 +70,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
 
                     @Override
                     public void onDrawerOpened(View drawerView) {
-                        if (mAuth.getCurrentUser().getUid().contains("LpPtVsPQWyeOzejQj8uLK49zlCX2")) {
+                        if (mAuth.getCurrentUser().getUid().contains("IqwmPTlbSZRFgBd6VQNPa0Cd0Aw1")) {
                             Log.i("user","admin");
                             Menu nav_Menu = navigationView.getMenu();
                             nav_Menu.findItem(R.id.algolia).setVisible(true);
