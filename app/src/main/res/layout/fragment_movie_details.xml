@@ -13,8 +13,6 @@
         android:background="#424242"
         tools:context=".MovieDetailsFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-
         <ImageView
             android:id="@+id/ivMovieBackdrop"
             android:layout_width="match_parent"
@@ -31,57 +29,66 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/ivMovieBackdrop"
-            android:text="TextView"
-            android:textColor="#c8c6d0"
-            android:textSize="24sp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/background_light"
+            android:textSize="40sp"
+            android:textStyle="bold|italic" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tvDirector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tvMovieTitle"
-            android:text="Directed by: "
-            android:textColor="#c8c6d0" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvCast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tvDirector"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvReleaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tvCast"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvMovieOverview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="287dp"
-            android:text="    "
+            android:layout_below="@+id/tvReleaseDate"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
             android:textColor="#c8c6d0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvDirector"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvMovieTitle"
-            android:layout_toEndOf="@+id/textView5"
-            android:text="    "
-            android:textColor="#c8c6d0" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tvMovieOverview"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="-271dp"
-            android:text="Release Date:"
-            android:textColor="#c8c6d0" />
-
-        <TextView
-            android:id="@+id/tvReleaseDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tvMovieOverview"
-            android:layout_marginBottom="-271dp"
-            android:layout_toEndOf="@+id/textView6"
-            android:text="    "
-            android:textColor="#c8c6d0" />
     </RelativeLayout>
 </ScrollView>

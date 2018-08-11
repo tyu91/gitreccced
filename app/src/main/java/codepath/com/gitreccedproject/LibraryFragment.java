@@ -152,6 +152,7 @@ public class LibraryFragment extends Fragment {
                         item.setMovieId(postSnapshot.child("movieId").getValue().toString());
                         item.setPosterPath(postSnapshot.child("posterPath").getValue().toString());
                         item.setBackdropPath(postSnapshot.child("backdropPath").getValue().toString());
+                        item.setReleaseDate(postSnapshot.child("releaseDate").getValue().toString());
                         //item.setDetails(postSnapshot.child("overview").getValue().toString());
                         movieslib.add(item);
 
@@ -166,6 +167,9 @@ public class LibraryFragment extends Fragment {
                         item.setBookId(postSnapshot.child("bookId").getValue().toString());
                         item.setSmallImgUrl(postSnapshot.child("smallImgUrl").getValue().toString());
                         item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
+                        item.setAuthor(postSnapshot.child("author").getValue().toString());
+                        item.setPubYear(postSnapshot.child("pubYear").getValue().toString());
+                        item.setDetails(postSnapshot.child("details").getValue().toString());
                         booklib.add(item);
                     }
                 }
