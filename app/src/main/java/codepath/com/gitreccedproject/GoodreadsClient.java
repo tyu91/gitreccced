@@ -30,6 +30,7 @@ public class GoodreadsClient extends DefaultHandler {
     boolean boolPubYear = false;
     boolean boolPubMonth = false;
     boolean boolPubDay = false;
+    boolean boolAverageRating = false;
     boolean inBook = false;
 
     private AsyncHttpClient client;
@@ -77,7 +78,7 @@ public class GoodreadsClient extends DefaultHandler {
             //set book to item
             book = item;
             //generate querying url string
-             String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(item.getBookId()));
+            String urlString = getApiUrl("book/show.xml?key=" + goodreadsApiKey + "&id=" + String.valueOf(item.getBookId()));
             Log.i("Books", "Book URL String: " + urlString);
             //convert querying url to URL object
             URL url = new URL(urlString);
@@ -126,10 +127,13 @@ public class GoodreadsClient extends DefaultHandler {
             boolPubMonth = true;
         } else if (qName.equalsIgnoreCase("original_publication_day")) {
             boolPubDay = true;
+        } else if (qName.equalsIgnoreCase("average_rating")) {
+            boolAverageRating = true;
         } else {
             Log.i("XMLBook", "skipped tag");
         }
     }
+
 
     //setting the fields of each book
     @Override
@@ -166,6 +170,9 @@ public class GoodreadsClient extends DefaultHandler {
         } else if (boolPubDay) {
             book.setPubDay(new String(ch, start, length));
             boolPubDay = false;
+        } else if (boolAverageRating) {
+            book.setAverageRating(Float.valueOf(new String(ch, start, length)));
+            boolAverageRating = false;
         } else if (inBook && boolId) {
             book.setBookId(new String(ch, start, length));
             Log.i("BookIdClient", "Book Id: " + new String(ch, start, length) + " || Book Title: " + book.getTitle());
@@ -183,7 +190,7 @@ public class GoodreadsClient extends DefaultHandler {
         if (localName.equalsIgnoreCase("work")) {
             //TODO: book added is correct
             Log.i("BookIdClient", "BookId before added to books list: " + book.getBookId() +
-            "Book Title before added to books list: " + book.getTitle());
+                    "Book Title before added to books list: " + book.getTitle());
             books.add(book);
 
             //after add book, reset all variables
@@ -198,6 +205,7 @@ public class GoodreadsClient extends DefaultHandler {
             boolPubYear = false;
             boolPubMonth = false;
             boolPubDay = false;
+            boolAverageRating = false;
             inBook = false;
         } else if (localName.equalsIgnoreCase("best_book")) {
             Log.i("BookIdClient", "best_book" + "==false");
