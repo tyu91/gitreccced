@@ -95,6 +95,11 @@ public class RecsFragment extends Fragment {
         //bookItems = dummyBookRecItems();
 
         //((MyLibraryActivity)getActivity()).showProgressBar();
+        bar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
+        ViewGroup contentLay = (ViewGroup) bar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
+        ProgressBar item = new ProgressBar(getContext());
+        contentLay.addView(item);
+        bar.show();
 
         refresh();
 
@@ -117,7 +122,10 @@ public class RecsFragment extends Fragment {
             public void onRefresh() {
                 // Your code to refresh the list here.
                 //((MyLibraryActivity)getActivity()).showProgressBar();
-                new loadasync().execute();
+                if (!bar.isShown())
+                {
+                    new loadasync().execute();
+                }
             }
         });
         // Configure the refreshing colors
