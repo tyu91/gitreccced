@@ -400,9 +400,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                         Log.i("Books", "adding new book to db");
 
                         //weird way, pls fix later
-                        mItems.set(mPosition, item);
-                        //mItems.remove(mPosition + 1);
-
+                        if (mItems.size() == 0) {
+                            //if mItems is empty, add at index 0
+                            mItems.add(item);
+                        } else {
+                            mItems.set(mPosition, item);
+                        }
                         Log.d("BookDecide", "iid: " + iid + " || title: " + item.getTitle());
                         dbBooks.child(iid).setValue(item);
                         Log.i("Books", "Added " + item.getTitle());
@@ -440,6 +443,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         Log.i("test", "setting dbItemsByUser");
         dbItemsByUser.child(iid).setValue(mItems.get(position));
         dbUsersbyItem.child(uid).setValue(LoginActivity.currentuser);
+
+        Toast.makeText(context,"Saved to library!",Toast.LENGTH_SHORT).show();
     }
 
     class BookAsync extends AsyncTask<Void, Void, Void> {
@@ -466,7 +471,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 @Override
                 public void onCallback(List<Item> someList) {
                     addItem(mPosition);
-                    Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Saved to library!",Toast.LENGTH_SHORT).show();
                     Log.i("select", String.format("Got item at %s", mPosition));
                 }
             });
