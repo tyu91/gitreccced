@@ -132,52 +132,171 @@ public class RecsFragment extends Fragment {
 
     public static ArrayList<Item> dummyMovieRecItems() {
         Item item1 = new Item();
-        item1.setIid("-LHoUNVp_jaXb7wXvO1M");
-        item1.setTitle("Thor: Ragnarok");
+        item1.setIid("-LJFJtZFOUbAoELId93F");
+        item1.setTitle("The Incredibles");
         item1.setGenre("Movie");
-        item1.setDetails("Thor is on the other side of the universe and " +
-                "finds himself in a race against time to get back to Asgard " +
-                "to stop Ragnarok, the prophecy of destruction to his homeworld and the " +
-                "end of Asgardian civilization, at the hands of an all-powerful new threat, " +
-                "the ruthless Hela.");
-        item1.setPosterPath("/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg");
+        item1.setDetails("Bob Parr has given up his superhero days to log in time as an insurance adjuster and raise his three children with his formerly heroic wife in suburbia. But when he receives a mysterious assignment, it's time to get back into costume.");
+        item1.setPosterPath("/2LqaLgk4Z226KkgPJuiOQ58wvrm.jpg");
+        item1.setBackdropPath("/wiDGnsn9RtNglgKQy4J1jZQBG5v.jpg");
+        item1.setReleaseDate("2004-11-05");
+        item1.setMovieId("9806");
+
+        Item item2 = new Item();
+        item2.setIid("-LJFJtYgQ_t4oMTF9rH6");
+        item2.setTitle("Avatar");
+        item2.setGenre("Movie");
+        item2.setDetails("In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.");
+        item2.setPosterPath("/kmcqlZGaSh20zpTbuoF0Cdn07dT.jpg");
+        item2.setBackdropPath("/5XPPB44RQGfkBrbJxmtdndKz05n.jpg");
+        item2.setReleaseDate("2009-12-10");
+        item2.setMovieId("19995");
+
+        Item item3 = new Item();
+        item3.setIid("-LJFJtg7u0nbXo9OWnpH");
+        item3.setTitle("Ocean's Twelve");
+        item3.setGenre("Movie");
+        item3.setDetails("Danny Ocean reunites with his old flame and the rest of his merry band of thieves in carrying out three huge heists in Rome, Paris and Amsterdam – but a Europol agent is hot on their heels.");
+        item3.setPosterPath("/oBJ8LF80wX8PzhnPcNO0E9lnmYA.jpg");
+        item3.setBackdropPath("/bYfM7W5bPTRLptXTItYExgTZLQV.jpg");
+        item3.setReleaseDate("2004-12-09");
+        item3.setMovieId("163");
+
+        Item item4 = new Item();
+        item4.setIid("-LJFJtgm19lXSZfphIMA");
+        item4.setTitle("Downsizing");
+        item4.setGenre("Movie");
+        item4.setDetails("A kindly occupational therapist undergoes a new procedure to be shrunken to four inches tall so that he and his wife can help save the planet and afford a nice lifestyle at the same time.");
+        item4.setPosterPath("/uLlmtN33rMuimRq6bu0OoNzCGGs.jpg");
+        item4.setBackdropPath("/rtr0l61RxLPkmZHbZj0WFlGx5G5.jpg");
+        item4.setReleaseDate("2017-12-22");
+        item4.setMovieId("301337");
 
         ArrayList dummyItems = new ArrayList();
 
         dummyItems.add(item1);
+        dummyItems.add(item2);
+        dummyItems.add(item3);
+        dummyItems.add(item4);
 
         return dummyItems;
     }
 
     public static ArrayList<Item> dummyTVRecItems() {
         Item item1 = new Item();
-        item1.setIid("-LHo_O2XGJEFUHxxrKNi");
-        item1.setTitle("Game of Thrones");
+        item1.setIid("-LJEq-oADC98ayEqqew7");
+        item1.setTitle("Phineas and Ferb");
         item1.setGenre("TV");
-        item1.setDetails("Seven noble families fight for control of the mythical" +
-                " land of Westeros. Friction between the houses leads to full-scale " +
-                "war. All while a very ancient evil awakens in the farthest north. Amidst" +
-                " the war, a neglected military order of misfits, the Night's Watch, is" +
-                " all that stands between the realms of men and icy horrors beyond.");
-        item1.setPosterPath("/gwPSoYUHAKmdyVywgLpKKA4BjRr.jpg");
+        item1.setDetails("Each day, two kindhearted suburban stepbrothers on summer vacation embark on some grand new project, which annoys their controlling sister, Candace, who tries to bust them. Meanwhile, their pet platypus plots against evil Dr. Doofenshmirtz.");
+        item1.setPosterPath("/t46F4ExX6nYmNT8m6aGCLcBNLk4.jpg");
+        item1.setBackdropPath("/5ZYWZmmOY7GV5RX77dSIpvnfPY1.jpg");
+        item1.setMovieId("1877");
+        item1.setReleaseDate("2007-08-17");
+
+        Item item2 = new Item();
+        item2.setIid("-LJEq-i9WzO5vFMc10xa");
+        item2.setTitle("Dexter");
+        item2.setGenre("TV");
+        item2.setDetails("Dexter is an American television drama series. The series centers on Dexter Morgan, a blood spatter pattern analyst for 'Miami Metro Police Department' who also leads a secret life as a serial killer, hunting down criminals who have slipped through the cracks of justice.");
+        item2.setPosterPath("/ydmfheI5cJ4NrgcupDEwk8I8y5q.jpg");
+        item2.setBackdropPath("/5m05BIoMHgTd4zvJ5OBh7gZFGWV.jpg");
+        item2.setMovieId("1405");
+        item2.setReleaseDate("2006-10-01");
+
+        Item item3 = new Item();
+        item3.setIid("-LJEq-okEsr3iJ3BEYHs");
+        item3.setTitle("Big Little Lies");
+        item3.setGenre("TV");
+        item3.setDetails("Subversive, darkly comedic drama Big Little Lies tells the tale of three mothers of first graders whose apparently perfect lives unravel to the point of murder.");
+        item3.setPosterPath("/6nxTO2tYDBR9twPWlDC3I1eXUnY.jpg");
+        item3.setBackdropPath("/we0Z9qjBN0rmQqqhzxonKZjQJak.jpg");
+        item3.setMovieId("66292");
+        item3.setReleaseDate("2017-02-19");
+
+        Item item4 = new Item();
+        item4.setIid("-LJEq-qIncYXWrCoEDm_");
+        item4.setTitle("Fullmetal Alchemist");
+        item4.setGenre("TV");
+        item4.setDetails("Edward and Alphonse Elric are two brothers gifted with the ability of alchemy, the science of taking one thing and changing it into another. However, alchemy works on the theory of Equivalent Exchange -- for something to be created, something else of equal value must be sacrificed. When their mother dies, Edward decides to do the unthinkable -- bringing her back to life by breaking one of Alchemy's biggest taboos and performing Human Alchemy. Thinking they have nothing more to lose, he and Alphonse make their attempt -- but something goes horribly wrong. In the process, Alphonse loses his body and Edward loses his leg. Ed manages to save Al by attaching his spirit to a suit of armor, but at the cost of his arm and leg.");
+        item4.setPosterPath("/sNpDtjUVNrTIVM1OR4EfEnRi4OH.jpg");
+        item4.setBackdropPath("/dshSjE7LZRR7CK58hLDhOz5ANFe.jpg");
+        item4.setMovieId("37863");
+        item4.setReleaseDate("2003-10-04");
 
         ArrayList dummyItems = new ArrayList();
 
         dummyItems.add(item1);
+        dummyItems.add(item2);
+        dummyItems.add(item3);
+        dummyItems.add(item4);
 
         return dummyItems;
     }
 
     public static ArrayList<Item> dummyBookRecItems() {
         Item item1 = new Item();
-        item1.setIid("-LHtne3w212L5ERVRd-P");
-        item1.setTitle("Harry Potter and the Goblet of Fire");
+        item1.setIid("-LJjcLrNLHOwudLzeFmw");
+        item1.setTitle("The Tsar of Love and Techno");
         item1.setGenre("Book");
-        item1.setDetails("no description available");
+        item1.setDetails("From the New York Times bestselling author of A Constellation of Vital Phenomena—dazzling, poignant, and lyrical interwoven stories about family, sacrifice, the legacy of war, and the redemptive power of art.<br /><br />This stunning, exquisitely written collection introduces a cast of remarkable characters whose lives intersect in ways both life-affirming and heartbreaking. A 1930s Soviet censor painstakingly corrects offending photographs, deep underneath Leningrad, bewitched by the image of a disgraced prima ballerina. A chorus of women recount their stories and those of their grandmothers, former gulag prisoners who settled their Siberian mining town. Two pairs of brothers share a fierce, protective love. Young men across the former USSR face violence at home and in the military. And great sacrifices are made in the name of an oil landscape unremarkable except for the almost incomprehensibly peaceful past it depicts. In stunning prose, with rich character portraits and a sense of history reverberating into the present, The Tsar of Love and Techno is a captivating work from one of our greatest new talents.");
+        item1.setPubYear("2015");
+        item1.setPubMonth("10");
+        item1.setPubDay("6");
+        item1.setImgUrl("https://images.gr-assets.com/books/1428086934m/23995336.jpg");
+        item1.setSmallImgUrl("https://images.gr-assets.com/books/1428086934s/23995336.jpg");
+        item1.setAuthor("Anthony Marra");
+        item1.setBookId("23995336");
+        item1.setAverageRating((float) 4.28000020980835);
+
+
+        Item item2 = new Item();
+        item2.setIid("-LJ_4hAl3aDU9PAtMnlC");
+        item2.setTitle("Green Eggs and Ham");
+        item2.setGenre("Book");
+        item2.setDetails("“Do you like green eggs and ham?” asks Sam-I-am in this Beginner Book by Dr. Seuss. In a house or with a mouse? In a boat or with a goat? On a train or in a tree? Sam keeps asking persistently. With unmistakable characters and signature rhymes, Dr. Seuss’s beloved favorite has cemented its place as a children’s classic. In this most famous of cumulative tales, the list of places to enjoy green eggs and ham, and friends to enjoy them with, gets longer and longer. Follow Sam-I-am as he insists that this unusual treat is indeed a delectable snack to be savored everywhere and in every way. <br /><br />Originally created by Dr. Seuss, Beginner Books encourage children to read all by themselves, with simple words and illustrations that give clues to their meaning.");
+        item2.setAuthor("Dr. Seuss");
+        item2.setSmallImgUrl("https://images.gr-assets.com/books/1468680100s/23772.jpg");
+        item2.setImgUrl("https://images.gr-assets.com/books/1468680100m/23772.jpg");
+        item2.setPubDay("\n");
+        item2.setPubMonth("6");
+        item2.setPubYear("1960");
+        item2.setBookId("23772");
+
+
+        Item item3 = new Item();
+        item3.setIid("-LJoxHNVdY7yf-zy5rlO");
+        item3.setTitle("Stardust");
+        item3.setGenre("Book");
+        item3.setDetails("Life moves at a leisurely pace in the tiny town of Wall—named after the imposing stone barrier which separates the town from a grassy meadow. Here, young Tristran Thorn has lost his heart to the beautiful Victoria Forester and for the coveted prize of her hand, Tristran vows to retrieve a fallen star and deliver it to his beloved. It is an oath that sends him over the ancient wall and into a world that is dangerous and strange beyond imagining...");
+        item3.setBookId("16793");
+        item3.setAverageRating((float) 4.07);
+        item3.setAuthor("Neil Gaiman");
+        item3.setSmallImgUrl("https://images.gr-assets.com/books/1459127484s/16793.jpg");
+        item3.setImgUrl("https://images.gr-assets.com/books/1459127484m/16793.jpg");
+        item3.setPubDay("1");
+        item3.setPubMonth("10");
+        item3.setPubYear("1998");
+
+        Item item4 = new Item();
+        item4.setIid("-LJoxM6dmNV65jSvxAUt");
+        item4.setTitle("The Giving Tree");
+        item4.setGenre("Book");
+        item4.setDetails("“Once there was a tree...and she loved a little boy.” So begins a story of unforgettable perception, beautifully written and illustrated by the gifted and versatile Shel Silverstein. Every day the boy would come to the tree to eat her apples, swing from her branches, or slide down her trunk...and the tree was happy. But as the boy grew older he began to want more from the tree, and the tree gave and gave and gave. This is a tender story, touched with sadness, aglow with consolation. Shel Silverstein has created a moving parable for readers of all ages that offers an affecting interpretation of the gift of giving and a serene acceptance of another's capacity to love in return.");
+        item4.setImgUrl("https://images.gr-assets.com/books/1174210942m/370493.jpg");
+        item4.setSmallImgUrl("https://images.gr-assets.com/books/1174210942s/370493.jpg");
+        item4.setPubMonth("\n");
+        item4.setPubYear("1964");
+        item4.setPubDay("\n");
+        item4.setAuthor("Shel Silverstein");
+        item4.setAverageRating((float) 4.369999);
+        item4.setBookId("370493");
+
 
         ArrayList dummyItems = new ArrayList();
 
         dummyItems.add(item1);
+        dummyItems.add(item2);
+        dummyItems.add(item3);
+        dummyItems.add(item4);
 
         return dummyItems;
     }
@@ -304,8 +423,13 @@ public class RecsFragment extends Fragment {
                     Log.i("sorted",movieItem.get(i).first.getTitle() + movieItem.get(i).second);
                     movieItems.add(movieItem.get(i).first);
                 }
-                if (movieItems.size() == 0) {
-                    movieItems = dummyMovieRecItems();
+                if (movieItems.size() < 4) {
+                    int size = movieItems.size();
+                    Log.i("size", String.format("%s", movieItems.size()));
+                    for (int i = 0; i < 4 - size; i++) {
+                        movieItems.add(dummyMovieRecItems().get(i));
+                        Log.i("adding", String.format("%s",i));
+                    }
                 }
                 movieRecAdapter = new RecAdapter(movieItems);
                 rv_movies.setAdapter(movieRecAdapter);
@@ -363,8 +487,11 @@ public class RecsFragment extends Fragment {
                     tvItems.add(tvItem.get(i).first);
                 }
 
-                if (tvItems.size() == 0) {
-                    tvItems = dummyTVRecItems();
+                if (tvItems.size() < 4) {
+                    int size = tvItems.size();
+                    for (int i = 0; i < 4 - size; i++) {
+                        tvItems.add(dummyTVRecItems().get(i));
+                    }
                 }
 
                 tvRecAdapter = new RecAdapter(tvItems);
@@ -432,8 +559,11 @@ public class RecsFragment extends Fragment {
                     bookItems.add(bookItem.get(i).first);
                 }
 
-                if (bookItems.size() == 0) {
-                    bookItems = dummyBookRecItems();
+                if (bookItems.size() < 4) {
+                    int size = bookItems.size();
+                    for (int i = 0; i < 4 - size; i++) {
+                        bookItems.add(dummyBookRecItems().get(i));
+                    }
                 }
 
                 bookRecAdapter = new RecAdapter(bookItems);
