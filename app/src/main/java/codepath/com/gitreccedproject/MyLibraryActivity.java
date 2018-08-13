@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +39,7 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ImageView plus_btn;
     private ProgressBar pbloading;
     private ImageView refresh;
+    private TextView tvMenuTitle;
 
     static boolean isVisitedRecs = false;
     static boolean isVisitedLib = false;
@@ -138,6 +140,9 @@ public class MyLibraryActivity extends AppCompatActivity {
                             nav_Menu.findItem(R.id.dbtest).setVisible(true);
                             nav_Menu.findItem(R.id.algolia).setChecked(false);
                             nav_Menu.findItem(R.id.dbtest).setChecked(false);
+
+                            tvMenuTitle = findViewById(R.id.tvMenuTitle);
+                            tvMenuTitle.setText("Welcome, " + currentuser.getUsername() + "!");
                         } else {
                             Log.i("user",mAuth.getCurrentUser().getUid());
                         }
