@@ -405,6 +405,7 @@ public class RecsFragment extends Fragment {
                     item.setImgUrl(postSnapshot.child("imgUrl").getValue().toString());
                     item.setAuthor(postSnapshot.child("author").getValue().toString());
                     item.setPubYear(postSnapshot.child("pubYear").getValue().toString());
+                    item.setAverageRating(Float.valueOf(postSnapshot.child("averageRating").getValue().toString()));
 
                     Log.i("TAG1", item.getTitle());
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ public class BookDetailsFragment extends Fragment {
 
 
     private TextView tvBookTitle, author, pub, overview;
+    private RatingBar rbRating;
     private ImageView cover;
 
 
@@ -67,11 +69,15 @@ public class BookDetailsFragment extends Fragment {
         pub = view.findViewById(R.id.tvPubDate);
         overview = view.findViewById(R.id.tvBookOverview);
         cover = view.findViewById(R.id.ivBookCover);
+        rbRating = view.findViewById(R.id.rbRating);
 
         tvBookTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
         author.setText(((DetailsActivity)getActivity()).item.getAuthor());
         pub.setText(((DetailsActivity)getActivity()).item.getPubYear());
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+        //vote average is 0..10, convert to 0..5 by dividing by 2
+        float voteAverage = ((DetailsActivity)getActivity()).item.getAverageRating();
+        rbRating.setRating(voteAverage > 0 ? voteAverage : 4.0f);
 
         Glide.with(getContext())
                 .load(imageUrl)

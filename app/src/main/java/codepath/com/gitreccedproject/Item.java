@@ -26,6 +26,7 @@ public class Item {
     public String pubYear;
     public String pubMonth;
     public String pubDay;
+    public float averageRating;
 
     public Item() {
         //empty constructor
@@ -53,6 +54,7 @@ public class Item {
         pubYear = " no associated pubYear";
         pubMonth = " no associated pubMonth";
         pubDay = " no associated pubDay";
+        averageRating = 4;
     }
 
     public String getIid() {
@@ -206,5 +208,13 @@ public class Item {
     public void setFirstAirDate(String firstAirDate) {
         this.firstAirDate = firstAirDate;
 
+    }
+
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(float averageRating) {
+        this.averageRating = averageRating;
     }
 }
