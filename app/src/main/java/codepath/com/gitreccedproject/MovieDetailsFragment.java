@@ -89,6 +89,8 @@ public class MovieDetailsFragment extends Fragment {
         }
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
 
+        backdrop.setImageResource(R.drawable.flicks_backdrop_placeholder_hor);
+
         Glide.with(getContext())
                 .load(imageUrl)
                 .into(backdrop);
