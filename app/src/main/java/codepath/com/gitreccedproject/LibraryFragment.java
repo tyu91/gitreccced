@@ -146,6 +146,8 @@ public class LibraryFragment extends Fragment {
                         item.setDetails(postSnapshot.child("overview").getValue().toString());
                     } else if (postSnapshot.child("details").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("details").getValue().toString()) > 0) {
                         item.setDetails(html2text(postSnapshot.child("details").getValue().toString()));
+                        Log.i("detailsbefore", postSnapshot.child("details").getValue().toString());
+                        Log.i("detailsafter", html2text(postSnapshot.child("details").getValue().toString()));
                     }
 
                     if (item.getGenre().contains("Movie")) {
