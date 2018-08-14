@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +31,7 @@ public class MovieDetailsFragment extends Fragment {
     private String mParam1, mParam2;
 
     private TextView tvMovieTitle, director, overview, releaseDate, tvCast;
+    private RatingBar rbRating;
     private ImageView backdrop;
     private AsyncHttpClient detailsClient;
 
@@ -77,9 +79,14 @@ public class MovieDetailsFragment extends Fragment {
         overview = view.findViewById(R.id.tvMovieOverview);
         backdrop = view.findViewById(R.id.ivMovieBackdrop);
         tvCast = view.findViewById(R.id.tvCast);
+        rbRating = view.findViewById(R.id.rbRating);
 
         tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
-        releaseDate.setText(((DetailsActivity)getActivity()).item.getReleaseDate().substring(0, 4));
+        if (((DetailsActivity) getActivity()).item.getReleaseDate() != null) {
+            releaseDate.setText(((DetailsActivity) getActivity()).item.getReleaseDate().substring(0, 4));
+        } else {
+            releaseDate.setText("");
+        }
         overview.setText(((DetailsActivity)getActivity()).item.getDetails());
 
         Glide.with(getContext())
@@ -117,6 +124,31 @@ public class MovieDetailsFragment extends Fragment {
 
                     tvCast.setText(finalCast);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.i("SearchAdapter", "FAILURE. Response String: " + responseString);
+            }
+        });
+
+        //get rating
+        detailsClient = new AsyncHttpClient();
+        movieDetailsUrl = "https://api.themoviedb.org/3/movie/" + ((DetailsActivity)getActivity()).item.getMovieId();
+        movieDetailsParams = new RequestParams();
+        movieDetailsParams.put("api_key", getContext().getString(R.string.movieApiKey));
+
+        detailsClient.get(movieDetailsUrl, movieDetailsParams, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.i("SearchAdapter", "SUCCESS: received response");
+                try {
+                    Log.i("RbRating", Float.valueOf(response.getString("vote_average")).toString());
+                    rbRating.setRating(Float.valueOf(response.getString("vote_average"))/2.0f);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
