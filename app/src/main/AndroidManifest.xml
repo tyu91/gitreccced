@@ -10,9 +10,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/fist"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/fist"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
@@ -35,7 +35,7 @@
         <activity android:name=".DetailsActivity" />
         <activity android:name=".InputRecsActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".UpdateInfoActivity"></activity>
+        <activity android:name=".UpdateInfoActivity" />
     </application>
 
 </manifest>

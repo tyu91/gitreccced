@@ -24,7 +24,7 @@ import org.parceler.Parcels;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private EditText email, password, name;
+    private EditText email, password, name, confirmPass;
     private TextView logIn;
     private Button createAccount;
 
@@ -52,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
         name = findViewById(R.id.etUID);
         email = findViewById(R.id.etEmail);
         password = findViewById(R.id.etPass);
+        confirmPass = findViewById(R.id.etConPass);
         logIn = findViewById(R.id.tvLogin);
         createAccount = findViewById(R.id.btnSignUp);
 
@@ -69,12 +70,16 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String em = email.getText().toString().trim();
                 String pass = password.getText().toString().trim();
+                String confirm = confirmPass.getText().toString().trim();
 
                 if (em.isEmpty() || pass.isEmpty()){
                     Toast.makeText(SignUpActivity.this, "Please complete all fields before Signing up", Toast.LENGTH_SHORT).show();
+
+                } else if (!em.equals(confirm)) {
+                    Toast.makeText(SignUpActivity.this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
+
                 } else {
                     callSignUp(em, pass, name.getText().toString());
-
                 }
             }
         });

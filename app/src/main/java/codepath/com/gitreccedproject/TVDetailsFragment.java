@@ -88,9 +88,23 @@ public class TVDetailsFragment extends Fragment {
         tvCast = view.findViewById(R.id.tvCast);
         rbRating = view.findViewById(R.id.rbRating);
 
-        tvTVTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
-        firstAired.setText(((DetailsActivity)getActivity()).item.getFirstAirDate());
-        overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+        if (((DetailsActivity)getActivity()).item.getTitle() != null) {
+            tvTVTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        } else {
+            tvTVTitle.setText("");
+        }
+
+        if (((DetailsActivity)getActivity()).item.getFirstAirDate() != null) {
+            firstAired.setText(((DetailsActivity)getActivity()).item.getFirstAirDate());
+        } else {
+            firstAired.setText("");
+        }
+
+        if (((DetailsActivity)getActivity()).item.getDetails() != null) {
+            overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+        } else {
+            overview.setText("");
+        }
 
 
         Glide.with(getContext())
@@ -103,8 +117,18 @@ public class TVDetailsFragment extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.i("SearchAdapter", "SUCCESS: received response");
                 try {
-                    seasons.setText("Seasons: " + response.getString("number_of_seasons"));
-                    firstAired.setText("First Aired: " + response.getString("first_air_date").substring(0, 4));
+                    if (response.getString("number_of_seasons") != null) {
+                        seasons.setText("Seasons: " + response.getString("number_of_seasons"));
+                    } else {
+                        seasons.setText("");
+                    }
+
+                    if (response.getString("first_air_date") != null) {
+                        firstAired.setText("First Aired: " + response.getString("first_air_date").substring(0, 4));
+                    } else {
+                        firstAired.setText("");
+                    }
+
                     rbRating.setRating(Float.valueOf(response.getString("vote_average"))/2.0f);
 
                 } catch (JSONException e) {
