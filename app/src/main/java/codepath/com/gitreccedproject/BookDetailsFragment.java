@@ -74,7 +74,7 @@ public class BookDetailsFragment extends Fragment {
         tvBookTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
         author.setText(((DetailsActivity)getActivity()).item.getAuthor());
         pub.setText("Published: " + ((DetailsActivity)getActivity()).item.getPubYear());
-        overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+        overview.setText(LibraryFragment.html2text(((DetailsActivity)getActivity()).item.getDetails()));
         //vote average is 0..10, convert to 0..5 by dividing by 2
         float voteAverage = ((DetailsActivity)getActivity()).item.getAverageRating();
         rbRating.setRating(voteAverage > 0 ? voteAverage : 4.0f);

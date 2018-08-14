@@ -20,7 +20,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
-            android:src="@android:color/black" />
+            android:src="@drawable/book_backdrop_placeholder" />
 
         <TextView
             android:id="@+id/tvBookTitle"
