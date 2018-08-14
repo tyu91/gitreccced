@@ -75,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (em.isEmpty() || pass.isEmpty()){
                     Toast.makeText(SignUpActivity.this, "Please complete all fields before Signing up", Toast.LENGTH_SHORT).show();
 
-                } else if (!em.equals(confirm)) {
+                } else if (!pass.equals(confirm)) {
                     Toast.makeText(SignUpActivity.this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
 
                 } else {
