@@ -13,48 +13,13 @@
         android:background="#424242"
         tools:context=".BookDetailsFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-
-        <TextView
-            android:id="@+id/tvPubDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView4"
-            android:layout_toEndOf="@+id/textView9"
-            android:text="    "
-            android:textColor="#c8c6d0" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView4"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="15dp"
-            android:text="Publication Date:"
-            android:textColor="#c8c6d0" />
-
-        <TextView
-            android:id="@+id/tvBookOverview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/textView9"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:text="    "
-            android:textColor="#c8c6d0"
-            android:textSize="18sp" />
-
         <ImageView
             android:id="@+id/ivBookCover"
-            android:layout_width="161dp"
-            android:layout_height="230dp"
+            android:layout_width="160dp"
+            android:layout_height="240dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="25dp"
             android:src="@android:color/black" />
 
         <TextView
@@ -63,29 +28,37 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/ivBookCover"
-            android:layout_marginLeft="15dp"
-            android:text="TextView"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
             android:textColor="#c8c6d0"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tvBookTitle"
-            android:layout_marginLeft="15dp"
-            android:text="Written by: "
-            android:textColor="#c8c6d0" />
+            android:textSize="24sp"
+            android:textStyle="bold|italic" />
 
         <TextView
             android:id="@+id/tvAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvBookTitle"
-            android:layout_toEndOf="@+id/textView4"
-            android:text="    "
-            android:textColor="#c8c6d0" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvPubDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvAuthor"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp" />
 
         <RatingBar
             android:id="@+id/rbRating"
@@ -94,9 +67,26 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tvPubDate"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:numStars="5"
             android:stepSize="0.01" />
 
+
+        <TextView
+            android:id="@+id/tvBookOverview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/rbRating"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="#c8c6d0"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </ScrollView>

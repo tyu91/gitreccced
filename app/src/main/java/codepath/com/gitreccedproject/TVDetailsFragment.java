@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +34,7 @@ public class TVDetailsFragment extends Fragment {
 
 
     private TextView tvTVTitle, seasons, firstAired, overview, tvCast;
+    private RatingBar rbRating;
     private ImageView backdrop;
     AsyncHttpClient detailsClient;
 
@@ -84,6 +86,7 @@ public class TVDetailsFragment extends Fragment {
         overview = view.findViewById(R.id.tvShowOverview);
         backdrop = view.findViewById(R.id.ivTVBackdrop);
         tvCast = view.findViewById(R.id.tvCast);
+        rbRating = view.findViewById(R.id.rbRating);
 
         tvTVTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
         firstAired.setText(((DetailsActivity)getActivity()).item.getFirstAirDate());
@@ -102,6 +105,7 @@ public class TVDetailsFragment extends Fragment {
                 try {
                     seasons.setText("Seasons: " + response.getString("number_of_seasons"));
                     firstAired.setText("First Aired: " + response.getString("first_air_date").substring(0, 4));
+                    rbRating.setRating(Float.valueOf(response.getString("vote_average"))/2.0f);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

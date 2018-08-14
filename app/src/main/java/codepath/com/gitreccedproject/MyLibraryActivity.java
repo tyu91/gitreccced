@@ -133,6 +133,10 @@ public class MyLibraryActivity extends AppCompatActivity {
 
                     @Override
                     public void onDrawerOpened(View drawerView) {
+
+                        tvMenuTitle = findViewById(R.id.tvMenuTitle);
+                        tvMenuTitle.setText("Welcome, " + currentuser.getUsername() + "!");
+
                         if (mAuth.getCurrentUser().getUid().contains("IqwmPTlbSZRFgBd6VQNPa0Cd0Aw1")) {
                             Log.i("user","admin");
                             Menu nav_Menu = navigationView.getMenu();
@@ -140,9 +144,6 @@ public class MyLibraryActivity extends AppCompatActivity {
                             nav_Menu.findItem(R.id.dbtest).setVisible(true);
                             nav_Menu.findItem(R.id.algolia).setChecked(false);
                             nav_Menu.findItem(R.id.dbtest).setChecked(false);
-
-                            tvMenuTitle = findViewById(R.id.tvMenuTitle);
-                            tvMenuTitle.setText("Welcome, " + currentuser.getUsername() + "!");
                         } else {
                             Log.i("user",mAuth.getCurrentUser().getUid());
                         }

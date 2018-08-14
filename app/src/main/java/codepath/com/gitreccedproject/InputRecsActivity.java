@@ -76,6 +76,8 @@ public class InputRecsActivity extends AppCompatActivity {
     ProgressBar pb;
     boolean isStart;
 
+    private TextView tvMenuTitle;
+
     boolean testPrint = true;
 
     static String mQuery = "no response";
@@ -112,6 +114,18 @@ public class InputRecsActivity extends AppCompatActivity {
         Drawable mDrawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_menu);
         mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
 
+        configClient = new AsyncHttpClient();
+
+        Log.i("fLevenshtein", "********** F I N I S H E D **********");
+        dbUsers = FirebaseDatabase.getInstance().getReference("users");
+        dbBooks = FirebaseDatabase.getInstance().getReference("books");
+
+        //add user id from sign up activity
+        resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        Log.i("uid", resultUser.getUid().toString());
+
+        final boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
+
         //new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY)
 
         getSupportActionBar().setHomeAsUpIndicator(mDrawable);
@@ -132,6 +146,10 @@ public class InputRecsActivity extends AppCompatActivity {
 
                     @Override
                     public void onDrawerOpened(View drawerView) {
+
+                        tvMenuTitle = findViewById(R.id.tvMenuTitle);
+                        tvMenuTitle.setText("Welcome, " + resultUser.getUsername() + "!");
+
                         if (mAuth.getCurrentUser().getUid().contains("IqwmPTlbSZRFgBd6VQNPa0Cd0Aw1")) {
                             Log.i("user","admin");
                             Menu nav_Menu = navigationView.getMenu();
@@ -191,19 +209,6 @@ public class InputRecsActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-
-        configClient = new AsyncHttpClient();
-
-        Log.i("fLevenshtein", "********** F I N I S H E D **********");
-        dbUsers = FirebaseDatabase.getInstance().getReference("users");
-        dbBooks = FirebaseDatabase.getInstance().getReference("books");
-
-        //add user id from sign up activity
-        resultUser = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        Log.i("uid", resultUser.getUid().toString());
-
-        final boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
-
 
         // find search views
         search_et = findViewById(R.id.search_et);
@@ -345,7 +350,6 @@ public class InputRecsActivity extends AppCompatActivity {
                             movieSearchClient.getIndex("movietv").searchAsync(new Query(newText), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
-                                    Log.i("content", content.toString());
                                     try {
                                         pb.setVisibility(ProgressBar.VISIBLE);
                                         items.clear();
