@@ -149,7 +149,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
                                 dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("userbyitem").child(mItem.getIid()).child(LoginActivity.currentuser.getUid());
+                                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(LoginActivity.currentuser.getUid());
                                         dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -184,7 +184,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
             int position = getAdapterPosition() % mItems.size();
 //            Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
             Log.i("overview", mItems.get(position).getDetails());
-            Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, String.format("Clicked %s!", position), Toast.LENGTH_SHORT).show();
 
             if (mItems.get(position).getIid().equals("")) {
                 final Intent i = new Intent(context, InputRecsActivity.class);
