@@ -55,6 +55,8 @@ public class RecsFragment extends Fragment {
     public static ArrayList<Item> tvItems;
     public static ArrayList<Item> bookItems;
 
+    public boolean isrefreshing;
+
     public static ArrayList<String> lib;
 
     Snackbar bar;
@@ -115,6 +117,8 @@ public class RecsFragment extends Fragment {
         rv_tvShows.setLayoutManager(tvShows);
         rv_books.setLayoutManager(books);
 
+        isrefreshing = false;
+
         swipeContainer = view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -122,7 +126,7 @@ public class RecsFragment extends Fragment {
             public void onRefresh() {
                 // Your code to refresh the list here.
                 //((MyLibraryActivity)getActivity()).showProgressBar();
-                if (!bar.isShown())
+                if (!bar.isShown() && !isrefreshing)
                 {
                     new loadasync().execute();
                 }
@@ -313,6 +317,7 @@ public class RecsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            isrefreshing = true;
             new populateasync().execute();
             return null;
         }
@@ -327,6 +332,7 @@ public class RecsFragment extends Fragment {
                     // Do something after 5s = 5000ms
                     bar.dismiss();
                     swipeContainer.setRefreshing(false);
+                    isrefreshing = false;
                 }
             }, 3000);
         }
