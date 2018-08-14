@@ -31,6 +31,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView4"
             android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
             android:text="Publication Date:"
             android:textColor="#c8c6d0" />
 
@@ -41,6 +42,8 @@
             android:layout_alignParentStart="true"
             android:layout_below="@id/textView9"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:text="    "
             android:textColor="#c8c6d0"
             android:textSize="18sp" />
@@ -60,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/ivBookCover"
+            android:layout_marginLeft="15dp"
             android:text="TextView"
             android:textColor="#c8c6d0"
             android:textSize="24sp" />
@@ -70,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tvBookTitle"
+            android:layout_marginLeft="15dp"
             android:text="Written by: "
             android:textColor="#c8c6d0" />
 
@@ -89,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tvPubDate"
+            android:layout_marginLeft="15dp"
             android:numStars="5"
             android:stepSize="0.01" />
 

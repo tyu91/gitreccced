@@ -8,6 +8,20 @@
     tools:context=".SignUpActivity">
 
     <EditText
+        android:id="@+id/etConPass"
+        android:layout_width="277dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="275dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textColor="#c8c6d0"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail"
+        tools:layout_editor_absoluteX="54dp" />
+
+    <EditText
         android:id="@+id/etUID"
         android:layout_width="277dp"
         android:layout_height="wrap_content"
@@ -64,7 +78,7 @@
         android:id="@+id/tvWarning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPass"
+        android:layout_below="@+id/etConPass"
         android:layout_centerHorizontal="true"
         android:text="Password must be at least 6 characters long"
         android:textColor="#FF4081"
@@ -90,8 +104,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="44dp"
-        android:layout_marginStart="95dp"
+        android:layout_marginBottom="43dp"
+        android:layout_marginStart="85dp"
         android:text="Already have an account? "
         android:textColor="#c8c6d0" />
 
