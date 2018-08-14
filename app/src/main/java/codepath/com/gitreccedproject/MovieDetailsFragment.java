@@ -81,13 +81,23 @@ public class MovieDetailsFragment extends Fragment {
         tvCast = view.findViewById(R.id.tvCast);
         rbRating = view.findViewById(R.id.rbRating);
 
-        tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        if (((DetailsActivity)getActivity()).item.getTitle() != null) {
+            tvMovieTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        } else {
+            tvMovieTitle.setText("");
+        }
+
         if (((DetailsActivity) getActivity()).item.getReleaseDate() != null) {
             releaseDate.setText(((DetailsActivity) getActivity()).item.getReleaseDate().substring(0, 4));
         } else {
             releaseDate.setText("");
         }
-        overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+
+        if (((DetailsActivity)getActivity()).item.getDetails() != null) {
+            overview.setText(((DetailsActivity)getActivity()).item.getDetails());
+        } else {
+            overview.setText("");
+        }
 
         backdrop.setImageResource(R.drawable.flicks_backdrop_placeholder_hor);
 

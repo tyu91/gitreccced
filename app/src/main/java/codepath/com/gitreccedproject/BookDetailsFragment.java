@@ -71,10 +71,31 @@ public class BookDetailsFragment extends Fragment {
         cover = view.findViewById(R.id.ivBookCover);
         rbRating = view.findViewById(R.id.rbRating);
 
-        tvBookTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
-        author.setText(((DetailsActivity)getActivity()).item.getAuthor());
-        pub.setText("Published: " + ((DetailsActivity)getActivity()).item.getPubYear());
-        overview.setText(LibraryFragment.html2text(((DetailsActivity)getActivity()).item.getDetails()));
+        if (((DetailsActivity)getActivity()).item.getTitle() != null) {
+            tvBookTitle.setText(((DetailsActivity)getActivity()).item.getTitle());
+        } else {
+            tvBookTitle.setText("");
+        }
+
+        if (((DetailsActivity)getActivity()).item.getAuthor() != null) {
+            author.setText(((DetailsActivity)getActivity()).item.getAuthor());
+        } else {
+            author.setText("");
+        }
+
+        if (((DetailsActivity)getActivity()).item.getPubYear() != null) {
+            pub.setText("Published: " + ((DetailsActivity)getActivity()).item.getPubYear());
+        } else {
+            pub.setText("");
+        }
+
+        if (((DetailsActivity)getActivity()).item.getDetails() != null) {
+            overview.setText(LibraryFragment.html2text(((DetailsActivity)getActivity()).item.getDetails()));
+        } else {
+            overview.setText("");
+        }
+
+
         //vote average is 0..10, convert to 0..5 by dividing by 2
         float voteAverage = ((DetailsActivity)getActivity()).item.getAverageRating();
         rbRating.setRating(voteAverage > 0 ? voteAverage : 4.0f);
