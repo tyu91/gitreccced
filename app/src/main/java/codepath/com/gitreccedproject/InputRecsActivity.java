@@ -350,7 +350,6 @@ public class InputRecsActivity extends AppCompatActivity {
                             movieSearchClient.getIndex("movietv").searchAsync(new Query(newText), null, new CompletionHandler() {
                                 @Override
                                 public void requestCompleted(JSONObject content, AlgoliaException error) {
-                                    Log.i("content", content.toString());
                                     try {
                                         pb.setVisibility(ProgressBar.VISIBLE);
                                         items.clear();
