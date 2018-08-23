@@ -39,6 +39,7 @@ public class MyLibraryActivity extends AppCompatActivity {
     private ImageView plus_btn;
     private ProgressBar pbloading;
     private ImageView refresh;
+    private ImageView info;
     private TextView tvMenuTitle;
 
     static boolean isVisitedRecs = false;
@@ -88,6 +89,17 @@ public class MyLibraryActivity extends AppCompatActivity {
         Log.i("libuser",currentuser.toString());
         Log.i("isNewUser", "isNewUser: " + String.valueOf(getIntent().getBooleanExtra("isNewUser", false)));
         boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
+
+        info = findViewById(R.id.ivInfo);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create dialog
+                final FragmentManager manager = getSupportFragmentManager();
+                final DescriptionDialog descriptionDialog = new DescriptionDialog(MyLibraryActivity.this, RECS_FRAGMENT);
+                descriptionDialog.show(manager, "This is a test");
+            }
+        });
 
         pbloading = toolbar.findViewById(R.id.pbLoading);
         refresh = toolbar.findViewById(R.id.refresh);

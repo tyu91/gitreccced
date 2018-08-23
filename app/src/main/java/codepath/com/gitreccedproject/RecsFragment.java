@@ -89,9 +89,9 @@ public class RecsFragment extends Fragment {
             }
         });*/
 
-        movieItems = new ArrayList<>();
-        tvItems = new ArrayList<>();
-        bookItems = new ArrayList<>();
+        movieItems = new ArrayList<Item>();
+        tvItems = new ArrayList<Item>();
+        bookItems = new ArrayList<Item>();
         //movieItems = dummyMovieRecItems();
         //tvItems = dummyTVRecItems();
         //bookItems = dummyBookRecItems();
@@ -183,7 +183,7 @@ public class RecsFragment extends Fragment {
         item4.setReleaseDate("2017-12-22");
         item4.setMovieId("301337");
 
-        ArrayList dummyItems = new ArrayList();
+        ArrayList dummyItems = new ArrayList<Item>();
 
         dummyItems.add(item1);
         dummyItems.add(item2);
@@ -234,7 +234,7 @@ public class RecsFragment extends Fragment {
         item4.setMovieId("37863");
         item4.setReleaseDate("2003-10-04");
 
-        ArrayList dummyItems = new ArrayList();
+        ArrayList dummyItems = new ArrayList<Item>();
 
         dummyItems.add(item1);
         dummyItems.add(item2);
@@ -303,7 +303,7 @@ public class RecsFragment extends Fragment {
         item4.setBookId("370493");
 
 
-        ArrayList dummyItems = new ArrayList();
+        ArrayList dummyItems = new ArrayList<Item>();
 
         dummyItems.add(item1);
         dummyItems.add(item2);
@@ -384,7 +384,7 @@ public class RecsFragment extends Fragment {
         itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                lib = new ArrayList<>();
+                lib = new ArrayList<String>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     lib.add(postSnapshot.child("iid").getValue().toString());
                 }
