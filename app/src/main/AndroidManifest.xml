@@ -33,7 +33,9 @@
         <activity android:name=".InputRecsTVActivity" />
         <activity android:name=".InputRecsBooksActivity" />
         <activity android:name=".DetailsActivity" />
-        <activity android:name=".InputRecsActivity" />
+        <activity
+            android:name=".InputRecsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".SettingsActivity" />
         <activity android:name=".UpdateInfoActivity" />
     </application>

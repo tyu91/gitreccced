@@ -15,11 +15,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,9 @@ public class InputRecsActivity extends AppCompatActivity {
     public RecyclerView searchlist_rv;
     public TextView finish;
     private DrawerLayout mDrawerLayout;
+    private TextView tvMenuTitle;
+    private Toolbar toolbar;
+    private ImageView info;
 
     DatabaseReference dbUsers;
     DatabaseReference dbBooks;
@@ -75,8 +80,6 @@ public class InputRecsActivity extends AppCompatActivity {
 
     ProgressBar pb;
     boolean isStart;
-
-    private TextView tvMenuTitle;
 
     boolean testPrint = true;
 
@@ -109,10 +112,18 @@ public class InputRecsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_recs);
 
         mAuth = FirebaseAuth.getInstance();
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Drawable mDrawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_menu);
         mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
+
+        new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY);
+
+        getSupportActionBar().setHomeAsUpIndicator(mDrawable);
 
         configClient = new AsyncHttpClient();
 
@@ -126,9 +137,20 @@ public class InputRecsActivity extends AppCompatActivity {
 
         final boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
 
-        //new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportActionBar().setHomeAsUpIndicator(mDrawable);
+
+        info = toolbar.findViewById(R.id.ivInfo);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create dialog
+                final FragmentManager manager = getSupportFragmentManager();
+                final DescriptionDialog descriptionDialog = new DescriptionDialog(InputRecsActivity.this, INPUT_RECS_ACTIVITY);
+                descriptionDialog.show(manager, "This is a test");
+            }
+        });
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);

@@ -90,7 +90,7 @@ public class MyLibraryActivity extends AppCompatActivity {
         Log.i("isNewUser", "isNewUser: " + String.valueOf(getIntent().getBooleanExtra("isNewUser", false)));
         boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
 
-        info = findViewById(R.id.ivInfo);
+        info = toolbar.findViewById(R.id.ivInfo);
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
