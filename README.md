@@ -23,6 +23,7 @@
 
 ### _Credits_
 
+- [Firebase](https://firebase.google.com/)
 - [Android Async Http Client](http://loopj.com/android-async-http/)
 - [Glide v4](https://bumptech.github.io/glide/)
 - [the Movie Database API](https://developers.themoviedb.org/3)
