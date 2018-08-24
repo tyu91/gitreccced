@@ -27,6 +27,7 @@
 - [Glide v4](https://bumptech.github.io/glide/)
 - [the Movie Database API](https://developers.themoviedb.org/3)
 - [Goodreads API](https://www.goodreads.com/api)
+- [Algolia](https://www.algolia.com/)
 
 <br />
 
