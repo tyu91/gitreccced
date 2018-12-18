@@ -41,12 +41,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     DatabaseReference dbUsersbyItem;
     DatabaseReference dbBooks;
 
-    //DatabaseReference dbRecItemsByUser;
-
-    //GoodreadsClient client = new GoodreadsClient();
-
-    //BookClient bClient = new BookClient();
-
     AsyncHttpClient tvDetailsClient;
 
     boolean isAdded;
@@ -63,8 +57,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public List<Item> mItems;
     public Item mItem;
     public int mPosition;
-    public List<Item> userItems = new ArrayList<>();
-    public List<Item> mRecs = new ArrayList<>();
     ArrayList<String> lib;
 
     ArrayList<String> library;
@@ -179,7 +171,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     holder.poster_title_tv.setVisibility(View.VISIBLE);
                     holder.poster_title_tv.bringToFront();
                     holder.poster_title_tv.setText(item.getTitle());
-                    Log.i("PosterImageNoPoster", "Title: " + item.getTitle() + " || RV Position: " + String.format("%s", position));
                 } else {
                     holder.poster_title_tv.setVisibility(View.INVISIBLE);
                     //if book has image, populate with associated photo

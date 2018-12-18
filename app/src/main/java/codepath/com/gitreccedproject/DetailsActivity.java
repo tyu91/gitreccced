@@ -45,8 +45,6 @@ public class DetailsActivity extends AppCompatActivity {
         Drawable mDrawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_menu);
         mDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP));
 
-        //new PorterDuffColorFilter(0xffffff, PorterDuff.Mode.MULTIPLY)
-
         getSupportActionBar().setHomeAsUpIndicator(mDrawable);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -141,7 +139,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (item.getGenre().equalsIgnoreCase("Movie")){
             fragTrans.replace(R.id.flShell, movieFrag).commit();
-            Log.i("fragment", "movie");
 
         } else if (item.getGenre().equalsIgnoreCase("TV")){
             fragTrans.replace(R.id.flShell, tvFrag).commit();
