@@ -56,7 +56,7 @@ public class DBTest2Activity extends AppCompatActivity {
         dbUsers = FirebaseDatabase.getInstance().getReference("users");
         dbBooks = FirebaseDatabase.getInstance().getReference("books");
 
-        User currentUser = LoginActivity.currentuser;
+        User currentUser = LoginActivity.currentUser;
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbUsers.child(uid).setValue(currentUser);
         currentUser.setUid(uid);

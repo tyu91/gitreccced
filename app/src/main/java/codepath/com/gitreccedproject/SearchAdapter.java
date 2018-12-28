@@ -188,7 +188,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
 
         // check if item is in user's library
-        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentUser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
         itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -425,7 +425,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private void addItem(final int position) {
         iid = mItems.get(position).getIid();
         Log.i("IidItem", "Iid of Item added to db: " + iid);
-        uid = LoginActivity.currentuser.getUid();
+        uid = LoginActivity.currentUser.getUid();
         Log.i("ResultUser", "Uid of current user: " + uid);
 
         dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(uid);
@@ -433,7 +433,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         Log.i("test", "setting dbItemsByUser");
         dbItemsByUser.child(iid).setValue(mItems.get(position));
-        dbUsersbyItem.child(uid).setValue(LoginActivity.currentuser);
+        dbUsersbyItem.child(uid).setValue(LoginActivity.currentUser);
 
         Toast.makeText(context,"Saved to library!",Toast.LENGTH_SHORT).show();
     }
@@ -473,7 +473,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public static void getrecs(final ArrayList<String> lib) {
         //get the node with the user's recs
-        DatabaseReference dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
+        DatabaseReference dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentUser.getUid());
         //clear user's recs and then repopulate
         dbRecItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
             @Override
@@ -486,7 +486,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public static void addrec(final DataSnapshot postSnapshot) {
         com.google.firebase.database.Query countquery = null;
-        final DatabaseReference dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
+        final DatabaseReference dbRecItemsByUser = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentUser.getUid());
         countquery = dbRecItemsByUser.child(postSnapshot.child("genre").getValue().toString()).child(postSnapshot.child("iid").getValue().toString()).child("count");
         countquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -511,7 +511,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public static void repopulate(final ArrayList<String> lib) {
         // get the list of items the user has liked
-        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid());
+        DatabaseReference dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentUser.getUid());
         com.google.firebase.database.Query itemsquery = null;
         itemsquery = dbItemsByUser;
         itemsquery.addListenerForSingleValueEvent(new ValueEventListener() {

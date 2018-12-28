@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     boolean isNewUser = false;
 
-    static User currentuser;
+    static User currentUser;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -120,11 +120,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
                 }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    currentuser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email, new Item());
+                    currentUser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email);
                     Log.i("snapshot","!");
                     Toast.makeText(getApplicationContext(), String.format("Welcome, %s!", postSnapshot.child("username").getValue()), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);
-                    intent.putExtra("user", Parcels.wrap(currentuser));
+                    intent.putExtra("user", Parcels.wrap(currentUser));
                     intent.putExtra("isNewUser", isNewUser);
                     startActivity(intent);
                     finish();

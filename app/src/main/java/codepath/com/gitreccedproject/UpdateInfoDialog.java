@@ -122,7 +122,7 @@ public class UpdateInfoDialog extends DialogFragment{
                     if (TextUtils.getTrimmedLength(username) > 0) {
                         dismiss();
                         dbUsers.child("username").setValue(username);
-                        LoginActivity.currentuser.setUsername(username);
+                        LoginActivity.currentUser.setUsername(username);
                         mDialogResult.finish(String.valueOf(username));
                         Log.d("update", "User profile updated.");
                         Toast.makeText(mActivity, "Successfully updated username!", Toast.LENGTH_LONG).show();
@@ -148,7 +148,7 @@ public class UpdateInfoDialog extends DialogFragment{
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             dbUsers.child("email").setValue(email);
-                                            LoginActivity.currentuser.setEmail(email);
+                                            LoginActivity.currentUser.setEmail(email);
                                             mDialogResult.finish(String.valueOf(email));
                                             dismiss();
                                             Log.d("update", "User email address updated.");
@@ -187,7 +187,7 @@ public class UpdateInfoDialog extends DialogFragment{
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             dbUsers.child("password").setValue(password);
-                                            LoginActivity.currentuser.setPassword(password);
+                                            LoginActivity.currentUser.setPassword(password);
                                             dismiss();
                                             Log.d("update", "User password updated.");
                                             Toast.makeText(getContext(), "Successfully updated password!", Toast.LENGTH_LONG).show();

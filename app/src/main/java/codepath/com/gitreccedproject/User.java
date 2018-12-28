@@ -15,19 +15,17 @@ public class User{
         //empty constructor
     }
 
-    public User (String uid, String username, String password, String email, Item item) {
+    public User (String uid, String username, String password, String email) {
         this.uid = uid;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.item = item;
     }
 
     public User (String uid) {
         this.uid = uid;
         this.username = username;
         this.password = password;
-        this.item = item;
     }
 
     public String getUid() {
@@ -46,10 +44,6 @@ public class User{
         return email;
     }
 
-    public Item getItem() {
-        return item;
-    }
-
     public void setUid(String uid) {
         this.uid = uid;
     }
@@ -60,10 +54,6 @@ public class User{
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
     }
 
     public void setEmail(String email) {

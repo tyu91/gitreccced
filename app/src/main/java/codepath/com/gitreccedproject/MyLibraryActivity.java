@@ -85,8 +85,8 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeAsUpIndicator(mDrawable);
 
-        final User currentuser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        Log.i("libuser",currentuser.toString());
+        final User currentUser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
+        Log.i("libuser",currentUser.toString());
         Log.i("isNewUser", "isNewUser: " + String.valueOf(getIntent().getBooleanExtra("isNewUser", false)));
         boolean isNewUser = getIntent().getBooleanExtra("isNewUser", false);
 
@@ -110,7 +110,7 @@ public class MyLibraryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i("plus","clicked!");
                 Intent i = new Intent(MyLibraryActivity.this, InputRecsActivity.class);
-                i.putExtra("user", Parcels.wrap(currentuser));
+                i.putExtra("user", Parcels.wrap(currentUser));
                 startActivity(i);
             }
         });
@@ -147,7 +147,7 @@ public class MyLibraryActivity extends AppCompatActivity {
                     public void onDrawerOpened(View drawerView) {
 
                         tvMenuTitle = findViewById(R.id.tvMenuTitle);
-                        tvMenuTitle.setText("Welcome, " + currentuser.getUsername() + "!");
+                        tvMenuTitle.setText("Welcome, " + currentUser.getUsername() + "!");
 
                         if (mAuth.getCurrentUser().getUid().contains("IqwmPTlbSZRFgBd6VQNPa0Cd0Aw1")) {
                             Log.i("user","admin");

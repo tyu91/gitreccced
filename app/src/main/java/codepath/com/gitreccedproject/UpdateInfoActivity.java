@@ -36,7 +36,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     UpdateInfoDialog updateInfoDialog;
-    User user;
+    User currentUser;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -141,10 +141,10 @@ public class UpdateInfoActivity extends AppCompatActivity {
         btn_done = findViewById(R.id.btn_done);
 
         //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        user = LoginActivity.currentuser;
+        currentUser = LoginActivity.currentUser;
 
-        tvUsername.setText(user.getUsername());
-        tvEmail.setText(user.getEmail());
+        tvUsername.setText(currentUser.getUsername());
+        tvEmail.setText(currentUser.getEmail());
 
         btnUpdateUsername.setOnClickListener(new View.OnClickListener() {
             @Override

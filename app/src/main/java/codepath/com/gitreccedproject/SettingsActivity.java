@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
     TextView tvEmail;
     Button btnUpdate;
 
-    FirebaseUser user;
+    FirebaseUser currentUser;
     FirebaseAuth mAuth;
     private DrawerLayout mDrawerLayout;
 
@@ -132,11 +132,11 @@ public class SettingsActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tvEmail);
         btnUpdate = findViewById(R.id.btnUpdate);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        User dbuser = LoginActivity.currentuser;
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        User dbUser = LoginActivity.currentUser;
 
-        tvEmail.setText(dbuser.getEmail());
-        tvUsername.setText(dbuser.getUsername());
+        tvEmail.setText(dbUser.getEmail());
+        tvUsername.setText(dbUser.getUsername());
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

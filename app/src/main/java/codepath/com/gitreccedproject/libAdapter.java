@@ -145,11 +145,11 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
                         alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 // remove from db
-                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentuser.getUid()).child(mItem.getIid());
+                                dbItemsByUser = FirebaseDatabase.getInstance().getReference("itemsbyuser").child(LoginActivity.currentUser.getUid()).child(mItem.getIid());
                                 dbItemsByUser.removeValue(new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(LoginActivity.currentuser.getUid());
+                                        dbUsersbyItem = FirebaseDatabase.getInstance().getReference("usersbyitem").child(mItem.getIid()).child(LoginActivity.currentUser.getUid());
                                         dbUsersbyItem.removeValue(new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
@@ -188,7 +188,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
             if (mItems.get(position).getIid().equals("")) {
                 final Intent i = new Intent(context, InputRecsActivity.class);
-                i.putExtra("user", Parcels.wrap(LoginActivity.currentuser));
+                i.putExtra("user", Parcels.wrap(LoginActivity.currentUser));
                 context.startActivity(i);
             } else {
                 final Intent i = new Intent(context, DetailsActivity.class);
@@ -208,7 +208,7 @@ public class libAdapter extends Adapter<libAdapter.ViewHolder> {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            DatabaseReference Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentuser.getUid());
+            DatabaseReference Recs = FirebaseDatabase.getInstance().getReference("recitemsbyuser").child(LoginActivity.currentUser.getUid());
             RecsFragment.getmovies(Recs);
             RecsFragment.getshows(Recs);
             RecsFragment.getbooks(Recs);

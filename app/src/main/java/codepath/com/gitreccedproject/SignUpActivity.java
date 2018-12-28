@@ -126,10 +126,10 @@ public class SignUpActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(mUsername)){
 
             //create new user with dummy uid since current user is actually previous user (fix later)
-            newUser = new User(uid, mUsername, mPassword, mEmail, new Item ());
+            newUser = new User(uid, mUsername, mPassword, mEmail);
             dbUsers.child(uid).setValue(newUser);
             newUser.setUid(uid);
-            LoginActivity.currentuser = newUser;
+            LoginActivity.currentUser = newUser;
 
             MyLibraryActivity.isVisitedRecs = false;
             MyLibraryActivity.isVisitedLib = false;
