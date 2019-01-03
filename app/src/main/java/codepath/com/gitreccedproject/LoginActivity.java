@@ -3,6 +3,8 @@ package codepath.com.gitreccedproject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText email, password;
     private Button login, signUp;
+    private Snackbar snackbar;
+    private String snackbarString;
+    CoordinatorLayout loginLayout;
 
     boolean isNewUser = false;
 
@@ -37,12 +42,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        loginLayout = findViewById(R.id.loginLayout);
+
         getSupportActionBar().hide();
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null){
             Log.i("signin", mAuth.getCurrentUser().getEmail());
-            getUserfromdb(mAuth.getCurrentUser().getEmail().trim());
+            getUserFromDb(mAuth.getCurrentUser().getEmail().trim());
         }
 
         email = findViewById(R.id.etEmail);
@@ -57,7 +64,9 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = password.getText().toString().trim();
 
                 if (em.isEmpty() || pass.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Please complete all fields before Logging In", Toast.LENGTH_SHORT).show();
+                    snackbarString = "Please complete all fields before logging in!";
+                    snackbar = Snackbar.make(loginLayout, snackbarString, Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 } else {
                     callLogIn(em, pass);
                 }
@@ -81,37 +90,41 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("TESTING", "Sign in successful" + task.isSuccessful());
 
-                        /*
-                        If sign in fails, display a message to the user. If sign in succeeds
+                        /*If sign in fails, display a message to the user. If sign in succeeds
                         the auth state will be modified and logic to handle the signed in user
                         can be handled in the listener
                          */
                         if (!task.isSuccessful()){
-                            Log.v("TESTING", task.getException().toString());
                             if (task.getException().toString().contains("The email address is badly formatted")) {
-                                Toast.makeText(LoginActivity.this, "Invalid email!", Toast.LENGTH_SHORT).show();
+                                snackbarString = "Invalid Email! Please try again.";
+                                snackbar = Snackbar.make(loginLayout, snackbarString, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             } else if (task.getException().toString().contains("There is no user record corresponding to this identifier")) {
-                                Toast.makeText(LoginActivity.this, "There is no account associated with this email", Toast.LENGTH_SHORT).show();
+                                snackbarString = "There is no account associated with this email!";
+                                snackbar = Snackbar.make(loginLayout, snackbarString, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             } else if (task.getException().toString().contains("The password is invalid or the user does not have a password")) {
-                                Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                                snackbarString = "Password Incorrect! Please try again.";
+                                snackbar = Snackbar.make(loginLayout, snackbarString, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             } else {
-                                Toast.makeText(LoginActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
+                                snackbarString = "Login Unsuccessful! Please try again.";
+                                snackbar = Snackbar.make(loginLayout, snackbarString, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             }
                         } else {
-                            getUserfromdb(email);
+                            getUserFromDb(email);
                         }
                     }
                 });
     }
 
-    private void getUserfromdb(final String email) {
+    private void getUserFromDb(final String email) {
         DatabaseReference usersRef;
         usersRef = FirebaseDatabase.getInstance().getReference("users");
         com.google.firebase.database.Query usersquery = null;
         usersquery = usersRef.orderByChild("email").equalTo(email.toLowerCase());
-        Log.i("e",email.toLowerCase());
 
         usersquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -121,8 +134,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     currentUser = new User(postSnapshot.child("uid").getValue().toString(), postSnapshot.child("username").getValue().toString(), postSnapshot.child("password").getValue().toString(), email);
-                    Log.i("snapshot","!");
-                    Toast.makeText(getApplicationContext(), String.format("Welcome, %s!", postSnapshot.child("username").getValue()), Toast.LENGTH_LONG).show();
+                    snackbarString = String.format("Welcome, %s!", postSnapshot.child("username").getValue());
+                    snackbar = Snackbar.make(loginLayout, snackbarString, Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+
                     Intent intent = new Intent(LoginActivity.this, MyLibraryActivity.class);
                     intent.putExtra("user", Parcels.wrap(currentUser));
                     intent.putExtra("isNewUser", isNewUser);

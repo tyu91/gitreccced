@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +26,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
@@ -72,6 +73,10 @@ public class InputRecsActivity extends AppCompatActivity {
 
     DatabaseReference dbRecItemsByUser;
 
+    private Snackbar inputRecsSnackbar;
+    private String inputRecsSnackbarString;
+    private CoordinatorLayout inputRecsLayout;
+
 
     public SearchAdapter searchAdapter;
     public ArrayList<Item> items;
@@ -110,6 +115,8 @@ public class InputRecsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_recs);
+
+        inputRecsLayout = findViewById(R.id.inputRecsLayout);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -214,7 +221,9 @@ public class InputRecsActivity extends AppCompatActivity {
                             final Intent i = new Intent(InputRecsActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
-                            Toast.makeText(getApplicationContext(), "Logged out!", Toast.LENGTH_SHORT).show();
+                            inputRecsSnackbarString = "Logout successful!";
+                            inputRecsSnackbar = Snackbar.make(inputRecsLayout, inputRecsSnackbarString, Snackbar.LENGTH_SHORT);
+                            inputRecsSnackbar.show();;
                         }
                         if (menuItem.getItemId() == R.id.algolia) {
                             Intent i = new Intent(getApplicationContext(), AlgoliaActivity.class);
@@ -377,7 +386,6 @@ public class InputRecsActivity extends AppCompatActivity {
                                         items.clear();
                                         itemIds.clear();
                                         searchAdapter.notifyItemRangeChanged(0, items.size());
-                                        Log.i("LevenshteinMovieTV", "ADAPTER CLEARED");
 
                                         String text = search_et.getQuery().toString();
                                         if (text != null && TextUtils.getTrimmedLength(text) > 0) {

@@ -139,15 +139,12 @@ public class LibraryFragment extends Fragment {
                 booklib = new ArrayList<>();
                 //actual data
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Log.i("shottt",postSnapshot.toString());
                     Item item = new Item(postSnapshot.child("iid").getValue().toString(),postSnapshot.child("genre").getValue().toString(),postSnapshot.child("title").getValue().toString(),"");
 
                     if (postSnapshot.child("overview").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("overview").getValue().toString()) > 0) {
                         item.setDetails(postSnapshot.child("overview").getValue().toString());
                     } else if (postSnapshot.child("details").getValue() != null && TextUtils.getTrimmedLength(postSnapshot.child("details").getValue().toString()) > 0) {
                         item.setDetails(html2text(postSnapshot.child("details").getValue().toString()));
-                        Log.i("detailsbefore", postSnapshot.child("details").getValue().toString());
-                        Log.i("detailsafter", html2text(postSnapshot.child("details").getValue().toString()));
                     }
 
                     if (item.getGenre().contains("Movie")) {
@@ -215,7 +212,9 @@ public class LibraryFragment extends Fragment {
             }
         });
 
-        // TODO - comment this if statement if we want to enable infinite scrolling only to the right
+        /**comment this if statement if we want to enable infinite scrolling only to the right
+         *
+         */
         /*if (items.size() > 0) {
             movies.scrollToPosition(items.size()*100);
             shows.scrollToPosition(100 * items.size());

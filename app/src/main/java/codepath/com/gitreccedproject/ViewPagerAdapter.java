@@ -14,7 +14,6 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        //return TabFragment.getInstance(position);
         if (position == 1) {
             MyLibraryActivity.isVisitedLib = true;
             return LibraryFragment.getInstance(position);

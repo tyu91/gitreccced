@@ -59,7 +59,8 @@ public class RecsFragment extends Fragment {
 
     public static ArrayList<String> lib;
 
-    Snackbar bar;
+    Snackbar loadingSnackbar;
+    String loadingSnackbarString;
 
     DatabaseReference Recs;
 
@@ -89,19 +90,17 @@ public class RecsFragment extends Fragment {
             }
         });*/
 
+
         movieItems = new ArrayList<Item>();
         tvItems = new ArrayList<Item>();
         bookItems = new ArrayList<Item>();
-        //movieItems = dummyMovieRecItems();
-        //tvItems = dummyTVRecItems();
-        //bookItems = dummyBookRecItems();
 
-        //((MyLibraryActivity)getActivity()).showProgressBar();
-        bar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
-        ViewGroup contentLay = (ViewGroup) bar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
+        loadingSnackbarString = "Loading";
+        loadingSnackbar = Snackbar.make(getView(), loadingSnackbarString, Snackbar.LENGTH_INDEFINITE);
+        ViewGroup contentLay = (ViewGroup) loadingSnackbar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
         ProgressBar item = new ProgressBar(getContext());
         contentLay.addView(item);
-        bar.show();
+        loadingSnackbar.show();
 
         refresh();
 
@@ -126,14 +125,15 @@ public class RecsFragment extends Fragment {
             public void onRefresh() {
                 // Your code to refresh the list here.
                 //((MyLibraryActivity)getActivity()).showProgressBar();
-                if (!bar.isShown() && !isrefreshing)
+                if (!loadingSnackbar.isShown() && !isrefreshing)
                 {
-                    new loadasync().execute();
+                    new LoadAsync().execute();
                 }
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeContainer.setColorSchemeResources
+                (android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -313,12 +313,12 @@ public class RecsFragment extends Fragment {
         return dummyItems;
     }
 
-    class loadasync extends AsyncTask<Void, Void, Void> {
+    class LoadAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
             isrefreshing = true;
-            new populateasync().execute();
+            new PopulateAsync().execute();
             return null;
         }
 
@@ -330,7 +330,7 @@ public class RecsFragment extends Fragment {
                 @Override
                 public void run() {
                     // Do something after 5s = 5000ms
-                    bar.dismiss();
+                    loadingSnackbar.dismiss();
                     swipeContainer.setRefreshing(false);
                     isrefreshing = false;
                 }
@@ -338,7 +338,7 @@ public class RecsFragment extends Fragment {
         }
     }
 
-    class populateasync extends AsyncTask<Void, Void, Void> {
+    class PopulateAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -346,11 +346,11 @@ public class RecsFragment extends Fragment {
             //((MyLibraryActivity)getActivity()).showProgressBar();
 
             if (!swipeContainer.isRefreshing()) {
-                bar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
-                ViewGroup contentLay = (ViewGroup) bar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
+                loadingSnackbar = Snackbar.make(getView(), "Loading", Snackbar.LENGTH_INDEFINITE);
+                ViewGroup contentLay = (ViewGroup) loadingSnackbar.getView().findViewById(android.support.design.R.id.snackbar_text).getParent();
                 ProgressBar item = new ProgressBar(getContext());
                 contentLay.addView(item);
-                bar.show();
+                loadingSnackbar.show();
             }
         }
 
@@ -388,7 +388,7 @@ public class RecsFragment extends Fragment {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     lib.add(postSnapshot.child("iid").getValue().toString());
                 }
-                new loadasync().execute();
+                new LoadAsync().execute();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

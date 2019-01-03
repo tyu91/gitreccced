@@ -108,7 +108,6 @@ public class MyLibraryActivity extends AppCompatActivity {
         plus_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("plus","clicked!");
                 Intent i = new Intent(MyLibraryActivity.this, InputRecsActivity.class);
                 i.putExtra("user", Parcels.wrap(currentUser));
                 startActivity(i);
