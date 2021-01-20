@@ -10,6 +10,16 @@
 
 <br />
 
+### _Walkthrough_
+
+<center>
+<img align='center' src='https://github.com/tyu91/gitreccced/blob/master/media/getreccedwalkthrough.gif' 
+     width='200' 
+     alt='GetRecced Walkthrough gif'>
+</center>
+
+<br />
+
 ### _Features_
 
 - Log in and signup via Firebase authentication
